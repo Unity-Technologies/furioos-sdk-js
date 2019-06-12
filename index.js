@@ -1,4 +1,4 @@
-import Player from "./classes/Player"
+var Player = require("./classes/Player.js");
 
 export default {
   Player,
