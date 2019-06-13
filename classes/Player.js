@@ -39,10 +39,23 @@ module.exports =  class Player {
 
     container.appendChild(iframe);
 
+    iframe.attacheEvent("onload", this._onLoad);
+
     return iframe;
   }
 
+  // Binding onload callback.
+  onLoad(onLoadCallback) {
+    this._onLoadCallback = onLoadCallback;
+  }
+
+  _onLoad() {
+    if (this._onLoadCallback) {
+      this._onLoadCallback();
+    }
+  }
+
   test() {
-    console.log("Call test method.", this.embed, );
+    console.log("Call test method.", this.embed);
   }
 }
