@@ -1,4 +1,4 @@
-var _constructorParams = function(shareId, containerId, options) {
+const _constructorParams = function(shareId, containerId, options) {
   // Share Id.
   if (!shareId || typeof shareId != "string") {
     return false;
@@ -12,14 +12,24 @@ var _constructorParams = function(shareId, containerId, options) {
   return true;
 }
 
+const _eventNames = {
+  LOAD: "load",
+  START_SESSION: "startSession",
+  STOP_SESSION: "stopSession",
+};
 
-module.exports =  class Player {
+const _furioosServerUrl = "http://localhost:3000"; //"https://portal.furioos.com"
+
+export default class Player {
+  static eventNames = _eventNames;
+
   constructor(sharedLink, containerId, options) {
     if (!_constructorParams(sharedLink, containerId, options)) {
       throw "Bad parameters";
     }
 
     console.log("Instanciate the player", sharedLink, containerId, options);
+
     // Create the iframe into the given container.
     this.embed = this._createIframe(sharedLink, containerId);
   }
@@ -34,14 +44,30 @@ module.exports =  class Player {
     // Create the iframe element.
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", sharedLink);
-    iframe.style.width = "640px";
-    iframe.style.height = "480px";
+    iframe.setAttribute("id", "myIframe");
+    
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
 
     container.appendChild(iframe);
 
-    iframe.attacheEvent("onload", this._onLoad);
+    iframe.onload = this._onLoad.bind(this);
 
     return iframe;
+  }
+
+  _onLoad() {
+    // Bind listener for the messages.
+    window.addEventListener("message", (e) => {
+      console.log("Message", e);
+      switch(e.data) {
+        case _eventNames.LOAD:
+          if (this._onLoadCallback) {
+            this._onLoadCallback();
+          }
+          return;
+      }
+    });
   }
 
   // Binding onload callback.
@@ -49,13 +75,11 @@ module.exports =  class Player {
     this._onLoadCallback = onLoadCallback;
   }
 
-  _onLoad() {
-    if (this._onLoadCallback) {
-      this._onLoadCallback();
-    }
+  startSession() {
+    this.embed.contentWindow.postMessage(_eventNames.START_SESSION, _furioosServerUrl);
   }
 
-  test() {
-    console.log("Call test method.", this.embed);
+  stopSession() {
+    this.embed.contentWindow.postMessage(_eventNames.STOP_SESSION, _furioosServerUrl);
   }
 }
