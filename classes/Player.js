@@ -14,6 +14,7 @@ const _constructorParams = function(shareId, containerId, options) {
 
 const _eventNames = {
   LOAD: "load",
+  ERROR: "error",
   START_SESSION: "startSession",
   STOP_SESSION: "stopSession",
 };
@@ -78,7 +79,7 @@ module.exports = class Player {
           }
           return;
 
-        case _eventNames.SDK_ERROR:
+        case _eventNames.ERROR:
           this._displayErrorMessage(e.data.value);
           return;
       }
