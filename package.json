@@ -1,6 +1,6 @@
 {
   "name": "furioos-sdk",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Furioos SDK to create your own furioos viewer",
   "main": "index.js",
   "scripts": {

@@ -31,11 +31,13 @@ module.exports = class Player {
     console.log("Instanciate the player", sharedLink, containerId, options);
 
     // Create the iframe into the given container.
-    this.embed = this._createIframe(sharedLink, containerId);
+    this.sharedLink = sharedLink;
+    this.containerId = containerId;
+    this.embed = this._createIframe();
   }
 
-  _createIframe(sharedLink, containerId) {
-    const container = document.getElementById(containerId);
+  _createIframe(containerId) {
+    const container = document.getElementById(this.containerId);
 
     if (!container) {
       throw "Cannot find the container";
@@ -43,7 +45,6 @@ module.exports = class Player {
 
     // Create the iframe element.
     const iframe = document.createElement("iframe");
-    iframe.setAttribute("src", sharedLink);
     iframe.setAttribute("id", "myIframe");
     
     iframe.style.width = "100%";
@@ -62,6 +63,8 @@ module.exports = class Player {
       console.log("Message", e);
       switch(e.data) {
         case _eventNames.LOAD:
+          this.embed.setAttribute("src", this.sharedLink);
+
           if (this._onLoadCallback) {
             this._onLoadCallback();
           }
