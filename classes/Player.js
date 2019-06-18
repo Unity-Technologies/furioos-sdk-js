@@ -36,7 +36,7 @@ module.exports = class Player {
     this.embed = this._createIframe();
   }
 
-  _createIframe(containerId) {
+  _createIframe() {
     const container = document.getElementById(this.containerId);
 
     if (!container) {
@@ -45,6 +45,7 @@ module.exports = class Player {
 
     // Create the iframe element.
     const iframe = document.createElement("iframe");
+    this.embed.setAttribute("src", this.sharedLink);
     iframe.setAttribute("id", "myIframe");
     
     iframe.style.width = "100%";
@@ -57,17 +58,28 @@ module.exports = class Player {
     return iframe;
   }
 
+  _displayErrorMessage(message) {
+    const container = document.getElementById(this.containerId);
+
+    const div = document.createElement("div");
+    div.innerText = message;
+
+    container.innerHTML = div;
+  }
+
   _onLoad() {
     // Bind listener for the messages.
     window.addEventListener("message", (e) => {
       console.log("Message", e);
-      switch(e.data) {
+      switch(e.data.type) {
         case _eventNames.LOAD:
-          this.embed.setAttribute("src", this.sharedLink);
-
           if (this._onLoadCallback) {
             this._onLoadCallback();
           }
+          return;
+
+        case _eventNames.SDK_ERROR:
+          this._displayErrorMessage(e.data.value);
           return;
       }
     });
@@ -79,10 +91,10 @@ module.exports = class Player {
   }
 
   startSession() {
-    this.embed.contentWindow.postMessage(_eventNames.START_SESSION, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: _eventNames.START_SESSION }, _furioosServerUrl);
   }
 
   stopSession() {
-    this.embed.contentWindow.postMessage(_eventNames.STOP_SESSION, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: _eventNames.STOP_SESSION }, _furioosServerUrl);
   }
 }
