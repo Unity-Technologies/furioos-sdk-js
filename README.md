@@ -4,7 +4,7 @@ You'll need a pro version subscription on your Furioos interface in order to use
 Then choose the app you want to use with the SDK and share it as SDK link.
 
 ## Installation
-```js npm install --save furioos-sdk ```
+```npm install --save furioos-sdk```
 
 ## Exemple
 You should copy past your link previously you got in your Furioos interface.
