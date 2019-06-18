@@ -29,8 +29,6 @@ module.exports = class Player {
       throw "Bad parameters";
     }
 
-    console.log("Instanciate the player", sharedLink, containerId, options);
-
     // Create the iframe into the given container.
     this.sharedLink = sharedLink;
     this.containerId = containerId;
@@ -47,7 +45,7 @@ module.exports = class Player {
     // Create the iframe element.
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", this.sharedLink);
-    iframe.setAttribute("id", "myIframe");
+    iframe.setAttribute("id", "furioos-sdk-iframe");
     
     iframe.style.width = "100%";
     iframe.style.height = "100%";
