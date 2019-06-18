@@ -20,7 +20,7 @@ const _eventNames = {
 
 const _furioosServerUrl = "http://localhost:3000"; //"https://portal.furioos.com"
 
-export default class Player {
+module.exports = class Player {
   static eventNames = _eventNames;
 
   constructor(sharedLink, containerId, options) {
