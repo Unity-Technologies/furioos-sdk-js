@@ -65,7 +65,8 @@ module.exports = class Player {
     const div = document.createElement("div");
     div.innerText = message;
 
-    container.innerHTML = div;
+    container.innerHTML = "";
+    container.appendChild(div);
   }
 
   _onLoad() {
