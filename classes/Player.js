@@ -46,7 +46,7 @@ module.exports = class Player {
 
     // Create the iframe element.
     const iframe = document.createElement("iframe");
-    this.embed.setAttribute("src", this.sharedLink);
+    iframe.setAttribute("src", this.sharedLink);
     iframe.setAttribute("id", "myIframe");
     
     iframe.style.width = "100%";
