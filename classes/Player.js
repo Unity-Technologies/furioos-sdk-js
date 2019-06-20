@@ -21,13 +21,15 @@ const _eventNames = {
   MINIMIZE: "minimize",
   MOUSELOCK: "mouseLock",
   QUALITY: "quality",
+  RESTART_APP: "restartApp",
+  RESTART_CLIENT: "restartClient",
 };
 
 const _qualityValues = {
   LOW: 0,
-  MEDIUM: 0,
-  HIGH: 0,
-  ULTRA: 0,
+  MEDIUM: 1,
+  HIGH: 2,
+  ULTRA: 3,
 }
 
 const _furioosServerUrl = "http://localhost:3000"; //"https://portal.furioos.com"
@@ -158,5 +160,13 @@ module.exports = class Player {
       type: _eventNames.QUALITY,
       value: value
     }, _furioosServerUrl);
+  }
+
+  restartApp() {
+    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_APP }, _furioosServerUrl);
+  }
+
+  restartClient() {
+    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_CLIENT }, _furioosServerUrl);
   }
 }
