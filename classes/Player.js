@@ -17,21 +17,53 @@ const _eventNames = {
   ERROR: "error",
   START_SESSION: "startSession",
   STOP_SESSION: "stopSession",
+  MAXIMIZE: "maximize",
+  MINIMIZE: "minimize",
+  MOUSELOCK: "mouseLock",
+  QUALITY: "quality",
 };
+
+const _qualityValues = {
+  LOW: 0,
+  MEDIUM: 0,
+  HIGH: 0,
+  ULTRA: 0,
+}
 
 const _furioosServerUrl = "http://localhost:3000"; //"https://portal.furioos.com"
 
 module.exports = class Player {
   static eventNames = _eventNames;
+  static qualityValues = _qualityValues;
 
   constructor(sharedLink, containerId, options) {
     if (!_constructorParams(sharedLink, containerId, options)) {
       throw "Bad parameters";
     }
 
+    // If there are options, treat those who change the url.
+    if (options) {
+      let prefix = "?";
+      if (options.whiteLabel) {
+        sharedLink += prefix + "whiteLabel=true";
+        prefix = "&";
+      }
+
+      if (options.hideToolbar) {
+        sharedLink += prefix + "hideToolbar=true";
+        prefix = "&";
+      }
+
+      if (options.hideTitle) {
+        sharedLink += prefix + "hideTitle=true";
+        prefix = "&";
+      }
+    }
+
     // Create the iframe into the given container.
     this.sharedLink = sharedLink;
     this.containerId = containerId;
+    this.options = options;
     this.embed = this._createIframe();
   }
 
@@ -70,7 +102,6 @@ module.exports = class Player {
   _onLoad() {
     // Bind listener for the messages.
     window.addEventListener("message", (e) => {
-      console.log("Message", e);
       switch(e.data.type) {
         case _eventNames.LOAD:
           if (this._onLoadCallback) {
@@ -96,5 +127,36 @@ module.exports = class Player {
 
   stopSession() {
     this.embed.contentWindow.postMessage({ type: _eventNames.STOP_SESSION }, _furioosServerUrl);
+  }
+
+  maximize() {
+    this.embed.contentWindow.postMessage({ type: _eventNames.MAXIMIZE }, _furioosServerUrl);
+  }
+
+  minimize() {
+    this.embed.contentWindow.postMessage({ type: _eventNames.MINIMIZE }, _furioosServerUrl);
+  }
+
+  mouseLock(value) {
+    this.embed.contentWindow.postMessage({ 
+      type: _eventNames.MOUSELOCK,
+      value: value
+    }, _furioosServerUrl);
+  }
+
+  quality(value) {
+    // Test if the value is correct.
+    if (value != _qualityValues.LOW 
+      && value != _qualityValues.MEDIUM
+      && value != _qualityValues.HIGH
+      && value != _qualityValues.ULTRA) 
+    {
+      throw "Bad parameter: The quality should be one of the given value in Player.qualityValues";
+    }
+
+    this.embed.contentWindow.postMessage({ 
+      type: _eventNames.QUALITY,
+      value: value
+    }, _furioosServerUrl);
   }
 }
