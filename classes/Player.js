@@ -15,8 +15,8 @@ const _constructorParams = function(shareId, containerId, options) {
 const _eventNames = {
   LOAD: "load",
   ERROR: "error",
-  START_SESSION: "startSession",
-  STOP_SESSION: "stopSession",
+  START: "start",
+  STOP: "stop",
   MAXIMIZE: "maximize",
   MINIMIZE: "minimize",
   MOUSELOCK: "mouseLock",
@@ -128,12 +128,12 @@ module.exports = class Player {
     this._onLoadCallback = onLoadCallback;
   }
 
-  startSession() {
-    this.embed.contentWindow.postMessage({ type: _eventNames.START_SESSION }, _furioosServerUrl);
+  start() {
+    this.embed.contentWindow.postMessage({ type: _eventNames.START }, _furioosServerUrl);
   }
 
-  stopSession() {
-    this.embed.contentWindow.postMessage({ type: _eventNames.STOP_SESSION }, _furioosServerUrl);
+  stop() {
+    this.embed.contentWindow.postMessage({ type: _eventNames.STOP }, _furioosServerUrl);
   }
 
   maximize() {

@@ -29,13 +29,10 @@ Instanciate the player for a given app.
 Bind a callback that will be called when the player is ready.
 - `callback: Function`: Your own code to do what you want when it's ready (ex: call startSession()).
 
-### startSession()
+### start()
 Launch the stream of the app.
 
-### stopSession()
-Stop the stream of the app.
-
-### stopSession()
+### stop()
 Stop the stream of the app.
 
 ### maximize()
