@@ -19,42 +19,52 @@ player.onLoad(function() {
 })
 ```
 
+## Properties
+#### quality: String
+Get the current setted quality. Possible values : LOW / MEDIUM / HIGH / ULTRA
+
 ## Methods
-### constructor(sdkShareLink, containerDivId, options)
+#### constructor(sdkShareLink, containerDivId, options)
 Instanciate the player for a given app.
 - `sdkShareLink: String`: Link of the app you want to share (ex: "https://portal.furioos.com/exemple/12345").
 - `containerDivId: String`: The ID of the container div that will host the render.
 
-### onLoad(callback)
+#### onLoad(callback)
 Bind a callback that will be called when the player is ready.
 - `callback: Function`: Your own code to do what you want when it's ready (ex: call startSession()).
 
-### start()
-Launch the stream of the app.
+### Methods to create your own interface
+Those methods permit you to create your own interface.
 
-### stop()
-Stop the stream of the app.
+#### start()
+Start streaming the app.
 
-### maximize()
-Full screen mode enabled.
+#### stop()
+Stop streaming the app.
 
-### minimize()
-Full screen mode disabled.
+#### maximize()
+Enable Full screen mode.
 
-### mouseLock(value)
-Lock/unlock the mouse.
+#### minimize()
+Disable Full screen mode.
+
+#### mouseLock(value)
+Lock/Unlock the mouse.
 - `value: Boolean`: true to lock, false to unlock the mouse.
 
-### quality(value)
+#### setQuality(value)
 Set the quality of the stream.
 - `value: QualityValue`: Use one of the static value Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA
 
-### restartApp()
+#### restartApp()
 Restart the application
 
-### restartClient()
+#### restartClient()
 Reload all the streaming.
 
-### sendData(data)
-Send data to your own application by using the Furioos Unity SDK.
+### API Method
+To use corectly this method, you will need to use the Furioos SDK for Unity in order to received the sended data and treat it into your app.
+
+#### sendData(data)
+Send data to your own application by using the Furioos SDK for Unity.
 - `data: JSON`: The data you want to send to your app formated in JSON.

@@ -36,7 +36,6 @@ const _qualityValues = {
 const _furioosServerUrl = "http://localhost:3000"; //"https://portal.furioos.com"
 
 module.exports = class Player {
-  static eventNames = _eventNames;
   static qualityValues = _qualityValues;
 
   constructor(sharedLink, containerId, options) {
@@ -79,6 +78,10 @@ module.exports = class Player {
     this.options = options;
     this.embed = this._createIframe();
   }
+
+  ///////////////////////
+  /// PRIVATE METHODS ///
+  ///////////////////////
 
   _createIframe() {
     const container = document.getElementById(this.containerId);
@@ -129,6 +132,30 @@ module.exports = class Player {
     });
   }
 
+  ////////////////////////
+  /////// GETTERS ////////
+  ////////////////////////
+
+  get quality() {
+    switch(this.quality) {
+      case _qualityValues.LOW:
+        return "LOW";
+
+      case _qualityValues.MEDIUM:
+          return "MEDIUM";
+
+      case _qualityValues.HIGH:
+          return "HIGH";
+
+      case _qualityValues.ULTRA:
+          return "ULTRA";
+    }
+  }
+
+  ////////////////////////
+  //// PUBLIC METHODS ////
+  ////////////////////////
+
   // Binding onload callback.
   onLoad(onLoadCallback) {
     this._onLoadCallback = onLoadCallback;
@@ -157,7 +184,7 @@ module.exports = class Player {
     }, _furioosServerUrl);
   }
 
-  quality(value) {
+  setQuality(value) {
     // Test if the value is correct.
     if (value != _qualityValues.LOW 
       && value != _qualityValues.MEDIUM
@@ -171,6 +198,8 @@ module.exports = class Player {
       type: _eventNames.QUALITY,
       value: value
     }, _furioosServerUrl);
+
+    this.quality = value;
   }
 
   restartApp() {
