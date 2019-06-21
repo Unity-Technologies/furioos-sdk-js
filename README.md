@@ -15,12 +15,12 @@ const player = new Player({sdkShareLink}, {containerDivId}, {options});
 
 player.onLoad(function() {
   // Here you know when the player is ready.
-  player.startSession();
+  player.start();
 })
 ```
 
 ## Properties
-#### quality: String
+#### - ```javascript quality: String```
 Get the current setted quality. Possible values : LOW / MEDIUM / HIGH / ULTRA
 
 ## Methods
