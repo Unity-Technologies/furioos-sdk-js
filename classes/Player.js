@@ -44,6 +44,11 @@ module.exports = class Player {
       throw "Bad parameters";
     }
 
+    if (sharedLink.indexOf("?") > 0) {
+      // Remove URL parameters, should use the options for parameters.
+      sharedLink = sharedLink.split("?")[0];
+    }
+
     // If there are options, treat those who change the url.
     if (options) {
       let prefix = "?";
