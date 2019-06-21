@@ -23,6 +23,7 @@ const _eventNames = {
   QUALITY: "quality",
   RESTART_APP: "restartApp",
   RESTART_CLIENT: "restartClient",
+  SEND_DATA: "sendData",
 };
 
 const _qualityValues = {
@@ -173,5 +174,12 @@ module.exports = class Player {
 
   restartClient() {
     this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_CLIENT }, _furioosServerUrl);
+  }
+
+  sendData(data) {
+    this.embed.contentWindow.postMessage({ 
+      type: _eventNames.SEND_DATA,
+      value: data,
+    }, _furioosServerUrl);
   }
 }

@@ -54,3 +54,7 @@ Restart the application
 
 ### restartClient()
 Reload all the streaming.
+
+### sendData(data)
+Send data to your own application by using the Furioos Unity SDK.
+- `data: JSON`: The data you want to send to your app formated in JSON.
