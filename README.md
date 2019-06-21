@@ -20,18 +20,18 @@ player.onLoad(function() {
 ```
 
 ## Properties
-#### - ```javascript quality: String```
+#### quality: String
 Get the current setted quality. Possible values : LOW / MEDIUM / HIGH / ULTRA
 
 ## Methods
 #### constructor(sdkShareLink, containerDivId, options)
 Instanciate the player for a given app.
-- `sdkShareLink: String`: Link of the app you want to share (ex: "https://portal.furioos.com/exemple/12345").
-- `containerDivId: String`: The ID of the container div that will host the render.
+- ```javascript sdkShareLink: String ```: Link of the app you want to share (ex: "https://portal.furioos.com/exemple/12345").
+- ```javascript containerDivId: String ```: The ID of the container div that will host the render.
 
 #### onLoad(callback)
 Bind a callback that will be called when the player is ready.
-- `callback: Function`: Your own code to do what you want when it's ready (ex: call startSession()).
+- ```javascript callback: Function ```: Your own code to do what you want when it's ready (ex: call startSession()).
 
 ### Methods to create your own interface
 Those methods permit you to create your own interface.
