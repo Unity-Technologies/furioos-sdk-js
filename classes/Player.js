@@ -60,6 +60,11 @@ module.exports = class Player {
         sharedLink += prefix + "hideTitle=true";
         prefix = "&";
       }
+
+      if (options.hidePlayButton) {
+        sharedLink += prefix + "hidePlayButton=true";
+        prefix = "&";
+      }
     }
 
     // Create the iframe into the given container.

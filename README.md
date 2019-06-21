@@ -11,7 +11,7 @@ You should copy past your link previously you got in your Furioos interface.
 ```javascript
 import { Player } from 'furioos-sdk';
 
-const player = new Player({sdkShareLink}, {containerDivId});
+const player = new Player({sdkShareLink}, {containerDivId}, {options});
 
 player.onLoad(function() {
   // Here you know when the player is ready.
@@ -20,17 +20,40 @@ player.onLoad(function() {
 ```
 
 ## Methods
-### constructor(sdkShareLink, containerDivId)
+### constructor(sdkShareLink, containerDivId, options)
 Instanciate the player for a given app.
 - `sdkShareLink: String`: Link of the app you want to share (ex: "https://portal.furioos.com/exemple/12345").
 - `containerDivId: String`: The ID of the container div that will host the render.
 
 ### onLoad(callback)
 Bind a callback that will be called when the player is ready.
-- `callback: Function`: You own code to do what you want when it's ready (ex: start the stream.);
+- `callback: Function`: Your own code to do what you want when it's ready (ex: call startSession()).
 
 ### startSession()
 Launch the stream of the app.
 
 ### stopSession()
 Stop the stream of the app.
+
+### stopSession()
+Stop the stream of the app.
+
+### maximize()
+Full screen mode enabled.
+
+### minimize()
+Full screen mode disabled.
+
+### mouseLock(value)
+Lock/unlock the mouse.
+- `value: Boolean`: true to lock, false to unlock the mouse.
+
+### quality(value)
+Set the quality of the stream.
+- `value: QualityValue`: Use one of the static value Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA
+
+### restartApp()
+Restart the application
+
+### restartClient()
+Reload all the streaming.
