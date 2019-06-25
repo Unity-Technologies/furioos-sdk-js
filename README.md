@@ -7,7 +7,7 @@ Then choose the app you want to use with the SDK and share it as SDK link.
 ```npm install --save furioos-sdk```
 
 ## Exemple
-You should copy past your link previously you got in your Furioos interface.
+You should copy past the link you previously got in your Furioos share interface.
 ```javascript
 import { Player } from 'furioos-sdk';
 
@@ -26,12 +26,12 @@ Get the current setted quality. Possible values : LOW / MEDIUM / HIGH / ULTRA
 ## Methods
 #### constructor(sdkShareLink, containerDivId, options)
 Instanciate the player for a given app.
-- ```javascript sdkShareLink: String ```: Link of the app you want to share (ex: "https://portal.furioos.com/exemple/12345").
-- ```javascript containerDivId: String ```: The ID of the container div that will host the render.
+- `sdkShareLink: String`: Link of the app you want to share (ex: "https://portal.furioos.com/exemple/12345").
+- `containerDivId: String`: The ID of the container div that will host the render.
 
 #### onLoad(callback)
 Bind a callback that will be called when the player is ready.
-- ```javascript callback: Function ```: Your own code to do what you want when it's ready (ex: call startSession()).
+- `callback: Function`: Your own code to do what you want when it's ready (ex: call startSession()).
 
 ### Methods to create your own interface
 Those methods permit you to create your own interface.
