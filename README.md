@@ -28,6 +28,11 @@ Get the current setted quality. Possible values : LOW / MEDIUM / HIGH / ULTRA
 Instanciate the player for a given app.
 - `sdkShareLink: String`: Link of the app you want to share (ex: "https://portal.furioos.com/exemple/12345").
 - `containerDivId: String`: The ID of the container div that will host the render.
+- `options: Object`: The options to setup the player are these following :
+  - `whiteLabel: Boolean`: Remove all Furioos' Logo
+  - `hideToolbar: Boolean`: Hide the toolbar to create your own.
+  - `hideTitle: Boolean`: Hide the title bar to create your own.
+  - `hidePlayButton: Boolean`: Hide the play button.
 
 #### onLoad(callback)
 Bind a callback that will be called when the player is ready.
