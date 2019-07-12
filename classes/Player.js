@@ -38,42 +38,44 @@ const _furioosServerUrl = "http://localhost:3000"; //"https://portal.furioos.com
 module.exports = class Player {
   static qualityValues = _qualityValues;
 
-  constructor(sharedLink, containerId, options) {
-    if (!_constructorParams(sharedLink, containerId, options)) {
+  constructor(sharedLinkID, containerId, options) {
+    if (!_constructorParams(sharedLinkID, containerId, options)) {
       throw "Bad parameters";
     }
 
-    if (sharedLink.indexOf("?") > 0) {
+    if (sharedLinkID.indexOf("?") > 0) {
       // Remove URL parameters, should use the options for parameters.
-      sharedLink = sharedLink.split("?")[0];
+      sharedLinkID = sharedLinkID.split("?")[0];
     }
+
+    sharedLinkID = _furioosServerUrl + "/embed/" + sharedLinkID;
 
     // If there are options, treat those who change the url.
     if (options) {
       let prefix = "?";
       if (options.whiteLabel) {
-        sharedLink += prefix + "whiteLabel=true";
+        sharedLinkID += prefix + "whiteLabel=true";
         prefix = "&";
       }
 
       if (options.hideToolbar) {
-        sharedLink += prefix + "hideToolbar=true";
+        sharedLinkID += prefix + "hideToolbar=true";
         prefix = "&";
       }
 
       if (options.hideTitle) {
-        sharedLink += prefix + "hideTitle=true";
+        sharedLinkID += prefix + "hideTitle=true";
         prefix = "&";
       }
 
       if (options.hidePlayButton) {
-        sharedLink += prefix + "hidePlayButton=true";
+        sharedLinkID += prefix + "hidePlayButton=true";
         prefix = "&";
       }
     }
 
     // Create the iframe into the given container.
-    this.sharedLink = sharedLink;
+    this.sharedLink = sharedLinkID;
     this.containerId = containerId;
     this.options = options;
     this.embed = this._createIframe();

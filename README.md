@@ -11,7 +11,7 @@ You should copy past the link you previously got in your Furioos share interface
 ```javascript
 import { Player } from 'furioos-sdk';
 
-const player = new Player({sdkShareLink}, {containerDivId}, {options});
+const player = new Player({sdkShareLinkID}, {containerDivId}, {options});
 
 player.onLoad(function() {
   // Here you know when the player is ready.
@@ -24,9 +24,9 @@ player.onLoad(function() {
 Get the current setted quality. Possible values : LOW / MEDIUM / HIGH / ULTRA
 
 ## Methods
-#### constructor(sdkShareLink, containerDivId, options)
+#### constructor(sdkShareLinkID, containerDivId, options)
 Instanciate the player for a given app.
-- `sdkShareLink: String`: Link of the app you want to share (ex: "https://portal.furioos.com/exemple/12345").
+- `sdkShareLinkID: String`: Link ID of the app you want to share (ex: "123.456").
 - `containerDivId: String`: The ID of the container div that will host the render.
 - `options: Object`: The options to setup the player are these following :
   - `whiteLabel: Boolean`: Remove all Furioos' Logo
