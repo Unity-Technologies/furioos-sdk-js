@@ -11,7 +11,7 @@ You should copy past the link you previously got in your Furioos share interface
 ```javascript
 import { Player } from 'furioos-sdk';
 
-const player = new Player({sdkShareLinkID}, {containerDivId}, {options});
+const player = new Player("sdkShareLinkID", "containerDivId", options);
 
 player.onLoad(function() {
   // Here you know when the player is ready.

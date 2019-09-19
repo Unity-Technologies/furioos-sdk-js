@@ -33,7 +33,7 @@ const _qualityValues = {
   ULTRA: 3,
 }
 
-const _furioosServerUrl = "http://localhost:3000"; //"https://portal.furioos.com"
+const _furioosServerUrl = "https://portal.furioos.com"
 
 module.exports = class Player {
   static qualityValues = _qualityValues;
