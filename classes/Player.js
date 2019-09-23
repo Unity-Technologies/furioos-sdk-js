@@ -36,7 +36,7 @@ const _qualityValues = {
 const _furioosServerUrl = "https://portal.furioos.com"
 
 module.exports = class Player {
-  static qualityValues = _qualityValues;
+  static get qualityValues() { return _qualityValues };
 
   constructor(sharedLinkID, containerId, options) {
     if (!_constructorParams(sharedLinkID, containerId, options)) {
