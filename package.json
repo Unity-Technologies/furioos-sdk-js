@@ -11,7 +11,7 @@
     "url": "git+https://github.com/F-MyKhi/furioos-sdk-js.git"
   },
   "author": "Furioos LTD",
-  "license": "AGPL-3.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/F-MyKhi/furioos-sdk-js/issues"
   },
