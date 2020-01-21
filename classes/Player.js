@@ -48,6 +48,10 @@ module.exports = class Player {
       sharedLinkID = sharedLinkID.split("?")[0];
     }
 
+    if (options.overridedURL) {
+      _furioosServerUrl = options.overridedURL;
+    } 
+
     sharedLinkID = _furioosServerUrl + "/embed/" + sharedLinkID;
 
     // If there are options, treat those who change the url.
