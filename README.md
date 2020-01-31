@@ -38,6 +38,10 @@ Instanciate the player for a given app.
 Bind a callback that will be called when the player is ready.
 - `callback: Function`: Your own code to do what you want when it's ready (ex: call startSession()).
 
+#### onSDKMessage(callback)
+Bind a callback to receive messages from your application.
+- `callback: Function`: Your own code to do what you want.
+
 ### Methods to create your own interface
 Those methods permit you to create your own interface.
 

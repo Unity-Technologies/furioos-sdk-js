@@ -14,6 +14,7 @@ const _constructorParams = function(shareId, containerId, options) {
 
 const _eventNames = {
   LOAD: "load",
+  ON_SDK_MESSAGE: "onSDKMessage",
   ERROR: "error",
   START: "start",
   STOP: "stop",
@@ -130,7 +131,11 @@ module.exports = class Player {
             this._onLoadCallback();
           }
           return;
-
+        case ON_SDK_MESSAGE:
+          if (this._onSDKMessageCallback) {
+            this._onSDKMessageCallback(e.data.value);
+          }
+          return;
         case _eventNames.ERROR:
           this._displayErrorMessage(e.data.value);
           return;
@@ -165,6 +170,10 @@ module.exports = class Player {
   // Binding onload callback.
   onLoad(onLoadCallback) {
     this._onLoadCallback = onLoadCallback;
+  }
+
+  onSDKMessage(onSDKMessageCallback) {
+    this._onSDKMessageCallback = onSDKMessageCallback;
   }
 
   start() {
