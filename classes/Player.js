@@ -14,7 +14,6 @@ const _constructorParams = function(shareId, containerId, options) {
 
 const _eventNames = {
   LOAD: "load",
-  ON_SDK_MESSAGE: "onSDKMessage",
   ERROR: "error",
   START: "start",
   STOP: "stop",
@@ -24,7 +23,8 @@ const _eventNames = {
   QUALITY: "quality",
   RESTART_APP: "restartApp",
   RESTART_CLIENT: "restartClient",
-  SEND_DATA: "sendData",
+  ON_SDK_MESSAGE: "onSDKMessage",
+  SEND_SDK_MESSAGE: "sendSDKMessage",
   SET_LOCATION: "setLocation"
 };
 
@@ -36,10 +36,10 @@ const _qualityValues = {
 }
 
 const _regions = {
-  EUW: { lat: 52.1326, lng: 5.2913 },
-  USW: { lat: 47.751076, lng: -120.740135 },
-  USE: { lat: 37.926868, lng: -78.024902 },
-  AUE: { lat: -33.865143, lng: 151.2099 }
+  EUW: [52.1326, 5.2913],
+  USW: [47.751076, -120.740135],
+  USE: [37.926868, -78.024902],
+  AUE: [-33.865143, 151.2099]
 }
 
 let _furioosServerUrl = "https://portal.furioos.com"
@@ -89,6 +89,7 @@ module.exports = class Player {
     }
 
     // Create the iframe into the given container.
+    this.loaded = false;
     this.sharedLink = sharedLinkID;
     this.containerId = containerId;
     this.options = options;
@@ -140,6 +141,8 @@ module.exports = class Player {
           if (this.location) {
             this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
           }
+          
+          this.loaded = true;
 
           if (this._onLoadCallback) {
             this._onLoadCallback();
@@ -189,6 +192,10 @@ module.exports = class Player {
   setDefaultLocation(location) {
     this.location = location;
 
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
     this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
   } 
 
@@ -197,22 +204,42 @@ module.exports = class Player {
       location = this.location;
     }  
 
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
     this.embed.contentWindow.postMessage({ type: _eventNames.START, value: location }, _furioosServerUrl);
   }
 
   stop() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
     this.embed.contentWindow.postMessage({ type: _eventNames.STOP }, _furioosServerUrl);
   }
 
   maximize() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
     this.embed.contentWindow.postMessage({ type: _eventNames.MAXIMIZE }, _furioosServerUrl);
   }
 
   minimize() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+    
     this.embed.contentWindow.postMessage({ type: _eventNames.MINIMIZE }, _furioosServerUrl);
   }
 
   mouseLock(value) {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+    
     this.embed.contentWindow.postMessage({ 
       type: _eventNames.MOUSELOCK,
       value: value
@@ -229,6 +256,10 @@ module.exports = class Player {
       throw "Bad parameter: The quality should be one of the given value in Player.qualityValues";
     }
 
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
     this.embed.contentWindow.postMessage({ 
       type: _eventNames.QUALITY,
       value: value
@@ -238,10 +269,18 @@ module.exports = class Player {
   }
 
   restartApp() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+    
     this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_APP }, _furioosServerUrl);
   }
 
   restartClient() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+    
     this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_CLIENT }, _furioosServerUrl);
   }
 
@@ -251,8 +290,12 @@ module.exports = class Player {
   }
 
   sendSDKMessage(data) {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+    
     this.embed.contentWindow.postMessage({ 
-      type: _eventNames.SEND_DATA,
+      type: _eventNames.SEND_SDK_MESSAGE,
       value: data,
     }, _furioosServerUrl);
   }
