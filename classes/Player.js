@@ -116,7 +116,7 @@ module.exports = class Player {
 
     container.appendChild(iframe);
 
-    iframe.onload = this._onLoad.bind(this);
+    iframe.contentWindow.onload = this._onLoad.bind(this);
 
     return iframe;
   }
