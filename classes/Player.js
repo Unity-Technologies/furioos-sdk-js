@@ -25,6 +25,7 @@ const _eventNames = {
   RESTART_APP: "restartApp",
   RESTART_CLIENT: "restartClient",
   SEND_DATA: "sendData",
+  SET_LOCATION: "setLocation"
 };
 
 const _qualityValues = {
@@ -34,10 +35,18 @@ const _qualityValues = {
   ULTRA: 3,
 }
 
+const _regions = {
+  EUW: { lat: 52.1326, lng: 5.2913 },
+  USW: { lat: 47.751076, lng: -120.740135 },
+  USE: { lat: 37.926868, lng: -78.024902 },
+  AUE: { lat: -33.865143, lng: 151.2099 }
+}
+
 let _furioosServerUrl = "https://portal.furioos.com"
 
 module.exports = class Player {
   static get qualityValues() { return _qualityValues };
+  static get regions() { return _regions };
 
   constructor(sharedLinkID, containerId, options) {
     if (!_constructorParams(sharedLinkID, containerId, options)) {
@@ -127,11 +136,16 @@ module.exports = class Player {
     window.addEventListener("message", (e) => {
       switch(e.data.type) {
         case _eventNames.LOAD:
+          // When the player is loaded: Set the default setted location (if setted).
+          if (this.location) {
+            this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+          }
+
           if (this._onLoadCallback) {
             this._onLoadCallback();
           }
           return;
-        case ON_SDK_MESSAGE:
+        case _eventNames.ON_SDK_MESSAGE:
           if (this._onSDKMessageCallback) {
             this._onSDKMessageCallback(e.data.value);
           }
@@ -172,12 +186,18 @@ module.exports = class Player {
     this._onLoadCallback = onLoadCallback;
   }
 
-  onSDKMessage(onSDKMessageCallback) {
-    this._onSDKMessageCallback = onSDKMessageCallback;
-  }
+  setDefaultLocation(location) {
+    this.location = location;
 
-  start() {
-    this.embed.contentWindow.postMessage({ type: _eventNames.START }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+  } 
+
+  start(location) {
+    if (!location) {
+      location = this.location;
+    }  
+
+    this.embed.contentWindow.postMessage({ type: _eventNames.START, value: location }, _furioosServerUrl);
   }
 
   stop() {
@@ -225,7 +245,12 @@ module.exports = class Player {
     this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_CLIENT }, _furioosServerUrl);
   }
 
-  sendData(data) {
+  // SDK
+  onSDKMessage(onSDKMessageCallback) {
+    this._onSDKMessageCallback = onSDKMessageCallback;
+  }
+
+  sendSDKMessage(data) {
     this.embed.contentWindow.postMessage({ 
       type: _eventNames.SEND_DATA,
       value: data,

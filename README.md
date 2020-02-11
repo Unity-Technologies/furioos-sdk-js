@@ -36,17 +36,19 @@ Instanciate the player for a given app.
 
 #### onLoad(callback)
 Bind a callback that will be called when the player is ready.
-- `callback: Function`: Your own code to do what you want when it's ready (ex: call startSession()).
-
-#### onSDKMessage(callback)
-Bind a callback to receive messages from your application.
-- `callback: Function`: Your own code to do what you want.
+- `callback: Function`: Your own code to do what you want when it's ready (ex: call start()).
 
 ### Methods to create your own interface
 Those methods permit you to create your own interface.
 
-#### start()
+#### setLocation(location)
+setup the default location used for each start. 
+You should set this value before the user can start the session if you use the default Furioos' start button.
+- `location: Region`: Use one of the static value : Player.regions.EUW / Player.regions.USE / Player.regions.USW / Player.regions.AUE
+
+#### start(location)
 Start streaming the app.
+- `location: Region`: Use one of the static value : Player.regions.EUW / Player.regions.USE / Player.regions.USW / Player.regions.AUE
 
 #### stop()
 Stop streaming the app.
@@ -71,9 +73,13 @@ Restart the application
 #### restartClient()
 Reload all the streaming.
 
-### API Method
+### SDK Methods
 To use corectly this method, you will need to use the Furioos SDK for Unity in order to received the sended data and treat it into your app.
 
-#### sendData(data)
+#### onSDKMessage(callback)
+Bind a callback to receive messages from your application.
+- `callback: Function`: Your own code to do what you want.
+
+#### sendSDKMessage(data)
 Send data to your own application by using the Furioos SDK for Unity.
 - `data: JSON`: The data you want to send to your app formated in JSON.
