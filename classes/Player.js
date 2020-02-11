@@ -295,7 +295,7 @@ module.exports = class Player {
     } 
     
     this.embed.contentWindow.postMessage({ 
-      type: _eventNames.SEND_DATA,
+      type: _eventNames.SEND_SDK_MESSAGE,
       value: data,
     }, _furioosServerUrl);
   }
