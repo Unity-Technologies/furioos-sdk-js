@@ -14,7 +14,6 @@ const _constructorParams = function(shareId, containerId, options) {
 
 const _eventNames = {
   LOAD: "load",
-  ON_SDK_MESSAGE: "onSDKMessage",
   ERROR: "error",
   START: "start",
   STOP: "stop",
@@ -24,7 +23,8 @@ const _eventNames = {
   QUALITY: "quality",
   RESTART_APP: "restartApp",
   RESTART_CLIENT: "restartClient",
-  SEND_DATA: "sendData",
+  ON_SDK_MESSAGE: "onSDKMessage",
+  SEND_SDK_MESSAGE: "sendSDKMessage",
   SET_LOCATION: "setLocation"
 };
 
