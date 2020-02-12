@@ -29,10 +29,11 @@ const _eventNames = {
 };
 
 const _qualityValues = {
-  LOW: 0,
-  MEDIUM: 1,
-  HIGH: 2,
-  ULTRA: 3,
+  AUTO: 0,
+  LOW: 1,
+  MEDIUM: 2,
+  HIGH: 3,
+  ULTRA: 4,
 }
 
 const _regions = {
@@ -166,6 +167,9 @@ module.exports = class Player {
 
   get quality() {
     switch(this.quality) {
+      case _qualityValues.AUTO:
+        return "AUTO";
+
       case _qualityValues.LOW:
         return "LOW";
 

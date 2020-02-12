@@ -21,7 +21,7 @@ player.onLoad(function() {
 
 ## Properties
 #### quality: String
-Get the current setted quality. Possible values : LOW / MEDIUM / HIGH / ULTRA
+Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH / ULTRA
 
 ## Methods
 #### constructor(sdkShareLinkID, containerDivId, options)
@@ -65,7 +65,7 @@ Lock/Unlock the mouse.
 
 #### setQuality(value)
 Set the quality of the stream.
-- `value: QualityValue`: Use one of the static value Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA
+- `value: QualityValue`: Use one of the static value Player.qualityValues.AUTO / Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA
 
 #### restartApp()
 Restart the application
