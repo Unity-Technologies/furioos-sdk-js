@@ -140,7 +140,15 @@ module.exports = class Player {
         case _eventNames.LOAD:
           // When the player is loaded: Set the default setted location (if setted).
           if (this.location) {
-            this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+            if (!this.embed.contentWindow) {
+              // Wait the window is reachable.
+              setTimeout(() => {
+                this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+              }, 100);
+            }
+            else {
+              this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+            }
           }
           
           this.loaded = true;
