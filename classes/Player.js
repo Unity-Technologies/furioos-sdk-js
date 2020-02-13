@@ -112,6 +112,7 @@ module.exports = class Player {
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", this.sharedLink);
     iframe.setAttribute("id", "furioos-sdk-iframe");
+    iframe.setAttribute("allow", "autoplay; fullscreen");
     
     iframe.style.width = "100%";
     iframe.style.height = "100%";
