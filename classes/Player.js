@@ -19,10 +19,8 @@ const _eventNames = {
   STOP: "stop",
   MAXIMIZE: "maximize",
   MINIMIZE: "minimize",
-  MOUSELOCK: "mouseLock",
   QUALITY: "quality",
-  RESTART_APP: "restartApp",
-  RESTART_CLIENT: "restartClient",
+  RESTART_STREAM: "restartStream",
   ON_SDK_MESSAGE: "onSDKMessage",
   SEND_SDK_MESSAGE: "sendSDKMessage",
   SET_LOCATION: "setLocation"
@@ -248,17 +246,6 @@ module.exports = class Player {
     this.embed.contentWindow.postMessage({ type: _eventNames.MINIMIZE }, _furioosServerUrl);
   }
 
-  mouseLock(value) {
-    if (!this.loaded) {
-      return; // Not loaded.
-    } 
-    
-    this.embed.contentWindow.postMessage({ 
-      type: _eventNames.MOUSELOCK,
-      value: value
-    }, _furioosServerUrl);
-  }
-
   setQuality(value) {
     // Test if the value is correct.
     if (value != _qualityValues.LOW 
@@ -281,20 +268,12 @@ module.exports = class Player {
     this.quality = value;
   }
 
-  restartApp() {
+  restartStream() {
     if (!this.loaded) {
       return; // Not loaded.
     } 
     
-    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_APP }, _furioosServerUrl);
-  }
-
-  restartClient() {
-    if (!this.loaded) {
-      return; // Not loaded.
-    } 
-    
-    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_CLIENT }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_STREAM }, _furioosServerUrl);
   }
 
   // SDK
