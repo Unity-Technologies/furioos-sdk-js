@@ -1,13 +1,13 @@
 # Furioos SDK
 ## Requirements
-You'll need a pro version subscription on your Furioos interface in order to use the SDK.
-Then choose the app you want to use with the SDK and share it as SDK link.
+You'll need a Business subscription on Furioos to use the SDK.
+Then choose the app you want to use with the SDK and create a SDK link.
 
 ## Installation
 ```npm install --save furioos-sdk```
 
 ## Exemple
-You should copy past the link you previously got in your Furioos share interface.
+You should copy past the link ID previously created.
 ```javascript
 import { Player } from 'furioos-sdk';
 
@@ -27,7 +27,7 @@ Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH / U
 #### constructor(sdkShareLinkID, containerDivId, options)
 Instanciate the player for a given app.
 - `sdkShareLinkID: String`: Link ID of the app you want to share (ex: "123.456").
-- `containerDivId: String`: The ID of the container div that will host the render.
+- `containerDivId: String`: The ID of the HTML container div that will host the render.
 - `options: Object`: The options to setup the player are these following :
   - `whiteLabel: Boolean`: Remove all Furioos' Logo
   - `hideToolbar: Boolean`: Hide the toolbar to create your own.
@@ -47,11 +47,11 @@ You should set this value before the user can start the session if you use the d
 - `location: Region`: Use one of the static value : Player.regions.EUW / Player.regions.USE / Player.regions.USW / Player.regions.AUE
 
 #### start(location)
-Start streaming the app.
+Start a new session.
 - `location: Region`: Use one of the static value : Player.regions.EUW / Player.regions.USE / Player.regions.USW / Player.regions.AUE
 
 #### stop()
-Stop streaming the app.
+Stop the session.
 
 #### maximize()
 Enable Full screen mode.
@@ -59,19 +59,12 @@ Enable Full screen mode.
 #### minimize()
 Disable Full screen mode.
 
-#### mouseLock(value)
-Lock/Unlock the mouse.
-- `value: Boolean`: true to lock, false to unlock the mouse.
-
 #### setQuality(value)
 Set the quality of the stream.
 - `value: QualityValue`: Use one of the static value Player.qualityValues.AUTO / Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA
 
-#### restartApp()
-Restart the application
-
-#### restartClient()
-Reload all the streaming.
+#### restartStream()
+Restart the streaming.
 
 ### SDK Methods
 To use corectly this method, you will need to use the Furioos SDK for Unity in order to received the sended data and treat it into your app.
