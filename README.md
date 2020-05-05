@@ -78,8 +78,7 @@ Send data to your own application by using the Furioos SDK for Unity.
 - `data: JSON`: The data you want to send to your app formated in JSON.
 
 ## SDK Local Test Exemple
-SDKDebug class let you debug the SDK communication on your local setup.
-Requirements: The Furioos Unity SDK on your application.
+SDKDebug class let you debug the SDK communication on your local setup (Requirements: The Furioos Unity SDK on your application).
 ```javascript
 import { SDKDebug } from 'furioos-sdk';
 
