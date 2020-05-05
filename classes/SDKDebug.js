@@ -1,4 +1,4 @@
-module.exports = class SDKLocalDebug {
+module.exports = class SDKDebug {
   constructor(localServerAddress) {
     if (!localServerAddress) {
       throw "Bad parameters";
