@@ -1,6 +1,6 @@
 # Furioos SDK
 ## Requirements
-You'll need a Business subscription on Furioos to use the SDK.
+Minimum requirements: Business subscription (or higher) on Furioos to use the SDK.
 Then choose the app you want to use with the SDK and create a SDK link.
 
 ## Installation
@@ -76,3 +76,21 @@ Bind a callback to receive messages from your application.
 #### sendSDKMessage(data)
 Send data to your own application by using the Furioos SDK for Unity.
 - `data: JSON`: The data you want to send to your app formated in JSON.
+
+## SDK Local Test Exemple
+SDKDebug class let you debug the SDK communication on your local setup (Requirements: The Furioos Unity SDK on your application).
+```javascript
+import { SDKDebug } from 'furioos-sdk';
+
+const sdkDebug = new SDKDebug("127.0.0.1:3000");
+
+sdkDebug.onReady(function() {
+  // Here you know when the WS connection with your application is ready.
+  sdkDebug.sendSDKMessage({ test: "test" });
+});
+
+sdkDebug.onSDKMessage(function(data) {
+  // Here you can manage the received data.
+  console.log("Received JSON", data);
+})
+```
