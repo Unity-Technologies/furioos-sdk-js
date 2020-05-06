@@ -38,6 +38,18 @@ Instanciate the player for a given app.
 Bind a callback that will be called when the player is ready.
 - `callback: Function`: Your own code to do what you want when it's ready (ex: call start()).
 
+#### onUserActive(callback)
+Bind a callback that will be called when the user is active on your session (only fired when a session is running).
+- `callback: Function`: Implement your code.
+
+#### onUserInactive(callback)
+Bind a callback that will be called when the user is inactive on your session (only fired when a session is running).
+- `callback: Function`: Implement your code.
+
+#### onSessionStopped(callback)
+Bind a callback that will be called when the session is stopped (ex: stopped for inactivity)
+- `callback: Function`: Implement your code.
+
 ### Methods to create your own interface
 Those methods permit you to create your own interface.
 

@@ -23,7 +23,10 @@ const _eventNames = {
   RESTART_STREAM: "restartStream",
   ON_SDK_MESSAGE: "onSDKMessage",
   SEND_SDK_MESSAGE: "sendSDKMessage",
-  SET_LOCATION: "setLocation"
+  SET_LOCATION: "setLocation",
+  ON_USER_ACTIVE: "onUserActive",
+  ON_USER_INACTIVE: "onUserInactive",
+  ON_SESSION_STOPPED: "onSessionStopped"
 };
 
 const _qualityValues = {
@@ -161,6 +164,21 @@ module.exports = class Player {
             this._onSDKMessageCallback(e.data.value);
           }
           return;
+        case _eventNames.ON_USER_ACTIVE:
+          if (this._onUserActiveCallback) {
+            this._onUserActiveCallback();
+          }
+          return;
+        case _eventNames.ON_USER_INACTIVE:
+          if (this._onUserInactiveCallback) {
+            this._onUserInactiveCallback();
+          }
+          return;
+        case _eventNames.ON_SESSION_STOPPED:
+          if (this._onSessionStoppedCallback) {
+            this._onSessionStoppedCallback();
+          }
+          return;
         case _eventNames.ERROR:
           this._displayErrorMessage(e.data.value);
           return;
@@ -279,6 +297,18 @@ module.exports = class Player {
   // SDK
   onSDKMessage(onSDKMessageCallback) {
     this._onSDKMessageCallback = onSDKMessageCallback;
+  }
+
+  onUserActive(onUserActiveCallback) {
+    this._onUserActiveCallback = onUserActiveCallback;
+  }
+
+  onUserInactive(onUserInactiveCallback) {
+    this._onUserInactiveCallback = onUserInactiveCallback;
+  }
+
+  onSessionStopped(onSessionStoppedCallback) {
+    this._onSessionStoppedCallback = onSessionStoppedCallback;
   }
 
   sendSDKMessage(data) {

@@ -5,7 +5,7 @@ module.exports = class SDKDebug {
     }
 
     // Init WS connection.
-    this.ws = new WebSocket(localServerAddress);
+    this.ws = new WebSocket("ws://" + localServerAddress);
     this.ws.binaryType = 'arraybuffer';
     this.ws.onerror = (event) => {this._wsOnError(event)};
     this.ws.onclose = (event) => {this._wsOnClose(event);}
@@ -52,7 +52,6 @@ module.exports = class SDKDebug {
       console.log("Cannot send message, ws connection not open");
       return; // Not loaded.
     } 
-
 
     this.ws.send(JSON.stringify(data),this._wsOnSendError);
   }
