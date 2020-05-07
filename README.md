@@ -33,6 +33,7 @@ Instanciate the player for a given app.
   - `hideToolbar: Boolean`: Hide the toolbar to create your own.
   - `hideTitle: Boolean`: Hide the title bar to create your own.
   - `hidePlayButton: Boolean`: Hide the play button.
+  - `overridedURL: String`: Override the url of the server you want to communicate with.
 
 #### onLoad(callback)
 Bind a callback that will be called when the player is ready.
