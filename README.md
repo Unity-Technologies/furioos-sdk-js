@@ -90,8 +90,9 @@ Bind a callback to receive messages from your application.
 Send data to your own application by using the Furioos SDK for Unity.
 - `data: JSON`: The data you want to send to your app formated in JSON.
 
-## SDK Local Test Exemple
+## SDK Local Test Exemple (Coming soon !)
 SDKDebug class let you debug the SDK communication on your local setup (Requirements: The Furioos Unity SDK on your application).
+This feature is in development and should not be used yet.
 ```javascript
 import { SDKDebug } from 'furioos-sdk';
 
