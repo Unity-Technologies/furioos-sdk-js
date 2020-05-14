@@ -1,13 +1,13 @@
 # Furioos SDK
 ## Requirements
-You'll need a pro version subscription on your Furioos interface in order to use the SDK.
-Then choose the app you want to use with the SDK and share it as SDK link.
+Minimum requirements: Business subscription (or higher) on Furioos to use the SDK.
+Then choose the app you want to use with the SDK and create a SDK link.
 
 ## Installation
 ```npm install --save furioos-sdk```
 
 ## Exemple
-You should copy past the link you previously got in your Furioos share interface.
+You should copy past the link ID previously created.
 ```javascript
 import { Player } from 'furioos-sdk';
 
@@ -21,35 +21,50 @@ player.onLoad(function() {
 
 ## Properties
 #### quality: String
-Get the current setted quality. Possible values : LOW / MEDIUM / HIGH / ULTRA
+Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH / ULTRA
 
 ## Methods
 #### constructor(sdkShareLinkID, containerDivId, options)
 Instanciate the player for a given app.
 - `sdkShareLinkID: String`: Link ID of the app you want to share (ex: "123.456").
-- `containerDivId: String`: The ID of the container div that will host the render.
+- `containerDivId: String`: The ID of the HTML container div that will host the render.
 - `options: Object`: The options to setup the player are these following :
   - `whiteLabel: Boolean`: Remove all Furioos' Logo
   - `hideToolbar: Boolean`: Hide the toolbar to create your own.
   - `hideTitle: Boolean`: Hide the title bar to create your own.
   - `hidePlayButton: Boolean`: Hide the play button.
+  - `overridedURL: String`: Override the url of the server you want to communicate with.
 
 #### onLoad(callback)
 Bind a callback that will be called when the player is ready.
-- `callback: Function`: Your own code to do what you want when it's ready (ex: call startSession()).
+- `callback: Function`: Your own code to do what you want when it's ready (ex: call start()).
 
-#### onSDKMessage(callback)
-Bind a callback to receive messages from your application.
-- `callback: Function`: Your own code to do what you want.
+#### onUserActive(callback)
+Bind a callback that will be called when the user is active on your session (only fired when a session is running).
+- `callback: Function`: Implement your code.
+
+#### onUserInactive(callback)
+Bind a callback that will be called when the user is inactive on your session (only fired when a session is running).
+- `callback: Function`: Implement your code.
+
+#### onSessionStopped(callback)
+Bind a callback that will be called when the session is stopped (ex: stopped for inactivity)
+- `callback: Function`: Implement your code.
 
 ### Methods to create your own interface
 Those methods permit you to create your own interface.
 
-#### start()
-Start streaming the app.
+#### setLocation(location)
+setup the default location used for each start. 
+You should set this value before the user can start the session if you use the default Furioos' start button.
+- `location: Region`: Use one of the static value : Player.regions.EUW / Player.regions.USE / Player.regions.USW / Player.regions.AUE
+
+#### start(location)
+Start a new session.
+- `location: Region`: Use one of the static value : Player.regions.EUW / Player.regions.USE / Player.regions.USW / Player.regions.AUE
 
 #### stop()
-Stop streaming the app.
+Stop the session.
 
 #### maximize()
 Enable Full screen mode.
@@ -57,23 +72,38 @@ Enable Full screen mode.
 #### minimize()
 Disable Full screen mode.
 
-#### mouseLock(value)
-Lock/Unlock the mouse.
-- `value: Boolean`: true to lock, false to unlock the mouse.
-
 #### setQuality(value)
 Set the quality of the stream.
-- `value: QualityValue`: Use one of the static value Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA
+- `value: QualityValue`: Use one of the static value Player.qualityValues.AUTO / Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA
 
-#### restartApp()
-Restart the application
+#### restartStream()
+Restart the streaming.
 
-#### restartClient()
-Reload all the streaming.
-
-### API Method
+### SDK Methods
 To use corectly this method, you will need to use the Furioos SDK for Unity in order to received the sended data and treat it into your app.
 
-#### sendData(data)
+#### onSDKMessage(callback)
+Bind a callback to receive messages from your application.
+- `callback: Function`: Your own code to do what you want.
+
+#### sendSDKMessage(data)
 Send data to your own application by using the Furioos SDK for Unity.
 - `data: JSON`: The data you want to send to your app formated in JSON.
+
+## SDK Local Test Exemple
+SDKDebug class let you debug the SDK communication on your local setup (Requirements: The Furioos Unity SDK on your application).
+```javascript
+import { SDKDebug } from 'furioos-sdk';
+
+const sdkDebug = new SDKDebug("127.0.0.1:3000");
+
+sdkDebug.onReady(function() {
+  // Here you know when the WS connection with your application is ready.
+  sdkDebug.sendSDKMessage({ test: "test" });
+});
+
+sdkDebug.onSDKMessage(function(data) {
+  // Here you can manage the received data.
+  console.log("Received JSON", data);
+})
+```

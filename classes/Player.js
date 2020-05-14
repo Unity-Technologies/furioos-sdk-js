@@ -14,30 +14,41 @@ const _constructorParams = function(shareId, containerId, options) {
 
 const _eventNames = {
   LOAD: "load",
-  ON_SDK_MESSAGE: "onSDKMessage",
   ERROR: "error",
   START: "start",
   STOP: "stop",
   MAXIMIZE: "maximize",
   MINIMIZE: "minimize",
-  MOUSELOCK: "mouseLock",
   QUALITY: "quality",
-  RESTART_APP: "restartApp",
-  RESTART_CLIENT: "restartClient",
-  SEND_DATA: "sendData",
+  RESTART_STREAM: "restartStream",
+  ON_SDK_MESSAGE: "onSDKMessage",
+  SEND_SDK_MESSAGE: "sendSDKMessage",
+  SET_LOCATION: "setLocation",
+  ON_USER_ACTIVE: "onUserActive",
+  ON_USER_INACTIVE: "onUserInactive",
+  ON_SESSION_STOPPED: "onSessionStopped"
 };
 
 const _qualityValues = {
-  LOW: 0,
-  MEDIUM: 1,
-  HIGH: 2,
-  ULTRA: 3,
+  AUTO: 0,
+  LOW: 1,
+  MEDIUM: 2,
+  HIGH: 3,
+  ULTRA: 4,
+}
+
+const _regions = {
+  EUW: [52.1326, 5.2913],
+  USW: [47.751076, -120.740135],
+  USE: [37.926868, -78.024902],
+  AUE: [-33.865143, 151.2099]
 }
 
 let _furioosServerUrl = "https://portal.furioos.com"
 
 module.exports = class Player {
   static get qualityValues() { return _qualityValues };
+  static get regions() { return _regions };
 
   constructor(sharedLinkID, containerId, options) {
     if (!_constructorParams(sharedLinkID, containerId, options)) {
@@ -80,6 +91,7 @@ module.exports = class Player {
     }
 
     // Create the iframe into the given container.
+    this.loaded = false;
     this.sharedLink = sharedLinkID;
     this.containerId = containerId;
     this.options = options;
@@ -101,6 +113,7 @@ module.exports = class Player {
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", this.sharedLink);
     iframe.setAttribute("id", "furioos-sdk-iframe");
+    iframe.setAttribute("allow", "autoplay; fullscreen");
     
     iframe.style.width = "100%";
     iframe.style.height = "100%";
@@ -127,13 +140,43 @@ module.exports = class Player {
     window.addEventListener("message", (e) => {
       switch(e.data.type) {
         case _eventNames.LOAD:
+          // When the player is loaded: Set the default setted location (if setted).
+          if (this.location) {
+            if (!this.embed.contentWindow) {
+              // Wait the window is reachable.
+              setTimeout(() => {
+                this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+              }, 100);
+            }
+            else {
+              this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+            }
+          }
+          
+          this.loaded = true;
+
           if (this._onLoadCallback) {
             this._onLoadCallback();
           }
           return;
-        case ON_SDK_MESSAGE:
+        case _eventNames.ON_SDK_MESSAGE:
           if (this._onSDKMessageCallback) {
             this._onSDKMessageCallback(e.data.value);
+          }
+          return;
+        case _eventNames.ON_USER_ACTIVE:
+          if (this._onUserActiveCallback) {
+            this._onUserActiveCallback();
+          }
+          return;
+        case _eventNames.ON_USER_INACTIVE:
+          if (this._onUserInactiveCallback) {
+            this._onUserInactiveCallback();
+          }
+          return;
+        case _eventNames.ON_SESSION_STOPPED:
+          if (this._onSessionStoppedCallback) {
+            this._onSessionStoppedCallback();
           }
           return;
         case _eventNames.ERROR:
@@ -149,6 +192,9 @@ module.exports = class Player {
 
   get quality() {
     switch(this.quality) {
+      case _qualityValues.AUTO:
+        return "AUTO";
+
       case _qualityValues.LOW:
         return "LOW";
 
@@ -172,31 +218,50 @@ module.exports = class Player {
     this._onLoadCallback = onLoadCallback;
   }
 
-  onSDKMessage(onSDKMessageCallback) {
-    this._onSDKMessageCallback = onSDKMessageCallback;
-  }
+  setDefaultLocation(location) {
+    this.location = location;
 
-  start() {
-    this.embed.contentWindow.postMessage({ type: _eventNames.START }, _furioosServerUrl);
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
+    this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+  } 
+
+  start(location) {
+    if (!location) {
+      location = this.location;
+    }  
+
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
+    this.embed.contentWindow.postMessage({ type: _eventNames.START, value: location }, _furioosServerUrl);
   }
 
   stop() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
     this.embed.contentWindow.postMessage({ type: _eventNames.STOP }, _furioosServerUrl);
   }
 
   maximize() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
     this.embed.contentWindow.postMessage({ type: _eventNames.MAXIMIZE }, _furioosServerUrl);
   }
 
   minimize() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+    
     this.embed.contentWindow.postMessage({ type: _eventNames.MINIMIZE }, _furioosServerUrl);
-  }
-
-  mouseLock(value) {
-    this.embed.contentWindow.postMessage({ 
-      type: _eventNames.MOUSELOCK,
-      value: value
-    }, _furioosServerUrl);
   }
 
   setQuality(value) {
@@ -209,6 +274,10 @@ module.exports = class Player {
       throw "Bad parameter: The quality should be one of the given value in Player.qualityValues";
     }
 
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
     this.embed.contentWindow.postMessage({ 
       type: _eventNames.QUALITY,
       value: value
@@ -217,17 +286,38 @@ module.exports = class Player {
     this.quality = value;
   }
 
-  restartApp() {
-    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_APP }, _furioosServerUrl);
+  restartStream() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+    
+    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_STREAM }, _furioosServerUrl);
   }
 
-  restartClient() {
-    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_CLIENT }, _furioosServerUrl);
+  // SDK
+  onSDKMessage(onSDKMessageCallback) {
+    this._onSDKMessageCallback = onSDKMessageCallback;
   }
 
-  sendData(data) {
+  onUserActive(onUserActiveCallback) {
+    this._onUserActiveCallback = onUserActiveCallback;
+  }
+
+  onUserInactive(onUserInactiveCallback) {
+    this._onUserInactiveCallback = onUserInactiveCallback;
+  }
+
+  onSessionStopped(onSessionStoppedCallback) {
+    this._onSessionStoppedCallback = onSessionStoppedCallback;
+  }
+
+  sendSDKMessage(data) {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+    
     this.embed.contentWindow.postMessage({ 
-      type: _eventNames.SEND_DATA,
+      type: _eventNames.SEND_SDK_MESSAGE,
       value: data,
     }, _furioosServerUrl);
   }
