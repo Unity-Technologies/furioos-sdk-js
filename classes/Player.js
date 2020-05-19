@@ -191,19 +191,19 @@ module.exports = class Player {
 
           if (response.error) {
             console.log("Error getting server availability", response.error);
-            if (this.getServerAvailabilityErrorCallback) {
-              this.getServerAvailabilityErrorCallback(response.error);
+            if (this._getServerAvailabilityErrorCallback) {
+              this._getServerAvailabilityErrorCallback(response.error);
             }
 
             return;
           }
 
-          if (!this.getServerAvailabilityCallback) {
+          if (!this._getServerAvailabilityCallback) {
             console.log("No success callback binded !");
             return;
           }
           
-          this.getServerAvailabilityCallback(response.stats);
+          this._getServerAvailabilityCallback(response.stats);
           return;
         case _eventNames.ERROR:
           this._displayErrorMessage(e.data.value);
