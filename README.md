@@ -51,6 +51,26 @@ Bind a callback that will be called when the user is inactive on your session (o
 Bind a callback that will be called when the session is stopped (ex: stopped for inactivity)
 - `callback: Function`: Implement your code.
 
+#### onStats(callback)
+Bind a callback that will be called frequently during a running session with all stats
+- `callback: Function`: Implement your code.
+
+#### setUserActive()
+This function help you to keep the session open if your user does not interact with the interface.
+Calling this function will fire onUserActive.
+Caution: If you always call it without checking if the user is really here the session will never ended untill the user close his window.
+
+#### getServerAvailability(callback)
+Call this function to get an estimated time to get a session on Furioos.
+- `callback: Function`: Treat the retrieved data
+##### Exemple:
+```javascript
+player.getServerAvailability(function(data) {
+  console.log("Time to assign a server": data.assignTime);
+  console.log("Time to copy, extract and launch your application": data.launchTime);
+});
+```
+
 ### Methods to create your own interface
 Those methods permit you to create your own interface.
 
