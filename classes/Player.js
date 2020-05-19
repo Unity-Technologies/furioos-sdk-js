@@ -186,6 +186,25 @@ module.exports = class Player {
             this._onStatsCallback();
           }
           return;
+        case _eventNames.GET_SERVER_AVAILABILITY:
+          const response = e.data.value;
+
+          if (response.error) {
+            console.log("Error getting server availability", response.error);
+            if (this.getServerAvailabilityErrorCallback) {
+              this.getServerAvailabilityErrorCallback(response.error);
+            }
+
+            return;
+          }
+
+          if (!this.getServerAvailabilityCallback) {
+            console.log("No success callback binded !");
+            return;
+          }
+          
+          this.getServerAvailabilityCallback(response.stats);
+          return;
         case _eventNames.ERROR:
           this._displayErrorMessage(e.data.value);
           return;
@@ -336,11 +355,15 @@ module.exports = class Player {
     this.sendSDKMessage({ "userActive": true });
   }
 
-  getServerAvailability(callback) {
+  getServerAvailability(getServerAvailabilityCallback, getServerAvailabilityErrorCallback) {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
+    this._getServerAvailabilityCallback = getServerAvailabilityCallback;
+    this._getServerAvailabilityErrorCallback = getServerAvailabilityErrorCallback;
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.GET_SERVER_AVAILABILITY, value: callback }, _furioosServerUrl);
+    // Call the get.
+    this.embed.contentWindow.postMessage({ type: _eventNames.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
+    // The response will be treat in the listener below.
   }
 }
