@@ -60,7 +60,7 @@ This function help you to keep the session open if your user does not interact w
 Calling this function will fire onUserActive.
 Caution: If you always call it without checking if the user is really here the session will never ended untill the user close his window.
 
-#### getServerAvailability(callback)
+#### getServerAvailability(callback, errorCallback) asynchronous function
 Call this function to get an estimated time to get a session on Furioos.
 - `callback: Function`: Treat the retrieved data
 ##### Exemple:
@@ -68,6 +68,8 @@ Call this function to get an estimated time to get a session on Furioos.
 player.getServerAvailability(function(data) {
   console.log("Time to assign a server": data.assignTime);
   console.log("Time to copy, extract and launch your application": data.launchTime);
+}, function(error) {
+  // Treat the error.
 });
 ```
 
