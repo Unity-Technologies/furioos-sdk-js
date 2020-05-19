@@ -53,7 +53,8 @@ Bind a callback that will be called when the session is stopped (ex: stopped for
 
 #### onStats(callback)
 Bind a callback that will be called frequently during a running session with all stats
-- `callback: Function`: Implement your code.
+- `callback: function(stats) {}`: Treat the stats data for your implementation.
+- (Stats detail coming soon)
 
 #### setUserActive()
 This function help you to keep the session open if your user does not interact with the interface.
