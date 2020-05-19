@@ -183,7 +183,7 @@ module.exports = class Player {
           return;
         case _eventNames.ON_STATS:
           if (this._onStatsCallback) {
-            this._onStatsCallback();
+            this._onStatsCallback(JSON.parse(e.data.value));
           }
           return;
         case _eventNames.GET_SERVER_AVAILABILITY:
