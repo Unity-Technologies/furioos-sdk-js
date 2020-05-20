@@ -162,9 +162,9 @@ Set the quality of the stream.
 Restart the streaming.
 
 ### Methods to communicate with your app
-Go deeper with your UI by creating your own data interpretation.
+Go deeper with your UI by creating your own data interpretation.  
 Those methods let you send/receive JSON data between your application and the HTML page where you have implemented the JS SDK.
-Requirements:
+#### Requirements
 - The Furioos SDK implemented in your application.
   - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
   - Furioos SDK for Unreal : :star: Coming soon :wink:
