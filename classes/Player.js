@@ -26,7 +26,9 @@ const _eventNames = {
   SET_LOCATION: "setLocation",
   ON_USER_ACTIVE: "onUserActive",
   ON_USER_INACTIVE: "onUserInactive",
-  ON_SESSION_STOPPED: "onSessionStopped"
+  ON_SESSION_STOPPED: "onSessionStopped",
+  ON_STATS: "onStats",
+  GET_SERVER_AVAILABILITY: "getServerAvailability"
 };
 
 const _qualityValues = {
@@ -179,6 +181,30 @@ module.exports = class Player {
             this._onSessionStoppedCallback();
           }
           return;
+        case _eventNames.ON_STATS:
+          if (this._onStatsCallback) {
+            this._onStatsCallback(JSON.parse(e.data.value));
+          }
+          return;
+        case _eventNames.GET_SERVER_AVAILABILITY:
+          const response = e.data.value;
+
+          if (response.error) {
+            console.log("Error getting server availability", response.error);
+            if (this._getServerAvailabilityErrorCallback) {
+              this._getServerAvailabilityErrorCallback(response.error);
+            }
+
+            return;
+          }
+
+          if (!this._getServerAvailabilityCallback) {
+            console.log("No success callback binded !");
+            return;
+          }
+          
+          this._getServerAvailabilityCallback(response.stats);
+          return;
         case _eventNames.ERROR:
           this._displayErrorMessage(e.data.value);
           return;
@@ -212,7 +238,6 @@ module.exports = class Player {
   ////////////////////////
   //// PUBLIC METHODS ////
   ////////////////////////
-
   // Binding onload callback.
   onLoad(onLoadCallback) {
     this._onLoadCallback = onLoadCallback;
@@ -311,6 +336,10 @@ module.exports = class Player {
     this._onSessionStoppedCallback = onSessionStoppedCallback;
   }
 
+  onStats(callback) {
+    this._onStatsCallback = callback;
+  }
+
   sendSDKMessage(data) {
     if (!this.loaded) {
       return; // Not loaded.
@@ -320,5 +349,21 @@ module.exports = class Player {
       type: _eventNames.SEND_SDK_MESSAGE,
       value: data,
     }, _furioosServerUrl);
+  }
+
+  setUserActive() {
+    this.sendSDKMessage({ "userActive": true });
+  }
+
+  getServerAvailability(getServerAvailabilityCallback, getServerAvailabilityErrorCallback) {
+    if (!this.loaded) {
+      return; // Not loaded.
+    }
+    this._getServerAvailabilityCallback = getServerAvailabilityCallback;
+    this._getServerAvailabilityErrorCallback = getServerAvailabilityErrorCallback;
+
+    // Call the get.
+    this.embed.contentWindow.postMessage({ type: _eventNames.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
+    // The response will be treat in the listener below.
   }
 }
