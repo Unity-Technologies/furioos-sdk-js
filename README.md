@@ -1,9 +1,6 @@
 # Furioos SDK
 ## Requirements
-- Business subscription (or higher) on Furioos to use the SDK.  
-- Furioos SDK implementation
-  - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
-  - Furioos SDK for Unreal : :star: Coming soon :wink:
+- Business subscription (or higher) on Furioos to use the SDK.
 - Then choose the app you want to use with the SDK and create a SDK link.
 
 ## Installation
@@ -164,12 +161,17 @@ Set the quality of the stream.
 #### restartStream()
 Restart the streaming.
 
-### SDK Methods
-To use corectly this method, you will need to use the Furioos SDK for Unity in order to received the sended data and treat it into your app.
+### Methods to communicate with your app
+Go deeper with your UI by creating your own data interpretation.
+Those methods let you send/receive JSON data between your application and the HTML page where you have implemented the JS SDK.
+Requirements:
+- The Furioos SDK implemented in your application.
+  - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
+  - Furioos SDK for Unreal : :star: Coming soon :wink:
 
 #### onSDKMessage(function(data) {})
 Bind a callback to receive messages from your application.
-- `data: Object`: The JSON that you send from your Application.
+- `data: Object`: The JSON that you send from your application.
 ##### Example:
 ```javascript
 player.onSDKMessage(function(data) {
@@ -187,9 +189,9 @@ const data = { test: "test" }
 player.sendSDKMessage(function(data); 
 ```
 
-## SDK Local Test Exemple (Coming soon !)
-SDKDebug class let you debug the SDK communication on your local setup (Requirements: The Furioos Unity SDK on your application).  
-This feature is in development and should not be used yet.
+## SDK Local Test Example (Coming soon !)
+SDKDebug class let you debug the SDK communication on your local setup (Requirements: The Furioos SDK implemented in your application).  
+:warning: This feature is in development and should not be used yet.
 ```javascript
 import { SDKDebug } from 'furioos-sdk';
 
