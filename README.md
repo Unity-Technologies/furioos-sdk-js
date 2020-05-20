@@ -126,7 +126,7 @@ Call this function to get an estimated time to get a session on Furioos.
 player.getServerAvailability(function(data) {
   console.log("Time to assign a server: ", data.assignTime);
   console.log("Time to copy, extract and launch your application: ", data.launchTime);
-  console.log("Time to copy, extract and launch your application: ", data.launchTime);
+  console.log("Number of machines ready for a session: ", data.availableMachines);
   console.log("Total time to get session ready: ", data.assignTime + data.launchTime);
 }, function(error) {
   // Treat the error.
