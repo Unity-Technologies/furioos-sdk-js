@@ -186,7 +186,7 @@ Send data to your own application by using the Furioos SDK.
 ```javascript
 const data = { test: "test" }
 // The JSON will be sent to your application and you need to implement its interpretation
-player.sendSDKMessage(function(data); 
+player.sendSDKMessage(data); 
 ```
 
 ## SDK Local Test Example (Coming soon !)
