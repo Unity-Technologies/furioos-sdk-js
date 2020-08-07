@@ -28,7 +28,8 @@ const _eventNames = {
   ON_USER_INACTIVE: "onUserInactive",
   ON_SESSION_STOPPED: "onSessionStopped",
   ON_STATS: "onStats",
-  GET_SERVER_AVAILABILITY: "getServerAvailability"
+  GET_SERVER_AVAILABILITY: "getServerAvailability",
+  GET_SERVER_METADATA: "getServerMetadata",
 };
 
 const _qualityValues = {
@@ -205,6 +206,25 @@ module.exports = class Player {
           
           this._getServerAvailabilityCallback(response.stats);
           return;
+        case _eventNames.GET_SERVER_METADATA:
+          const response = e.data.value;
+
+          if (response.error) {
+            console.log("Error getting server metadata", response.error);
+            if (this._getServerMetadataErrorCallback) {
+              this._getServerMetadataErrorCallback(response.error);
+            }
+
+            return;
+          }
+
+          if (!this._getServerMetadataCallback) {
+            console.log("No success callback binded !");
+            return;
+          }
+          
+          this._getServerMetadataCallback(response.metadata);
+          return;
         case _eventNames.ERROR:
           this._displayErrorMessage(e.data.value);
           return;
@@ -364,6 +384,18 @@ module.exports = class Player {
 
     // Call the get.
     this.embed.contentWindow.postMessage({ type: _eventNames.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
+    // The response will be treat in the listener below.
+  }
+
+  getServerMetadata(getServerMetadataCallback, getServerMetadataErrorCallback) {
+    if (!this.loaded) {
+      return; // Not loaded.
+    }
+    this._getServerMetadataCallback = getServerMetadataCallback;
+    this._getServerMetadataErrorCallback = getServerMetadataErrorCallback;
+
+    // Call the get.
+    this.embed.contentWindow.postMessage({ type: _eventNames.GET_SERVER_METADATA }, _furioosServerUrl);
     // The response will be treat in the listener below.
   }
 }
