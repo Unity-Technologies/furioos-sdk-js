@@ -133,6 +133,22 @@ player.getServerAvailability(function(data) {
 });
 ```
 
+#### getServerMetadata(function(metadata) {}, function(error) {}) asynchronous function
+Call this function to get unique VM informations.
+This function return metadata only when a session is running.
+`metadata: Object`:
+- `publicIP: String` The VM public IP.
+- `name: String` A unique name to identify a VM.
+##### Example:
+```javascript
+player.getServerAvailability(function(metadata) {
+  console.log("Public VM IP: ", metadata.publicIP);
+  console.log("VM unique name: ", metadata.name);
+}, function(error) {
+  // Treat the error.
+});
+```
+
 ### Methods to create your own interface
 Those methods let you create your own interface.
 
@@ -186,7 +202,7 @@ Send data to your own application by using the Furioos SDK.
 ```javascript
 const data = { test: "test" }
 // The JSON will be sent to your application and you need to implement its interpretation
-player.sendSDKMessage(function(data); 
+player.sendSDKMessage(data); 
 ```
 
 ## SDK Local Test Example (Coming soon !)
