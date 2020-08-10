@@ -207,12 +207,12 @@ module.exports = class Player {
           this._getServerAvailabilityCallback(response.stats);
           return;
         case _eventNames.GET_SERVER_METADATA:
-          const response = e.data.value;
+          const res = e.data.value;
 
-          if (response.error) {
-            console.log("Error getting server metadata", response.error);
+          if (res.error) {
+            console.log("Error getting server metadata", res.error);
             if (this._getServerMetadataErrorCallback) {
-              this._getServerMetadataErrorCallback(response.error);
+              this._getServerMetadataErrorCallback(res.error);
             }
 
             return;
@@ -223,7 +223,7 @@ module.exports = class Player {
             return;
           }
           
-          this._getServerMetadataCallback(response.metadata);
+          this._getServerMetadataCallback(res.metadata);
           return;
         case _eventNames.ERROR:
           this._displayErrorMessage(e.data.value);
