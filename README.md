@@ -115,6 +115,11 @@ This function help you to keep the session open if your user does not interact w
 Calling this function will fire onUserActive.  
 Caution: If you always call it without checking if the user is really here the session will never ended untill the user close his window.
 
+#### setThumbnailUrl(url)
+Change the thumbnail of your app.
+- `url: String`: A public url of the thumbnail you want to set.
+
+
 #### getServerAvailability(function(stats) {}, function(error) {}) asynchronous function
 Call this function to get an estimated time to get a session on Furioos.  
 `stats: Object`:

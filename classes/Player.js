@@ -30,6 +30,7 @@ const _eventNames = {
   ON_STATS: "onStats",
   GET_SERVER_AVAILABILITY: "getServerAvailability",
   GET_SERVER_METADATA: "getServerMetadata",
+  SET_THUMBNAIL_URL: "setThumbnailUrl",
 };
 
 const _qualityValues = {
@@ -374,6 +375,14 @@ module.exports = class Player {
   setUserActive() {
     this.sendSDKMessage({ "userActive": true });
   }
+
+  setThumbnailUrl(thumbnailUrl) {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
+    this.embed.contentWindow.postMessage({ type: _eventNames.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
+  } 
 
   getServerAvailability(getServerAvailabilityCallback, getServerAvailabilityErrorCallback) {
     if (!this.loaded) {
