@@ -31,6 +31,11 @@ const _eventNames = {
   GET_SERVER_AVAILABILITY: "getServerAvailability",
   GET_SERVER_METADATA: "getServerMetadata",
   SET_THUMBNAIL_URL: "setThumbnailUrl",
+  ON_APP_INSTALL_PROGRESS: "onAppInstallProgress",
+  ON_APP_INSTALL_SUCCESS: "onAppInstallSuccess",
+  ON_APP_INSTALL_FAIL: "onAppInstallFail",
+  ON_APP_START: "onAppStart",
+  ON_STREAM_START: "onStreamStart",
 };
 
 const _qualityValues = {
@@ -176,6 +181,31 @@ module.exports = class Player {
         case _eventNames.ON_USER_INACTIVE:
           if (this._onUserInactiveCallback) {
             this._onUserInactiveCallback();
+          }
+          return;
+        case _eventNames.ON_APP_INSTALL_PROGRESS:
+          if (this._onAppInstallProgress) {
+            this._onAppInstallProgress(e.data.value);
+          }
+          return;
+        case _eventNames.ON_APP_INSTALL_SUCCESS:
+          if (this._onAppInstallSuccess) {
+            this._onAppInstallSuccess();
+          }
+          return;
+        case _eventNames.ON_APP_INSTALL_FAIL:
+          if (this._onAppInstallFail) {
+            this._onAppInstallFail();
+          }
+          return;
+        case _eventNames.ON_APP_START:
+          if (this._onAppStart) {
+            this._onAppStart();
+          }
+          return;
+        case _eventNames.ON_STREAM_START:
+          if (this._onStreamStart) {
+            this._onStreamStart();
           }
           return;
         case _eventNames.ON_SESSION_STOPPED:
@@ -351,6 +381,26 @@ module.exports = class Player {
 
   onUserInactive(onUserInactiveCallback) {
     this._onUserInactiveCallback = onUserInactiveCallback;
+  }
+
+  onAppInstallProgress(onAppInstallProgress) {
+    this._onAppInstallProgress = onAppInstallProgress;
+  }
+
+  onAppInstallSuccess(onAppInstallSuccess) {
+    this._onAppInstallSuccess = onAppInstallSuccess;
+  }
+
+  onAppInstallFail(onAppInstallFail) {
+    this._onAppInstallFail = onAppInstallFail;
+  }
+
+  onAppStart(onAppStart) {
+    this._onAppStart = onAppStart;
+  }
+
+  onStreamStart(onStreamStart) {
+    this._onStreamStart = onStreamStart;
   }
 
   onSessionStopped(onSessionStoppedCallback) {
