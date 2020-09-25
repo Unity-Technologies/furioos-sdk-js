@@ -1,4 +1,4 @@
-var SDKDebug = require("./classes/SDKDebug.js");
+var SDKDebug = require("./SDKDebug.js");
 
 const _constructorParams = function(shareId, containerId, options) {
   // Share Id.
