@@ -110,7 +110,7 @@ module.exports = class Player {
         // Local debug the SDK communication with your app.
         debugAppMode = true;
 
-        const container = document.getElementById(this.containerId);
+        const container = document.getElementById(containerId);
         container.innerText = "You are currently debugging locally your app. There is not stream here. Open console to see logs";
         this.sdkDebug = new SDKDebug(options.wsServerAddress);
 
