@@ -30,7 +30,10 @@ module.exports = class SDKDebug {
   }
 
   _wsOnMessage(event) {
-    this._onSDKMessageCallback(JSON.parse(event.data));
+    const msg = JSON.parse(event.data);
+    if (msg.type == "furioos" && msg.task == "sdk") {
+      this._onSDKMessageCallback(JSON.parse(msg.data));
+    }
   }
 
   _wsOnSendError(event) {
