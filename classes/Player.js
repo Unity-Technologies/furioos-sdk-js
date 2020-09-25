@@ -1,3 +1,5 @@
+var SDKDebug = require("./classes/SDKDebug.js");
+
 const _constructorParams = function(shareId, containerId, options) {
   // Share Id.
   if (!shareId || typeof shareId != "string") {
@@ -53,7 +55,7 @@ const _regions = {
   AUE: [-33.865143, 151.2099]
 }
 
-let _furioosServerUrl = "https://portal.furioos.com"
+let _furioosServerUrl = "https://portal.furioos.com";
 
 module.exports = class Player {
   static get qualityValues() { return _qualityValues };
@@ -76,6 +78,7 @@ module.exports = class Player {
     sharedLinkID = _furioosServerUrl + "/embed/" + sharedLinkID;
 
     // If there are options, treat those who change the url.
+    let debugAppMode = false;
     if (options) {
       let prefix = "?";
       if (options.whiteLabel) {
@@ -97,14 +100,45 @@ module.exports = class Player {
         sharedLinkID += prefix + "hidePlayButton=true";
         prefix = "&";
       }
+
+      if (options.debugAppMode) {
+        if (!options.wsServerAddress) {
+          console.error("Missing wsServerAddress parameter.");
+          return;
+        }
+
+        // Local debug the SDK communication with your app.
+        debugAppMode = true;
+        this.sdkDebug = new SDKDebug(options.wsServerAddress);
+
+        this.sdkDebug.onReady = () => {
+          // Here you know when the WS connection with your application is ready.
+          console.log("Send SDK message");
+          this.loaded = true;
+          if (this._onLoadCallback) {
+            this._onLoadCallback();
+          }
+        };
+      
+        this.sdkDebug.onSDKMessage((data) => {
+          // Here you can manage the received data.
+          if (this._onSDKMessageCallback) {
+            this._onSDKMessageCallback(data);
+          }
+        });
+      }
     }
 
     // Create the iframe into the given container.
     this.loaded = false;
+    this.debugAppMode = debugAppMode;
     this.sharedLink = sharedLinkID;
     this.containerId = containerId;
     this.options = options;
-    this.embed = this._createIframe();
+
+    if (!debugAppMode) {
+      this.embed = this._createIframe();
+    } 
   }
 
   ///////////////////////
@@ -416,6 +450,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
     
+    if (this.appDebugMode) {
+      this.sdkDebug.sendSDKMessage(data);
+      return;
+    }
+
     this.embed.contentWindow.postMessage({ 
       type: _eventNames.SEND_SDK_MESSAGE,
       value: data,
