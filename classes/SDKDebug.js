@@ -53,6 +53,12 @@ module.exports = class SDKDebug {
       return; // Not loaded.
     } 
 
-    this.ws.send(JSON.stringify(data),this._wsOnSendError);
+    const parsedData = {
+      type: "furioos",
+      task: "sdk",
+      data: JSON.stringify(data)
+    }
+
+    this.ws.send(JSON.stringify(parsedData),this._wsOnSendError);
   }
 }
