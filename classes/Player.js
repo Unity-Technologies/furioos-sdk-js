@@ -450,7 +450,7 @@ module.exports = class Player {
       return; // Not loaded.
     } 
     
-    if (this.appDebugMode) {
+    if (this.debugAppMode) {
       this.sdkDebug.sendSDKMessage(data);
       return;
     }
