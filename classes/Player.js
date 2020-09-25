@@ -109,6 +109,9 @@ module.exports = class Player {
 
         // Local debug the SDK communication with your app.
         debugAppMode = true;
+
+        const container = document.getElementById(this.containerId);
+        container.innerText = "You are currently debugging locally your app. There is not stream here. Open console to see logs";
         this.sdkDebug = new SDKDebug(options.wsServerAddress);
 
         this.sdkDebug.onReady = () => {
@@ -335,6 +338,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No setDefaultLocation in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
   } 
 
@@ -347,6 +355,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No start in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ type: _eventNames.START, value: location }, _furioosServerUrl);
   }
 
@@ -354,6 +367,11 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     } 
+
+    if (this.debugAppMode) {
+      console.log("No stop in debug mode")
+      return; // Not loaded.
+    }
 
     this.embed.contentWindow.postMessage({ type: _eventNames.STOP }, _furioosServerUrl);
   }
@@ -363,6 +381,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No maximize in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ type: _eventNames.MAXIMIZE }, _furioosServerUrl);
   }
 
@@ -370,6 +393,11 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     } 
+
+    if (this.debugAppMode) {
+      console.log("No minimize in debug mode")
+      return; // Not loaded.
+    }
     
     this.embed.contentWindow.postMessage({ type: _eventNames.MINIMIZE }, _furioosServerUrl);
   }
@@ -388,6 +416,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No setQuality in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ 
       type: _eventNames.QUALITY,
       value: value
@@ -400,6 +433,11 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     } 
+
+    if (this.debugAppMode) {
+      console.log("No restartStream in debug mode")
+      return; // Not loaded.
+    }
     
     this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_STREAM }, _furioosServerUrl);
   }
@@ -470,6 +508,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No setThumbnailUrl in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ type: _eventNames.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
   } 
 
@@ -477,6 +520,12 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     }
+
+    if (this.debugAppMode) {
+      console.log("No getServerAvailability in debug mode")
+      return; // Not loaded.
+    }
+
     this._getServerAvailabilityCallback = getServerAvailabilityCallback;
     this._getServerAvailabilityErrorCallback = getServerAvailabilityErrorCallback;
 
@@ -489,6 +538,12 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     }
+
+    if (this.debugAppMode) {
+      console.log("No getServerMetadata in debug mode")
+      return; // Not loaded.
+    }
+
     this._getServerMetadataCallback = getServerMetadataCallback;
     this._getServerMetadataErrorCallback = getServerMetadataErrorCallback;
 
