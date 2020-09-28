@@ -16,7 +16,6 @@ const options = {
   hideToolbar: false,
   hideTitle: true,
   hidePlayButton: false,
-  overridedURL: "http://localhost:8080"
 };
 
 const player = new Player("123.456", "containerDivId", options);
@@ -26,145 +25,324 @@ const player = new Player("123.456", "containerDivId", options);
 #### quality: String
 Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH / ULTRA
 
-## Methods
+## API
 #### constructor(sdkShareLinkID, containerDivId, options)
 Instanciate the player for a given app.
-- `sdkShareLinkID: String`: Link ID of the app you want to share (ex: "123.456").
-- `containerDivId: String`: The ID of the HTML container div that will host the render.
-- `options: Object`: The options to setup the player are these following :
-  - `whiteLabel: Boolean`: Remove all Furioos' Logo
-  - `hideToolbar: Boolean`: Hide the toolbar to create your own.
-  - `hideTitle: Boolean`: Hide the title bar to create your own.
-  - `hidePlayButton: Boolean`: Hide the play button.
-  - `overridedURL: String`: Override the url of the server you want to communicate with.
+| Property | Type | Description | optional | DefaultValue |
+| --- | --- | --- | --- | --- |
+| **`sdkShareLinkID`** | String | SDK Link ID of the app you want to share (ex: "123.456"). | false | null |
+| **`containerDivId`** | String | The ID of the HTML container div that will host the render. | false | null |
+| **`options`** | Object | The options to setup the player are these following : | true | {} |
 
-#### onLoad(function() {})
-Bind a callback that will be called when the player is ready.
-##### Example
-```
+##### options:
+| Property | Type | Description | optional | DefaultValue |
+| --- | --- | --- | --- | --- |
+| **`whiteLabel`** | Boolean | Remove all Furioos' Logo | true | false |
+| **`hideToolbar`** | Boolean | Hide the toolbar to create your own | true | false |
+| **`hideTitle`** | Boolean | Hide the title bar to create your own | true | false |
+| **`hidePlayButton`** | Boolean | Hide the play button | true | false |
+| **`overridedURL`** | Boolean | Override the url of the server you want to communicate with | true | "https://portal.furioos.com" |
+
+
+### Events
+<details>
+  <summary>
+    <b>onLoad(function() {})</b> 
+    <p>Bind a callback that will be called when the player is ready.</p>
+  </summary>
+
+<b>Example</b>
+```javascript
 player.onLoad(function() {
   // Here you know when the player is ready.
   player.start();
 })
 ```
+</details>
 
-#### onUserActive(function() {})
-Bind a callback that will be called when the user is active on your session (only fired when a session is running).
-##### Example
-```
+<details>
+  <summary>
+    <b>onAppInstallProgress(function(data) {})</b> 
+    <p>
+       Bind a callback that will be called during your application installation.
+       You'll receive the progress of the installation.
+    </p>
+  </summary>
+  
+  <b>data: </b>
+  | Property | Type | Description | Value |
+  | --- | --- | --- | --- |
+  | **`status`** | String | The current installation step | "COPYING" or "DECOMPRESSING" |
+  | **`progress`** | Number | The progress value | between 0 and 1 |
+
+  <b>Example</b>
+  ```javascript
+  player.onAppInstallProgress(function(data) {
+    // Implement your own code.
+    console.log(data.status + " the application : " + Math.round(data.progress*100) + "%");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>onAppInstallSuccess(function() {})</b> 
+    <p>
+       Bind a callback that will be called when your application installation has succeed.
+    </p>
+  </summary>
+  
+  <b>Example</b>
+  ```javascript
+  player.onAppInstallSuccess(function() {
+    // Implement your own code.
+    console.log("My application is fully installed");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>onAppInstallFail(function() {})</b> 
+    <p>
+       Bind a callback that will be called when your application installation has failed.
+    </p>
+  </summary>
+  
+  <b>Example</b>
+  ```javascript
+  player.onAppInstallFail(function() {
+    // Implement your own code.
+    console.log("Installation has failed");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>onAppStart(function() {})</b> 
+    <p>
+       Bind a callback that will be called when your application starts.
+    </p>
+  </summary>
+  
+  <b>Example</b>
+  ```javascript
+  player.onAppStart(function() {
+    // Implement your own code.
+    console.log("Application started");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>onStreamStart(function() {})</b> 
+    <p>
+       Bind a callback that will be called when the stream starts.
+    </p>
+  </summary>
+  
+  <b>Example</b>
+  ```javascript
+  player.onStreamStart(function() {
+    // Implement your own code.
+    console.log("Stream started");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>onUserActive(function() {})</b> 
+    <p>Bind a callback that will be called when the user is **active** on your session (only fired when a session is running).</p>
+  </summary>
+
+<b>Example</b>
+```javascript
 player.onUserActive(function() {
   // Implement your own code.
   console.log("My user is active");
 })
 ```
+</details>
 
-#### onUserInactive(function() {})
-Bind a callback that will be called when the user is inactive on your session (only fired when a session is running).
-##### Example
-```
+<details>
+  <summary>
+    <b>onUserInactive(function() {})</b> 
+    <p>Bind a callback that will be called when the user is **inactive** on your session (only fired when a session is running).</p>
+  </summary>
+
+<b>Example</b>
+```javascript
 player.onUserInactive(function() {
   // Implement your own code.
   console.log("My user is inactive");
 })
 ```
+</details>
 
-#### onSessionStopped(function() {})
-Bind a callback that will be called when the session is stopped (ex: stopped for inactivity).
-##### Example
-```
+<details>
+  <summary>
+    <b>onSessionStopped(function() {})</b> 
+    <p>Bind a callback that will be called when the session is stopped (ex: stopped for inactivity).</p>
+  </summary>
+
+<b>Example</b>
+```javascript
 player.onSessionStopped(function() {
   // Implement your own code.
   console.log("The session has been stopped");
 })
 ```
+</details>
 
-#### onStats(function(stats) {})
-Bind a callback that will be called frequently during a running session with all stats  
-`stats: Object`:
-- `appHeight: Number` Height of the application screen on VM
-- `appWidth: Number` Width of the application screen on VM
-- `dataLatency: Number` Round trip network latency
-- `dataMethod: String` events/data transmission method (value: "datachannel" or "ws")
-- `packetsLost: Number` Percent of lost packets (value: 0 to 1)
-- `serverCpuUsage: Number` Server CPU usage
-- `serverEncodingMs: Number` Server encoding time (milliseconds)
-- `serverFramerate: Number` Server framerate
-- `serverGpuMemTotal: Number` Total GPU RAM available on server (byte)
-- `serverGpuMemUsed: Number` Current GPU RAM used on server (byte) 
-- `serverGpuUsage: Number` Server GPU usage percent
-- `serverGrabbingMs: Number` Server grabbing time (milliseconds)
-- `serverRamTotal: Number` Total RAM available on serve (byte)
-- `serverRamUsed: Number` Current RAM used on server (byte) 
-- `streamingEngine: String` Current streaming engine used (value: "Furioos" or "RenderStreaming")
-- `userActive: Boolean` Define if the user is consider as active by the Furioos player
-- `videoBitrate: Number` Received video bitrate (kbps)
-- `videoFramerate: Number` Received video framerate
-- `videoHeight: Number` Heigh of the received video
-- `videoWidth: Number` Width of the received video
-- `videoLatency: Number` Total video latency (round trip network latency + decoding time)
-##### Example
-```
-player.onStats(function(stats) {
-  // Implement your own code.
-  console.log("Stats received: ", stats);
-})
-```
+<details>
+  <summary>
+    <b>onStats(function(stats) {})</b> 
+    <p>Bind a callback that will be called frequently during a running session with all stats.</p>
+  </summary>
+  
+  <b>stats:</b>
+  | Property | Type | Description | DefaultValue |
+  | --- | --- | --- | --- |
+  | **`appHeight`** | Number | Height of the application screen on VM | 0 |
+  | **`appWidth`** | Number | Width of the application screen on VM | 0 |
+  | **`dataLatency`** | Number | Round trip network latency | 0 |
+  | **`dataMethod`** | String | events/data transmission method (value: "datachannel" or "ws") | "datachannel" |
+  | **`packetsLost`** | Number | Percent of lost packets (value: 0 to 1) | 0 |
+  | **`serverCpuUsage`** | Number | Server CPU usage | 0 |
+  | **`serverEncodingMs`** | Number | Server encoding time (milliseconds) | 0 |
+  | **`serverFramerate`** | Number | Server framerate | 0 |
+  | **`serverGpuMemTotal`** | Number | Total GPU RAM available on server (byte) | 0 |
+  | **`serverGpuMemUsed`** | Number | Current GPU RAM used on server (byte) | 0 |
+  | **`serverGpuUsage`** | Number | Server GPU usage percent | 0 |
+  | **`serverGrabbingMs`** | Number | Server grabbing time (milliseconds) | 0 |
+  | **`serverRamTotal`** | Number | Total RAM available on serve (byte) | 0 |
+  | **`serverRamUsed`** | Number | Current RAM used on server (byte) | 0 |
+  | **`streamingEngine`** | String | Current streaming engine used (value: "Furioos" or "RenderStreaming") | "Furioos" |
+  | **`userActive`** | Boolean | Define if the user is consider as active by the Furioos player | 0 |
+  | **`videoBitrate`** | Number | Received video bitrate (kbps) | 0 |
+  | **`videoFramerate`** | Number | Received video framerate | 0 |
+  | **`videoHeight`** | Number | Heigh of the received video | 0 |
+  | **`videoWidth`** | Number | Width of the received video | 0 |
+  | **`videoLatency`** | Number | Total video latency (round trip network latency + decoding time) | 0 |
 
+
+  <b>Example</b>
+  ```javascript
+  player.onStats(function(stats) {
+    // Implement your own code.
+    console.log("Stats received: ", stats);
+  })
+  ```
+</details>
+
+### Methods
 #### setUserActive()
 This function help you to keep the session open if your user does not interact with the interface.  
 Calling this function will fire onUserActive.  
 Caution: If you always call it without checking if the user is really here the session will never ended untill the user close his window.
 
-#### setThumbnailUrl(url)
-Change the thumbnail of your app.
-- `url: String`: A public url of the thumbnail you want to set.
+<details>
+  <summary>
+    <b>setThumbnailUrl(url)</b> 
+    <p>Change the thumbnail of your app.</p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue |
+  | --- | --- | --- | --- |
+  | **`url`** | String | A public url of the thumbnail you want to set | null |
+</details>
 
+<details>
+  <summary>
+    <b>getServerAvailability(function(data) {}, function(error) {})</b> 
+    <p>Call this function to get an estimated time to get a session on Furioos.</p>
+  </summary>
+  
+  <b>data:</b>
+  | Property | Type | Description | DefaultValue |
+  | --- | --- | --- | --- |
+  | **`assignTime`** | Number | Estimated time (minutes) to be assigned to a server | 0 |
+  | **`launchTime`** | Number | Estimated time (minutes) for your app to be ready (copied, extracted and launched) | 0 |
+  | **`availableMachines`** | Number | Number of ready VM waiting for a session | 0 |
+  
+  <b>Example:</b>
+  ```javascript
+    player.getServerAvailability(function(data) {
+      console.log("Time to assign a server: ", data.assignTime);
+      console.log("Time to copy, extract and launch your application: ", data.launchTime);
+      console.log("Number of machines ready for a session: ", data.availableMachines);
+      console.log("Total time to get session ready: ", data.assignTime + data.launchTime);
+    }, function(error) {
+      // Treat the error.
+    });
+  ```
+</details>
 
-#### getServerAvailability(function(stats) {}, function(error) {}) asynchronous function
-Call this function to get an estimated time to get a session on Furioos.  
-`stats: Object`:
-- `assignTime: Number` Estimated time (minutes) to be assigned to a server
-- `launchTime: Number` Estimated time (minutes) for your app to be ready (copied, extracted and launched)
-- `availableMachines: Number` Number of ready VM waiting for a session
-##### Example:
-```javascript
-player.getServerAvailability(function(data) {
-  console.log("Time to assign a server: ", data.assignTime);
-  console.log("Time to copy, extract and launch your application: ", data.launchTime);
-  console.log("Number of machines ready for a session: ", data.availableMachines);
-  console.log("Total time to get session ready: ", data.assignTime + data.launchTime);
-}, function(error) {
-  // Treat the error.
-});
-```
+<details>
+  <summary>
+    <b>getServerMetadata(function(metadata) {}, function(error) {})</b> 
+    <p>
+      Call this function to get unique VM informations.
+      This function return metadata only when a session is running.
+    </p>
+  </summary>
+  
+  <b>metadata:</b>
+  | Property | Type | Description | DefaultValue |
+  | --- | --- | --- | --- |
+  | **`publicIP`** | String | The VM public IP. | "" |
+  | **`name`** | String | A unique name to identify a VM. | "" |
+  
+  <b>Example:</b>
+  ```javascript
+    player.getServerAvailability(function(metadata) {
+      console.log("Public VM IP: ", metadata.publicIP);
+      console.log("VM unique name: ", metadata.name);
+    }, function(error) {
+      // Treat the error.
+    });
+  ```
+</details>
 
-#### getServerMetadata(function(metadata) {}, function(error) {}) asynchronous function
-Call this function to get unique VM informations.
-This function return metadata only when a session is running.
-`metadata: Object`:
-- `publicIP: String` The VM public IP.
-- `name: String` A unique name to identify a VM.
-##### Example:
-```javascript
-player.getServerAvailability(function(metadata) {
-  console.log("Public VM IP: ", metadata.publicIP);
-  console.log("VM unique name: ", metadata.name);
-}, function(error) {
-  // Treat the error.
-});
-```
+<details>
+  <summary>
+    <b>setLocation(location)</b> 
+    <p>
+      Setup the default location used for each start.  
+      You should set this value before the user can start the session if you use the default Furioos' start button.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue |
+  | --- | --- | --- | --- |
+  | **`location`** | String | The VM public IP. | "" |
+  
+  <b>Example:</b>
+  ```javascript
+    player.setLocation(Player.regions.EUW);
+  ```
+</details>
 
-### Methods to create your own interface
-Those methods let you create your own interface.
-
-#### setLocation(location)
-Setup the default location used for each start.  
-You should set this value before the user can start the session if you use the default Furioos' start button.
-- `location: Region`: Use one of the static value : Player.regions.EUW / Player.regions.USE / Player.regions.USW / Player.regions.AUE
-
-#### start(location)
-Start a new session.
-- `location: Region`: Use one of the static value : Player.regions.EUW / Player.regions.USE / Player.regions.USW / Player.regions.AUE
+<details>
+  <summary>
+    <b>start(location)</b> 
+    <p>
+      Start a new session.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue | Optional |
+  | --- | --- | --- | --- | --- |
+  | **`location`** | String | The VM public IP. | "" | true |
+  
+  <b>Example:</b>
+  ```javascript
+    player.start(Player.regions.EUW);
+  ```
+</details>
 
 #### stop()
 Stop the session.
@@ -175,9 +353,23 @@ Enable Full screen mode.
 #### minimize()
 Disable Full screen mode.
 
-#### setQuality(value)
-Set the quality of the stream.
-- `value: QualityValue`: Use one of the static value Player.qualityValues.AUTO / Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA
+<details>
+  <summary>
+    <b>setQuality(quality)</b> 
+    <p>
+      Set the quality of the stream.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue | Optional |
+  | --- | --- | --- | --- | --- |
+  | **`quality`** | QualityValue | Use one of the static value Player.qualityValues.AUTO / Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA | Furioos App Quality | false |
+  
+  <b>Example:</b>
+  ```javascript
+    player.setQuality(Player.qualityValues.ULTRA);
+  ```
+</details>
 
 #### restartStream()
 Restart the streaming.
@@ -188,45 +380,62 @@ Those methods let you send/receive JSON data between your application and the HT
 #### Requirements
 - The Furioos SDK implemented in your application.
   - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
-  - Furioos SDK for Unreal : :star: Coming soon :wink:
+  - Furioos SDK for Unreal : :star: Coming in October 2020 :wink:
 
-#### onSDKMessage(function(data) {})
-Bind a callback to receive messages from your application.
-- `data: Object`: The JSON that you send from your application.
-##### Example:
+<details>
+  <summary>
+    <b>onSDKMessage(function(data) {})</b> 
+    <p>
+      Bind a callback to receive messages from your application.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue | Optional |
+  | --- | --- | --- | --- | --- |
+  | **`data`** | Object | The JSON that you send from your application. | null | false |
+  
+  <b>Example:</b>
+  ```javascript
+    player.onSDKMessage(function(data) {
+      console.log("Message received from my application: ", data);
+    });
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>sendSDKMessage(data)</b> 
+    <p>
+      Send data to your own application by using the Furioos SDK.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue | Optional |
+  | --- | --- | --- | --- | --- |
+  | **`data`** | Object | The data you want to send to your app formated in JSON. | null | false |
+  
+  <b>Example:</b>
+  ```javascript
+    player.sendSDKMessage({ "test": "test" }); 
+  ```
+</details>
+
+## Debug localy the SDK communication tunnel (WIP: Coming soon !)
+https://github.com/DonJGo/furioos-sdk-js-example
+
 ```javascript
-player.onSDKMessage(function(data) {
-  console.log("Message received from my application: ", data);
-});
-```
+import { Player } from 'furioos-sdk';
 
-#### sendSDKMessage(data)
-Send data to your own application by using the Furioos SDK.
-- `data: JSON`: The data you want to send to your app formated in JSON.
-##### Example:
-```javascript
-const data = { test: "test" }
-// The JSON will be sent to your application and you need to implement its interpretation
-player.sendSDKMessage(data); 
-```
+const options = {
+  whiteLabel: true,
+  hideToolbar: false,
+  hideTitle: true,
+  hidePlayButton: false,
+  debugAppMode: true, // This enable the debug mode on local.
+  wsServerAddress: "127.0.0.1:8080", // This is the local IP:PORT used to communicate with your app.
+};
 
-## SDK Local Test Example (Coming soon !)
-SDKDebug class let you debug the SDK communication on your local setup (Requirements: The Furioos SDK implemented in your application).  
-:warning: This feature is in development and should not be used yet.
-```javascript
-import { SDKDebug } from 'furioos-sdk';
-
-const sdkDebug = new SDKDebug("127.0.0.1:3000");
-
-sdkDebug.onReady(function() {
-  // Here you know when the WS connection with your application is ready.
-  sdkDebug.sendSDKMessage({ test: "test" });
-});
-
-sdkDebug.onSDKMessage(function(data) {
-  // Here you can manage the received data.
-  console.log("Received JSON", data);
-})
+const player = new Player("123.456", "containerDivId", options);
 ```
 ## :warning: Common Errors
 - *Failed to execute 'postMessage' on 'DOMWindow': The target origin (http://....) provided does not match the recipient window's origin ('http://...')*
