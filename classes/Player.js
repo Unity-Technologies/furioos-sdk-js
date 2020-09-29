@@ -102,11 +102,6 @@ module.exports = class Player {
       }
 
       if (options.debugAppMode) {
-        if (!options.wsServerAddress) {
-          console.error("Missing wsServerAddress parameter.");
-          return;
-        }
-
         // Local debug the SDK communication with your app.
         debugAppMode = true;
 
