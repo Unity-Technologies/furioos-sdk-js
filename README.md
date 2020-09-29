@@ -431,15 +431,15 @@ Those methods let you send/receive JSON data between your application and the HT
 </details>
 
 ## Debug localy the SDK communication tunnel
-:warning: This feature cannot work without **running the following project**: https://github.com/DonJGo/furioos-sdk-js-example
+:warning: This feature cannot work without **running the following project**: https://github.com/Unity-Technologies/furioos-sdk-js-example
 
-With this project, you'll be able to communicate localy with your application.
+With this project, you'll be able to communicate localy with your application through port 8081.
 
 :warning: There will be no stream.
-
-This feature open a direct tunnel between your js and your application running localy.
-
-Only **sendSDKMessage** and **onSDKMessage** can be used here to test the communication.
+<p>
+ This feature open a direct tunnel between your js and your application running localy.<br/>
+ Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
+</p>
 
 #### How does it work ?
 You just need to enable the **debugAppMode**.
