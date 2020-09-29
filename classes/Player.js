@@ -112,11 +112,12 @@ module.exports = class Player {
 
         const container = document.getElementById(containerId);
         container.innerText = "You are currently debugging locally your app. There is not stream here. Open console to see logs";
-        this.sdkDebug = new SDKDebug(options.wsServerAddress);
+
+        const serverAddress = options.wsServerAddress ? options.wsServerAddress + ":8081" : "127.0.0.1:8081"
+        this.sdkDebug = new SDKDebug(serverAddress);
 
         this.sdkDebug.onReady = () => {
           // Here you know when the WS connection with your application is ready.
-          console.log("Send SDK message");
           this.loaded = true;
           if (this._onLoadCallback) {
             this._onLoadCallback();
