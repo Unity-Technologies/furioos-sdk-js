@@ -1,13 +1,41 @@
 # Furioos SDK
 ## Requirements
-- Business subscription (or higher) on Furioos to use the SDK.
-- Then choose the app you want to use with the SDK and create a SDK link.
+- A Furioos Account on www.furioos.com available from the Business plan.
+- Then choose the application you want to use with the SDK and create a SDK link.
+
+## Table of contents
+* [Installation](#installation)
+* [API](#api)
+  * [Properties](#properties)
+  * [Events](#events)
+  * [Methods](#methods)
+  * [Communicate with your application](#communicate-with-your-application)
+* [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel)
 
 ## Installation
 ```npm install --save furioos-sdk```
 
-## Example
-You should copy past the link ID previously created.
+## API
+#### constructor(sdkShareLinkID, containerDivId, options)
+Instanciate the player for a given application.
+| Property | Type | Description | optional | DefaultValue |
+| --- | --- | --- | --- | --- |
+| **`sdkShareLinkID`** | String | Furioos SDK Link ID of the application you want to share. | false | null |
+| **`containerDivId`** | String | The ID of the HTML container div that will host the render. | false | null |
+| **`options`** | Object | The options to setup the player are these following : | true | {} |
+
+##### options:
+| Property | Type | Description | optional | DefaultValue |
+| --- | --- | --- | --- | --- |
+| **`whiteLabel`** | Boolean | Remove all Furioos' Logo | true | false |
+| **`hideToolbar`** | Boolean | Hide the toolbar to create your own | true | false |
+| **`hideTitle`** | Boolean | Hide the title bar to create your own | true | false |
+| **`hidePlayButton`** | Boolean | Hide the play button | true | false |
+| **`overridedURL`** | Boolean | Override the url of the server you want to communicate with | true | "https://portal.furioos.com" |
+| **`debugAppMode`** | Boolean | Active local debug of your application. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | false |
+| **`wsServerAddress`** | String | Set up the ip address of your websocket server. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | "127.0.0.1" |
+
+#### Example
 ```javascript
 import { Player } from 'furioos-sdk';
 
@@ -21,28 +49,9 @@ const options = {
 const player = new Player("123.456", "containerDivId", options);
 ```
 
-## Properties
+### Properties
 #### quality: String
 Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH / ULTRA
-
-## API
-#### constructor(sdkShareLinkID, containerDivId, options)
-Instanciate the player for a given app.
-| Property | Type | Description | optional | DefaultValue |
-| --- | --- | --- | --- | --- |
-| **`sdkShareLinkID`** | String | SDK Link ID of the app you want to share (ex: "123.456"). | false | null |
-| **`containerDivId`** | String | The ID of the HTML container div that will host the render. | false | null |
-| **`options`** | Object | The options to setup the player are these following : | true | {} |
-
-##### options:
-| Property | Type | Description | optional | DefaultValue |
-| --- | --- | --- | --- | --- |
-| **`whiteLabel`** | Boolean | Remove all Furioos' Logo | true | false |
-| **`hideToolbar`** | Boolean | Hide the toolbar to create your own | true | false |
-| **`hideTitle`** | Boolean | Hide the title bar to create your own | true | false |
-| **`hidePlayButton`** | Boolean | Hide the play button | true | false |
-| **`overridedURL`** | Boolean | Override the url of the server you want to communicate with | true | "https://portal.furioos.com" |
-
 
 ### Events
 <details>
@@ -242,7 +251,7 @@ player.onSessionStopped(function() {
 #### setUserActive()
 This function help you to keep the session open if your user does not interact with the interface.  
 Calling this function will fire onUserActive.  
-Caution: If you always call it without checking if the user is really here the session will never ended untill the user close his window.
+:warning: If you always call it without checking if the user is really here the session will never ended untill the user close his window.
 
 <details>
   <summary>
@@ -374,9 +383,10 @@ Disable Full screen mode.
 #### restartStream()
 Restart the streaming.
 
-### Methods to communicate with your app
+### Communicate with your application
 Go deeper with your UI by creating your own data interpretation.  
 Those methods let you send/receive JSON data between your application and the HTML page where you have implemented the JS SDK.
+
 #### Requirements
 - The Furioos SDK implemented in your application.
   - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
@@ -420,8 +430,19 @@ Those methods let you send/receive JSON data between your application and the HT
   ```
 </details>
 
-## Debug localy the SDK communication tunnel (WIP: Coming soon !)
-https://github.com/DonJGo/furioos-sdk-js-example
+## Debug localy the SDK communication tunnel
+:warning: This feature cannot work without **running the following project**: https://github.com/DonJGo/furioos-sdk-js-example
+
+With this project, you'll be able to communicate localy with your application.
+
+:warning: There will be no stream.
+
+This feature open a direct tunnel between your js and your application running localy.
+
+Only **sendSDKMessage** and **onSDKMessage** can be used here to test the communication.
+
+#### How does it work ?
+You just need to enable the **debugAppMode**.
 
 ```javascript
 import { Player } from 'furioos-sdk';
@@ -431,8 +452,7 @@ const options = {
   hideToolbar: false,
   hideTitle: true,
   hidePlayButton: false,
-  debugAppMode: true, // This enable the debug mode on local.
-  wsServerAddress: "127.0.0.1:8080", // This is the local IP:PORT used to communicate with your app.
+  debugAppMode: true, // This enable the local debug mode.
 };
 
 const player = new Player("123.456", "containerDivId", options);
