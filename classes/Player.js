@@ -1,3 +1,5 @@
+var SDKDebug = require("./SDKDebug.js");
+
 const _constructorParams = function(shareId, containerId, options) {
   // Share Id.
   if (!shareId || typeof shareId != "string") {
@@ -31,6 +33,11 @@ const _eventNames = {
   GET_SERVER_AVAILABILITY: "getServerAvailability",
   GET_SERVER_METADATA: "getServerMetadata",
   SET_THUMBNAIL_URL: "setThumbnailUrl",
+  ON_APP_INSTALL_PROGRESS: "onAppInstallProgress",
+  ON_APP_INSTALL_SUCCESS: "onAppInstallSuccess",
+  ON_APP_INSTALL_FAIL: "onAppInstallFail",
+  ON_APP_START: "onAppStart",
+  ON_STREAM_START: "onStreamStart",
 };
 
 const _qualityValues = {
@@ -48,7 +55,7 @@ const _regions = {
   AUE: [-33.865143, 151.2099]
 }
 
-let _furioosServerUrl = "https://portal.furioos.com"
+let _furioosServerUrl = "https://portal.furioos.com";
 
 module.exports = class Player {
   static get qualityValues() { return _qualityValues };
@@ -71,6 +78,7 @@ module.exports = class Player {
     sharedLinkID = _furioosServerUrl + "/embed/" + sharedLinkID;
 
     // If there are options, treat those who change the url.
+    let debugAppMode = false;
     if (options) {
       let prefix = "?";
       if (options.whiteLabel) {
@@ -92,14 +100,44 @@ module.exports = class Player {
         sharedLinkID += prefix + "hidePlayButton=true";
         prefix = "&";
       }
+
+      if (options.debugAppMode) {
+        // Local debug the SDK communication with your app.
+        debugAppMode = true;
+
+        const container = document.getElementById(containerId);
+        container.innerText = "You are currently debugging locally your app. There is not stream here. Open console to see logs";
+
+        const serverAddress = options.wsServerAddress ? options.wsServerAddress + ":8081" : "127.0.0.1:8081"
+        this.sdkDebug = new SDKDebug(serverAddress);
+
+        this.sdkDebug.onReady = () => {
+          // Here you know when the WS connection with your application is ready.
+          this.loaded = true;
+          if (this._onLoadCallback) {
+            this._onLoadCallback();
+          }
+        };
+      
+        this.sdkDebug.onSDKMessage((data) => {
+          // Here you can manage the received data.
+          if (this._onSDKMessageCallback) {
+            this._onSDKMessageCallback(data);
+          }
+        });
+      }
     }
 
     // Create the iframe into the given container.
     this.loaded = false;
+    this.debugAppMode = debugAppMode;
     this.sharedLink = sharedLinkID;
     this.containerId = containerId;
     this.options = options;
-    this.embed = this._createIframe();
+
+    if (!debugAppMode) {
+      this.embed = this._createIframe();
+    } 
   }
 
   ///////////////////////
@@ -176,6 +214,31 @@ module.exports = class Player {
         case _eventNames.ON_USER_INACTIVE:
           if (this._onUserInactiveCallback) {
             this._onUserInactiveCallback();
+          }
+          return;
+        case _eventNames.ON_APP_INSTALL_PROGRESS:
+          if (this._onAppInstallProgress) {
+            this._onAppInstallProgress(e.data.value);
+          }
+          return;
+        case _eventNames.ON_APP_INSTALL_SUCCESS:
+          if (this._onAppInstallSuccess) {
+            this._onAppInstallSuccess();
+          }
+          return;
+        case _eventNames.ON_APP_INSTALL_FAIL:
+          if (this._onAppInstallFail) {
+            this._onAppInstallFail();
+          }
+          return;
+        case _eventNames.ON_APP_START:
+          if (this._onAppStart) {
+            this._onAppStart();
+          }
+          return;
+        case _eventNames.ON_STREAM_START:
+          if (this._onStreamStart) {
+            this._onStreamStart();
           }
           return;
         case _eventNames.ON_SESSION_STOPPED:
@@ -271,6 +334,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No setDefaultLocation in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
   } 
 
@@ -283,6 +351,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No start in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ type: _eventNames.START, value: location }, _furioosServerUrl);
   }
 
@@ -290,6 +363,11 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     } 
+
+    if (this.debugAppMode) {
+      console.log("No stop in debug mode")
+      return; // Not loaded.
+    }
 
     this.embed.contentWindow.postMessage({ type: _eventNames.STOP }, _furioosServerUrl);
   }
@@ -299,6 +377,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No maximize in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ type: _eventNames.MAXIMIZE }, _furioosServerUrl);
   }
 
@@ -306,6 +389,11 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     } 
+
+    if (this.debugAppMode) {
+      console.log("No minimize in debug mode")
+      return; // Not loaded.
+    }
     
     this.embed.contentWindow.postMessage({ type: _eventNames.MINIMIZE }, _furioosServerUrl);
   }
@@ -324,6 +412,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No setQuality in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ 
       type: _eventNames.QUALITY,
       value: value
@@ -336,6 +429,11 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     } 
+
+    if (this.debugAppMode) {
+      console.log("No restartStream in debug mode")
+      return; // Not loaded.
+    }
     
     this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_STREAM }, _furioosServerUrl);
   }
@@ -353,6 +451,26 @@ module.exports = class Player {
     this._onUserInactiveCallback = onUserInactiveCallback;
   }
 
+  onAppInstallProgress(onAppInstallProgress) {
+    this._onAppInstallProgress = onAppInstallProgress;
+  }
+
+  onAppInstallSuccess(onAppInstallSuccess) {
+    this._onAppInstallSuccess = onAppInstallSuccess;
+  }
+
+  onAppInstallFail(onAppInstallFail) {
+    this._onAppInstallFail = onAppInstallFail;
+  }
+
+  onAppStart(onAppStart) {
+    this._onAppStart = onAppStart;
+  }
+
+  onStreamStart(onStreamStart) {
+    this._onStreamStart = onStreamStart;
+  }
+
   onSessionStopped(onSessionStoppedCallback) {
     this._onSessionStoppedCallback = onSessionStoppedCallback;
   }
@@ -366,6 +484,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
     
+    if (this.debugAppMode) {
+      this.sdkDebug.sendSDKMessage(data);
+      return;
+    }
+
     this.embed.contentWindow.postMessage({ 
       type: _eventNames.SEND_SDK_MESSAGE,
       value: data,
@@ -381,6 +504,11 @@ module.exports = class Player {
       return; // Not loaded.
     } 
 
+    if (this.debugAppMode) {
+      console.log("No setThumbnailUrl in debug mode")
+      return; // Not loaded.
+    }
+
     this.embed.contentWindow.postMessage({ type: _eventNames.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
   } 
 
@@ -388,6 +516,12 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     }
+
+    if (this.debugAppMode) {
+      console.log("No getServerAvailability in debug mode")
+      return; // Not loaded.
+    }
+
     this._getServerAvailabilityCallback = getServerAvailabilityCallback;
     this._getServerAvailabilityErrorCallback = getServerAvailabilityErrorCallback;
 
@@ -400,6 +534,12 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     }
+
+    if (this.debugAppMode) {
+      console.log("No getServerMetadata in debug mode")
+      return; // Not loaded.
+    }
+
     this._getServerMetadataCallback = getServerMetadataCallback;
     this._getServerMetadataErrorCallback = getServerMetadataErrorCallback;
 
