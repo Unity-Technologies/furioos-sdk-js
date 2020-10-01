@@ -59,7 +59,7 @@ module.exports = class SDKDebug {
     const parsedData = {
       type: "furioos",
       task: "sdk",
-      data: JSON.stringify(data)
+      data: data
     }
 
     this.ws.send(JSON.stringify(parsedData),this._wsOnSendError);
