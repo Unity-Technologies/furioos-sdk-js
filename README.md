@@ -276,6 +276,12 @@ Calling this function will fire onUserActive.
   | **`assignTime`** | Number | Estimated time (minutes) to be assigned to a server | 0 |
   | **`launchTime`** | Number | Estimated time (minutes) for your app to be ready (copied, extracted and launched) | 0 |
   | **`availableMachines`** | Number | Number of ready VM waiting for a session | 0 |
+  | <b>*</b>**`maximumMachines`** | Number | Maximum machines setted on your campaign | 0 |
+  | <b>*</b>**`usedMachines`** | Number | Number of current used machines in your pool | 0 |
+  | <b>*</b>**`creatingMachines`** | Number | Number of creating machines (creating machine in the cloud) | 0 |
+  | <b>*</b>**`installingMachines`** | Number | Number of installing machine (installing your application on it) | 0 |
+  
+  <b>*</b> *Those values are only available for an application running on a pre-allocated campaign.*
   
   <b>Example:</b>
   ```javascript
