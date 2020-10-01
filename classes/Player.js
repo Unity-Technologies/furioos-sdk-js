@@ -483,6 +483,10 @@ module.exports = class Player {
     if (!this.loaded) {
       return; // Not loaded.
     } 
+
+    if (typeof data == "object") {
+      data = JSON.stringify(data);
+    }
     
     if (this.debugAppMode) {
       this.sdkDebug.sendSDKMessage(data);
