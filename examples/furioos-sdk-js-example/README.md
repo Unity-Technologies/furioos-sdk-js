@@ -5,9 +5,10 @@ It also a way to debug localy your application.
 
 ## Installation
 You just need to **download** the full project zipped.
-Then you just need this subfolder to start a first project using the SDK.
 
 **Unzip** it where you want.
+
+**Go under** `examples/furioos-sdk-js-example` (this subfolder could be extracted from the whole project to make your test).
 
 **Run it** by executing the run.sh script `sh run.sh`
 
