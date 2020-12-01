@@ -4,7 +4,8 @@ It is a first step to try Furioos SDK with your links on Furioos.
 It also a way to debug localy your application.
 
 ## Installation
-You just need to **download** this project zipped.
+You just need to **download** the full project zipped.
+Then you just need this subfolder to start a first project using the SDK.
 
 **Unzip** it where you want.
 
