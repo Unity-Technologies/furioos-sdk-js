@@ -324,25 +324,6 @@ Calling this function will fire onUserActive.
 
 <details>
   <summary>
-    <b>setLocation(location)</b> 
-    <p>
-      Setup the default location used for each start.  
-      You should set this value before the user can start the session if you use the default Furioos' start button.
-    </p>
-  </summary>
-  
-  | Property | Type | Description | DefaultValue |
-  | --- | --- | --- | --- |
-  | **`location`** | String | The VM public IP. | "" |
-  
-  <b>Example:</b>
-  ```javascript
-    player.setLocation(Player.regions.EUW);
-  ```
-</details>
-
-<details>
-  <summary>
     <b>start(location)</b> 
     <p>
       Start a new session.

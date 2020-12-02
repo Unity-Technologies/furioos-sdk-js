@@ -8,7 +8,8 @@ You just need to **download** the full project zipped.
 
 **Unzip** it where you want.
 
-**Go under** `examples/furioos-sdk-js-example` (this subfolder could be extracted from the whole project to make your test).
+**Go under** `examples/furioos-sdk-js-example` (this subfolder should be extracted from the whole project to make your test).
+:warning: Keeping and running the example folder form the furioos-sdk-js folder could trigger errors.
 
 **Run it** by executing the run.sh script `sh run.sh`
 
