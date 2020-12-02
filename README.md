@@ -324,25 +324,6 @@ Calling this function will fire onUserActive.
 
 <details>
   <summary>
-    <b>setLocation(location)</b> 
-    <p>
-      Setup the default location used for each start.  
-      You should set this value before the user can start the session if you use the default Furioos' start button.
-    </p>
-  </summary>
-  
-  | Property | Type | Description | DefaultValue |
-  | --- | --- | --- | --- |
-  | **`location`** | String | The VM public IP. | "" |
-  
-  <b>Example:</b>
-  ```javascript
-    player.setLocation(Player.regions.EUW);
-  ```
-</details>
-
-<details>
-  <summary>
     <b>start(location)</b> 
     <p>
       Start a new session.
@@ -396,7 +377,7 @@ Those methods let you send/receive JSON data between your application and the HT
 #### Requirements
 - The Furioos SDK implemented in your application.
   - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
-  - Furioos SDK for Unreal : :star: Coming in October 2020 :wink:
+  - Furioos SDK for Unreal : https://github.com/Unity-Technologies/furioos-sdk-unreal-engine :lock_with_ink_pen: *Pending legal approval to be public* :clock1:
 
 <details>
   <summary>
@@ -437,7 +418,7 @@ Those methods let you send/receive JSON data between your application and the HT
 </details>
 
 ## Debug localy the SDK communication tunnel
-:warning: This feature cannot work without **running the following project**: https://github.com/Unity-Technologies/furioos-sdk-js-example
+:warning: This feature cannot work without **running the following example**: `furioos-sdk-js-example`
 
 With this project, you'll be able to communicate localy with your application through port 8081.
 
