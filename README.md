@@ -377,7 +377,7 @@ Those methods let you send/receive JSON data between your application and the HT
 #### Requirements
 - The Furioos SDK implemented in your application.
   - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
-  - Furioos SDK for Unreal : :star: Coming in October 2020 :wink:
+  - Furioos SDK for Unreal : :star: Coming Soon :wink:
 
 <details>
   <summary>
@@ -418,7 +418,7 @@ Those methods let you send/receive JSON data between your application and the HT
 </details>
 
 ## Debug localy the SDK communication tunnel
-:warning: This feature cannot work without **running the following project**: https://github.com/Unity-Technologies/furioos-sdk-js-example
+:warning: This feature cannot work without **running the following example**: `furioos-sdk-js-example`
 
 With this project, you'll be able to communicate localy with your application through port 8081.
 
