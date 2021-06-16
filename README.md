@@ -313,7 +313,7 @@ Calling this function will fire onUserActive.
   
   <b>Example:</b>
   ```javascript
-    player.getServerAvailability(function(metadata) {
+    player.getServerMetadata(function(metadata) {
       console.log("Public VM IP: ", metadata.publicIP);
       console.log("VM unique name: ", metadata.name);
     }, function(error) {
