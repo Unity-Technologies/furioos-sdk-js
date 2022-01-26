@@ -1,6 +1,6 @@
 # Furioos SDK
 ## Requirements
-- A Furioos Account on www.furioos.com available from the Business plan.
+- A Furioos Account on www.furioos.com.
 - Then choose the application you want to use with the SDK and create a SDK link.
 
 ## Table of contents
