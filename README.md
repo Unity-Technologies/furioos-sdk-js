@@ -31,7 +31,7 @@ Instanciate the player for a given application.
 | **`hideToolbar`** | Boolean | Hide the toolbar to create your own | true | false |
 | **`hideTitle`** | Boolean | Hide the title bar to create your own | true | false |
 | **`hidePlayButton`** | Boolean | Hide the play button | true | false |
-| **`overridedURL`** | Boolean | Override the url of the server you want to communicate with | true | "https://portal.furioos.com" |
+| **`overridedURL`** | String | Override the url of the server you want to communicate with | undefined | "https://portal.furioos.com" |
 | **`debugAppMode`** | Boolean | Active local debug of your application. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | false |
 | **`wsServerAddress`** | String | Set up the ip address of your websocket server. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | "127.0.0.1" |
 

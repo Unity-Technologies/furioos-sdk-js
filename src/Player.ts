@@ -1,18 +1,16 @@
-var SDKDebug = require("./SDKDebug.js");
+import { SDKDebug } from "./SDKDebug";
 
-const _constructorParams = function(shareId, containerId, options) {
-  // Share Id.
-  if (!shareId || typeof shareId != "string") {
+const _constructorParams = function (shareId: unknown, containerId: unknown) {
+  if (!shareId || typeof shareId !== "string") {
     return false;
   }
 
-  // Container
-  if (!containerId || typeof containerId != "string") {
+  if (!containerId || typeof containerId !== "string") {
     return false;
   }
 
   return true;
-}
+};
 
 const _eventNames = {
   LOAD: "load",
@@ -46,23 +44,66 @@ const _qualityValues = {
   MEDIUM: 2,
   HIGH: 3,
   ULTRA: 4,
-}
+} as const;
+
+type QualityValue = typeof _qualityValues[keyof typeof _qualityValues];
 
 const _regions = {
   EUW: [52.1326, 5.2913],
   USW: [47.751076, -120.740135],
   USE: [37.926868, -78.024902],
-  AUE: [-33.865143, 151.2099]
-}
+  AUE: [-33.865143, 151.2099],
+} as const;
 
 let _furioosServerUrl = "https://portal.furioos.com";
 
-module.exports = class Player {
-  static get qualityValues() { return _qualityValues };
-  static get regions() { return _regions };
+type PlayerOptions = {
+  whiteLabel?: boolean;
+  hideToolbar?: boolean;
+  hideTitle?: boolean;
+  hidePlayButton?: boolean;
+  overridedURL?: string;
+  debugAppMode?: boolean;
+  wsServerAddress?: string;
+};
 
-  constructor(sharedLinkID, containerId, options) {
-    if (!_constructorParams(sharedLinkID, containerId, options)) {
+export class Player {
+  sdkDebug?: SDKDebug;
+  loaded: boolean;
+  debugAppMode: boolean;
+  sharedLink: string;
+  containerId: string;
+  embed?: HTMLIFrameElement;
+  options: PlayerOptions;
+  location?: string;
+
+  private _quality: QualityValue = _qualityValues.AUTO;
+
+  _onLoadCallback?: () => void;
+  _onSDKMessageCallback?: (data: any) => void;
+  _onUserActiveCallback?: () => void;
+  _onUserInactiveCallback?: () => void;
+  _onAppInstallProgress?: (value: any) => void;
+  _onAppInstallSuccess?: () => void;
+  _onAppInstallFail?: () => void;
+  _onAppStart?: () => void;
+  _onStreamStart?: () => void;
+  _onSessionStoppedCallback?: () => void;
+  _onStatsCallback?: (value: any) => void;
+  _getServerAvailabilityErrorCallback?: (error: any) => void;
+  _getServerAvailabilityCallback?: (stats: any) => void;
+  _getServerMetadataErrorCallback?: (error: any) => void;
+  _getServerMetadataCallback?: (metadata: any) => void;
+
+  static qualityValues = _qualityValues;
+  static regions = _regions;
+
+  constructor(
+    sharedLinkID: string,
+    containerId: string,
+    options: PlayerOptions,
+  ) {
+    if (!_constructorParams(sharedLinkID, containerId)) {
       throw "Bad parameters";
     }
 
@@ -73,7 +114,7 @@ module.exports = class Player {
 
     if (options.overridedURL) {
       _furioosServerUrl = options.overridedURL;
-    } 
+    }
 
     sharedLinkID = _furioosServerUrl + "/embed/" + sharedLinkID;
 
@@ -106,9 +147,14 @@ module.exports = class Player {
         debugAppMode = true;
 
         const container = document.getElementById(containerId);
-        container.innerText = "You are currently debugging locally your app. There is not stream here. Open console to see logs";
+        if (container) {
+          container.innerText =
+            "You are currently debugging locally your app. There is not stream here. Open console to see logs";
+        }
 
-        const serverAddress = options.wsServerAddress ? options.wsServerAddress + ":8081" : "127.0.0.1:8081"
+        const serverAddress = options.wsServerAddress
+          ? options.wsServerAddress + ":8081"
+          : "127.0.0.1:8081";
         this.sdkDebug = new SDKDebug(serverAddress);
 
         this.sdkDebug.onReady = () => {
@@ -118,7 +164,7 @@ module.exports = class Player {
             this._onLoadCallback();
           }
         };
-      
+
         this.sdkDebug.onSDKMessage((data) => {
           // Here you can manage the received data.
           if (this._onSDKMessageCallback) {
@@ -137,14 +183,14 @@ module.exports = class Player {
 
     if (!debugAppMode) {
       this.embed = this._createIframe();
-    } 
+    }
   }
 
   ///////////////////////
   /// PRIVATE METHODS ///
   ///////////////////////
 
-  _createIframe() {
+  _createIframe(): HTMLIFrameElement {
     const container = document.getElementById(this.containerId);
 
     if (!container) {
@@ -156,7 +202,7 @@ module.exports = class Player {
     iframe.setAttribute("src", this.sharedLink);
     iframe.setAttribute("id", "furioos-sdk-iframe");
     iframe.setAttribute("allow", "autoplay; fullscreen");
-    
+
     iframe.style.width = "100%";
     iframe.style.height = "100%";
 
@@ -167,8 +213,8 @@ module.exports = class Player {
     return iframe;
   }
 
-  _displayErrorMessage(message) {
-    const container = document.getElementById(this.containerId);
+  _displayErrorMessage(message: string): void {
+    const container = document.getElementById(this.containerId) as HTMLElement;
 
     const div = document.createElement("div");
     div.innerText = message;
@@ -177,24 +223,29 @@ module.exports = class Player {
     container.appendChild(div);
   }
 
-  _onLoad() {
+  _onLoad(): void {
     // Bind listener for the messages.
     window.addEventListener("message", (e) => {
-      switch(e.data.type) {
+      switch (e.data.type) {
         case _eventNames.LOAD:
           // When the player is loaded: Set the default setted location (if setted).
           if (this.location) {
-            if (!this.embed.contentWindow) {
+            if (!(this.embed as HTMLIFrameElement).contentWindow) {
               // Wait the window is reachable.
               setTimeout(() => {
-                this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+                (this.embed as HTMLIFrameElement).contentWindow?.postMessage(
+                  { type: _eventNames.SET_LOCATION, value: this.location },
+                  _furioosServerUrl,
+                );
               }, 100);
-            }
-            else {
-              this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+            } else {
+              (this.embed as HTMLIFrameElement).contentWindow?.postMessage(
+                { type: _eventNames.SET_LOCATION, value: this.location },
+                _furioosServerUrl,
+              );
             }
           }
-          
+
           this.loaded = true;
 
           if (this._onLoadCallback) {
@@ -267,7 +318,7 @@ module.exports = class Player {
             console.log("No success callback binded !");
             return;
           }
-          
+
           this._getServerAvailabilityCallback(response.stats);
           return;
         case _eventNames.GET_SERVER_METADATA:
@@ -286,7 +337,7 @@ module.exports = class Player {
             console.log("No success callback binded !");
             return;
           }
-          
+
           this._getServerMetadataCallback(res.metadata);
           return;
         case _eventNames.ERROR:
@@ -301,7 +352,7 @@ module.exports = class Player {
   ////////////////////////
 
   get quality() {
-    switch(this.quality) {
+    switch (this._quality) {
       case _qualityValues.AUTO:
         return "AUTO";
 
@@ -309,13 +360,13 @@ module.exports = class Player {
         return "LOW";
 
       case _qualityValues.MEDIUM:
-          return "MEDIUM";
+        return "MEDIUM";
 
       case _qualityValues.HIGH:
-          return "HIGH";
+        return "HIGH";
 
       case _qualityValues.ULTRA:
-          return "ULTRA";
+        return "ULTRA";
     }
   }
 
@@ -323,224 +374,262 @@ module.exports = class Player {
   //// PUBLIC METHODS ////
   ////////////////////////
   // Binding onload callback.
-  onLoad(onLoadCallback) {
+  onLoad(onLoadCallback: () => void): void {
     this._onLoadCallback = onLoadCallback;
   }
 
-  setDefaultLocation(location) {
+  setDefaultLocation(location: string): void {
     this.location = location;
 
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
-      console.log("No setDefaultLocation in debug mode")
+      console.log("No setDefaultLocation in debug mode");
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
-  } 
+    this.embed?.contentWindow?.postMessage(
+      { type: _eventNames.SET_LOCATION, value: this.location },
+      _furioosServerUrl,
+    );
+  }
 
-  start(location) {
+  start(location?: string): void {
     if (!location) {
       location = this.location;
-    }  
+    }
 
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
-      console.log("No start in debug mode")
+      console.log("No start in debug mode");
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.START, value: location }, _furioosServerUrl);
+    this.embed?.contentWindow?.postMessage(
+      { type: _eventNames.START, value: location },
+      _furioosServerUrl,
+    );
   }
 
-  stop() {
+  stop(): void {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
-      console.log("No stop in debug mode")
+      console.log("No stop in debug mode");
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.STOP }, _furioosServerUrl);
+    this.embed?.contentWindow?.postMessage(
+      { type: _eventNames.STOP },
+      _furioosServerUrl,
+    );
   }
 
-  maximize() {
+  maximize(): void {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
-      console.log("No maximize in debug mode")
+      console.log("No maximize in debug mode");
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.MAXIMIZE }, _furioosServerUrl);
+    this.embed?.contentWindow?.postMessage(
+      { type: _eventNames.MAXIMIZE },
+      _furioosServerUrl,
+    );
   }
 
-  minimize() {
+  minimize(): void {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
-      console.log("No minimize in debug mode")
+      console.log("No minimize in debug mode");
       return; // Not loaded.
     }
-    
-    this.embed.contentWindow.postMessage({ type: _eventNames.MINIMIZE }, _furioosServerUrl);
+
+    this.embed?.contentWindow?.postMessage(
+      { type: _eventNames.MINIMIZE },
+      _furioosServerUrl,
+    );
   }
 
-  setQuality(value) {
+  setQuality(value: number): void {
     // Test if the value is correct.
-    if (value != _qualityValues.LOW 
-      && value != _qualityValues.MEDIUM
-      && value != _qualityValues.HIGH
-      && value != _qualityValues.ULTRA) 
-    {
+    if (
+      value != _qualityValues.LOW &&
+      value != _qualityValues.MEDIUM &&
+      value != _qualityValues.HIGH &&
+      value != _qualityValues.ULTRA
+    ) {
       throw "Bad parameter: The quality should be one of the given value in Player.qualityValues";
     }
 
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
-      console.log("No setQuality in debug mode")
+      console.log("No setQuality in debug mode");
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ 
-      type: _eventNames.QUALITY,
-      value: value
-    }, _furioosServerUrl);
+    this.embed?.contentWindow?.postMessage(
+      {
+        type: _eventNames.QUALITY,
+        value: value,
+      },
+      _furioosServerUrl,
+    );
 
-    this.quality = value;
+    this._quality = value;
   }
 
-  restartStream() {
+  restartStream(): void {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
-      console.log("No restartStream in debug mode")
+      console.log("No restartStream in debug mode");
       return; // Not loaded.
     }
-    
-    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_STREAM }, _furioosServerUrl);
+
+    this.embed?.contentWindow?.postMessage(
+      { type: _eventNames.RESTART_STREAM },
+      _furioosServerUrl,
+    );
   }
 
   // SDK
-  onSDKMessage(onSDKMessageCallback) {
+  onSDKMessage(onSDKMessageCallback: (data: any) => void) {
     this._onSDKMessageCallback = onSDKMessageCallback;
   }
 
-  onUserActive(onUserActiveCallback) {
+  onUserActive(onUserActiveCallback: () => void) {
     this._onUserActiveCallback = onUserActiveCallback;
   }
 
-  onUserInactive(onUserInactiveCallback) {
+  onUserInactive(onUserInactiveCallback: () => void) {
     this._onUserInactiveCallback = onUserInactiveCallback;
   }
 
-  onAppInstallProgress(onAppInstallProgress) {
+  onAppInstallProgress(onAppInstallProgress: (value: any) => void) {
     this._onAppInstallProgress = onAppInstallProgress;
   }
 
-  onAppInstallSuccess(onAppInstallSuccess) {
+  onAppInstallSuccess(onAppInstallSuccess: () => void) {
     this._onAppInstallSuccess = onAppInstallSuccess;
   }
 
-  onAppInstallFail(onAppInstallFail) {
+  onAppInstallFail(onAppInstallFail: () => void) {
     this._onAppInstallFail = onAppInstallFail;
   }
 
-  onAppStart(onAppStart) {
+  onAppStart(onAppStart: () => void) {
     this._onAppStart = onAppStart;
   }
 
-  onStreamStart(onStreamStart) {
+  onStreamStart(onStreamStart: () => void) {
     this._onStreamStart = onStreamStart;
   }
 
-  onSessionStopped(onSessionStoppedCallback) {
+  onSessionStopped(onSessionStoppedCallback: () => void) {
     this._onSessionStoppedCallback = onSessionStoppedCallback;
   }
 
-  onStats(callback) {
+  onStats(callback: (value: any) => void) {
     this._onStatsCallback = callback;
   }
 
-  sendSDKMessage(data) {
+  sendSDKMessage(data: any): void {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (typeof data == "object") {
       data = JSON.stringify(data);
     }
-    
-    if (this.debugAppMode) {
+
+    if (this.debugAppMode && this.sdkDebug) {
       this.sdkDebug.sendSDKMessage(data);
       return;
     }
 
-    this.embed.contentWindow.postMessage({ 
-      type: _eventNames.SEND_SDK_MESSAGE,
-      value: data,
-    }, _furioosServerUrl);
+    this.embed?.contentWindow?.postMessage(
+      {
+        type: _eventNames.SEND_SDK_MESSAGE,
+        value: data,
+      },
+      _furioosServerUrl,
+    );
   }
 
-  setUserActive() {
-    this.sendSDKMessage({ "userActive": true });
+  setUserActive(): void {
+    this.sendSDKMessage({ userActive: true });
   }
 
-  setThumbnailUrl(thumbnailUrl) {
-    if (!this.loaded) {
-      return; // Not loaded.
-    } 
-
-    if (this.debugAppMode) {
-      console.log("No setThumbnailUrl in debug mode")
-      return; // Not loaded.
-    }
-
-    this.embed.contentWindow.postMessage({ type: _eventNames.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
-  } 
-
-  getServerAvailability(getServerAvailabilityCallback, getServerAvailabilityErrorCallback) {
+  setThumbnailUrl(thumbnailUrl: string): void {
     if (!this.loaded) {
       return; // Not loaded.
     }
 
     if (this.debugAppMode) {
-      console.log("No getServerAvailability in debug mode")
+      console.log("No setThumbnailUrl in debug mode");
+      return; // Not loaded.
+    }
+
+    this.embed?.contentWindow?.postMessage(
+      { type: _eventNames.SET_THUMBNAIL_URL, value: thumbnailUrl },
+      _furioosServerUrl,
+    );
+  }
+
+  getServerAvailability(
+    getServerAvailabilityCallback: (stats: any) => void,
+    getServerAvailabilityErrorCallback: (error: any) => void,
+  ) {
+    if (!this.loaded) {
+      return; // Not loaded.
+    }
+
+    if (this.debugAppMode) {
+      console.log("No getServerAvailability in debug mode");
       return; // Not loaded.
     }
 
     this._getServerAvailabilityCallback = getServerAvailabilityCallback;
-    this._getServerAvailabilityErrorCallback = getServerAvailabilityErrorCallback;
+    this._getServerAvailabilityErrorCallback =
+      getServerAvailabilityErrorCallback;
 
     // Call the get.
-    this.embed.contentWindow.postMessage({ type: _eventNames.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
+    this.embed?.contentWindow?.postMessage(
+      { type: _eventNames.GET_SERVER_AVAILABILITY },
+      _furioosServerUrl,
+    );
     // The response will be treat in the listener below.
   }
 
-  getServerMetadata(getServerMetadataCallback, getServerMetadataErrorCallback) {
+  getServerMetadata(
+    getServerMetadataCallback: (metadata: any) => void,
+    getServerMetadataErrorCallback: (error: any) => void,
+  ) {
     if (!this.loaded) {
       return; // Not loaded.
     }
 
     if (this.debugAppMode) {
-      console.log("No getServerMetadata in debug mode")
+      console.log("No getServerMetadata in debug mode");
       return; // Not loaded.
     }
 
@@ -548,7 +637,10 @@ module.exports = class Player {
     this._getServerMetadataErrorCallback = getServerMetadataErrorCallback;
 
     // Call the get.
-    this.embed.contentWindow.postMessage({ type: _eventNames.GET_SERVER_METADATA }, _furioosServerUrl);
+    this.embed?.contentWindow?.postMessage(
+      { type: _eventNames.GET_SERVER_METADATA },
+      _furioosServerUrl,
+    );
     // The response will be treat in the listener below.
   }
 }
