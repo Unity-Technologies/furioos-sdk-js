@@ -33,6 +33,7 @@ const _eventNames = {
   GET_SERVER_AVAILABILITY: "getServerAvailability",
   GET_SERVER_METADATA: "getServerMetadata",
   SET_THUMBNAIL_URL: "setThumbnailUrl",
+  TOGGLE_VOLUME_MUTED: "toggleVolumeMuted",
   ON_APP_INSTALL_PROGRESS: "onAppInstallProgress",
   ON_APP_INSTALL_SUCCESS: "onAppInstallSuccess",
   ON_APP_INSTALL_FAIL: "onAppInstallFail",
@@ -436,6 +437,19 @@ module.exports = class Player {
     }
     
     this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_STREAM }, _furioosServerUrl);
+  }
+
+  toggleMuted() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    } 
+
+    if (this.debugAppMode) {
+      console.log("No restartStream in debug mode")
+      return; // Not loaded.
+    }
+    
+    this.embed.contentWindow.postMessage({ type: _eventNames.TOGGLE_VOLUME_MUTED }, _furioosServerUrl);
   }
 
   // SDK
