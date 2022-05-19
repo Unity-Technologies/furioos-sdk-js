@@ -1,4 +1,4 @@
-var SDKDebug = require("./SDKDebug.js");
+import {SDKDebug} from "./SDKDebug.js";
 
 const _constructorParams = function(shareId, containerId, options) {
   // Share Id.
@@ -58,7 +58,8 @@ const _regions = {
 
 let _furioosServerUrl = "https://portal.furioos.com";
 
-module.exports = class Player {
+export class Player {
+
   static get qualityValues() { return _qualityValues };
   static get regions() { return _regions };
 
