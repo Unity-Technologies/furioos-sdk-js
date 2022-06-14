@@ -14,7 +14,7 @@ const _constructorParams = function (shareId, containerId, options) {
   return true;
 }
 
-const EVENTS_NAME = {
+const SDK_EVENTS_NAME = {
   LOAD: "load",
   ERROR: "error",
   START: "start",
@@ -38,6 +38,8 @@ const EVENTS_NAME = {
   ON_APP_INSTALL_FAIL: "onAppInstallFail",
   ON_APP_START: "onAppStart",
   ON_STREAM_START: "onStreamStart",
+  SET_VOLUME: "setVolume",
+  APP_STOP: "appStop",
 };
 
 const _qualityValues = {
@@ -182,17 +184,17 @@ class Player {
     // Bind listener for the messages.
     window.addEventListener("message", (e) => {
       switch (e.data.type) {
-        case EVENTS_NAME.LOAD:
+        case SDK_EVENTS_NAME.LOAD:
           // When the player is loaded: Set the default setted location (if setted).
           if (this.location) {
             if (!this.embed.contentWindow) {
               // Wait the window is reachable.
               setTimeout(() => {
-                this.embed.contentWindow.postMessage({ type: EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
+                this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
               }, 100);
             }
             else {
-              this.embed.contentWindow.postMessage({ type: EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
+              this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
             }
           }
 
@@ -202,57 +204,57 @@ class Player {
             this._onLoadCallback();
           }
           return;
-        case EVENTS_NAME.ON_SDK_MESSAGE:
+        case SDK_EVENTS_NAME.ON_SDK_MESSAGE:
           if (this._onSDKMessageCallback) {
             this._onSDKMessageCallback(e.data.value);
           }
           return;
-        case EVENTS_NAME.ON_USER_ACTIVE:
+        case SDK_EVENTS_NAME.ON_USER_ACTIVE:
           if (this._onUserActiveCallback) {
             this._onUserActiveCallback();
           }
           return;
-        case EVENTS_NAME.ON_USER_INACTIVE:
+        case SDK_EVENTS_NAME.ON_USER_INACTIVE:
           if (this._onUserInactiveCallback) {
             this._onUserInactiveCallback();
           }
           return;
-        case EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
+        case SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
           if (this._onAppInstallProgress) {
             this._onAppInstallProgress(e.data.value);
           }
           return;
-        case EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
+        case SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
           if (this._onAppInstallSuccess) {
             this._onAppInstallSuccess();
           }
           return;
-        case EVENTS_NAME.ON_APP_INSTALL_FAIL:
+        case SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL:
           if (this._onAppInstallFail) {
             this._onAppInstallFail();
           }
           return;
-        case EVENTS_NAME.ON_APP_START:
+        case SDK_EVENTS_NAME.ON_APP_START:
           if (this._onAppStart) {
             this._onAppStart();
           }
           return;
-        case EVENTS_NAME.ON_STREAM_START:
+        case SDK_EVENTS_NAME.ON_STREAM_START:
           if (this._onStreamStart) {
             this._onStreamStart();
           }
           return;
-        case EVENTS_NAME.ON_SESSION_STOPPED:
+        case SDK_EVENTS_NAME.ON_SESSION_STOPPED:
           if (this._onSessionStoppedCallback) {
             this._onSessionStoppedCallback();
           }
           return;
-        case EVENTS_NAME.ON_STATS:
+        case SDK_EVENTS_NAME.ON_STATS:
           if (this._onStatsCallback) {
             this._onStatsCallback(JSON.parse(e.data.value));
           }
           return;
-        case EVENTS_NAME.GET_SERVER_AVAILABILITY:
+        case SDK_EVENTS_NAME.GET_SERVER_AVAILABILITY:
           const response = e.data.value;
 
           if (response.error) {
@@ -271,7 +273,7 @@ class Player {
 
           this._getServerAvailabilityCallback(response.stats);
           return;
-        case EVENTS_NAME.GET_SERVER_METADATA:
+        case SDK_EVENTS_NAME.GET_SERVER_METADATA:
           const res = e.data.value;
 
           if (res.error) {
@@ -290,8 +292,14 @@ class Player {
 
           this._getServerMetadataCallback(res.metadata);
           return;
-        case EVENTS_NAME.ERROR:
+        case SDK_EVENTS_NAME.ERROR:
           this._displayErrorMessage(e.data.value);
+          return;
+
+        case SDK_EVENTS_NAME.APP_STOP:
+          if (this._onAppStop) {
+            this._onAppStop(e.data.value);
+          }
           return;
       }
     });
@@ -302,44 +310,52 @@ class Player {
   ////////////////////////
   on(event, callback) {
     switch (event) {
-      case EVENTS_NAME.LOAD:
+      case SDK_EVENTS_NAME.LOAD:
         this._onLoadCallback = callback;
         return;
 
-      case EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
+      case SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
         this._onAppInstallProgress = callback;
         return;
 
-      case EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
+      case SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
         this._onAppInstallSuccess = callback;
         return;
 
-      case EVENTS_NAME.ON_APP_INSTALL_FAIL:
+      case SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL:
         this._onAppInstallFail = callback;
         return;
 
-      case EVENTS_NAME.ON_APP_START:
+      case SDK_EVENTS_NAME.ON_APP_START:
         this._onAppStart = callback;
         return;
 
-      case EVENTS_NAME.ON_STREAM_START:
+      case SDK_EVENTS_NAME.ON_STREAM_START:
         this._onStreamStart = callback;
         return;
 
-      case EVENTS_NAME.ON_SESSION_STOPPED:
+      case SDK_EVENTS_NAME.ON_SESSION_STOPPED:
         this._onSessionStoppedCallback = callback;
         return;
 
-      case EVENTS_NAME.ON_STATS:
+      case SDK_EVENTS_NAME.ON_STATS:
         this._onStatsCallback = callback;
         return;
 
-      case EVENTS_NAME.ON_USER_INACTIVE:
+      case SDK_EVENTS_NAME.ON_USER_INACTIVE:
         this._onUserInactiveCallback = callback;
         return;
 
-      case EVENTS_NAME.ON_SDK_MESSAGE:
+      case SDK_EVENTS_NAME.ON_USER_ACTIVE:
+        this._onUserActiveCallback = callback;
+        return;
+
+      case SDK_EVENTS_NAME.ON_SDK_MESSAGE:
         this._onSDKMessageCallback = callback;
+        return;
+
+      case SDK_EVENTS_NAME.APP_STOP:
+        this._onAppStop = callback;
         return;
     }
   }
@@ -383,7 +399,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
   }
 
   start(location) {
@@ -400,7 +416,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.START, value: location }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.START, value: location }, _furioosServerUrl);
   }
 
   stop() {
@@ -413,7 +429,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.STOP }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.STOP }, _furioosServerUrl);
   }
 
   maximize() {
@@ -426,7 +442,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.MAXIMIZE }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.MAXIMIZE }, _furioosServerUrl);
   }
 
   minimize() {
@@ -439,7 +455,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.MINIMIZE }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.MINIMIZE }, _furioosServerUrl);
   }
 
   setQuality(value) {
@@ -461,7 +477,7 @@ class Player {
     }
 
     this.embed.contentWindow.postMessage({
-      type: EVENTS_NAME.QUALITY,
+      type: SDK_EVENTS_NAME.QUALITY,
       value: value
     }, _furioosServerUrl);
 
@@ -478,14 +494,10 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.RESTART_STREAM }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESTART_STREAM }, _furioosServerUrl);
   }
 
   // SDK
-  onUserActive(onUserActiveCallback) {
-    this._onUserActiveCallback = onUserActiveCallback;
-  }
-
   sendSDKMessage(data) {
     if (!this.loaded) {
       return; // Not loaded.
@@ -501,7 +513,7 @@ class Player {
     }
 
     this.embed.contentWindow.postMessage({
-      type: EVENTS_NAME.SEND_SDK_MESSAGE,
+      type: SDK_EVENTS_NAME.SEND_SDK_MESSAGE,
       value: data,
     }, _furioosServerUrl);
   }
@@ -520,7 +532,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
   }
 
   getServerAvailability(getServerAvailabilityCallback, getServerAvailabilityErrorCallback) {
@@ -537,7 +549,7 @@ class Player {
     this._getServerAvailabilityErrorCallback = getServerAvailabilityErrorCallback;
 
     // Call the get.
-    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
     // The response will be treat in the listener below.
   }
 
@@ -555,12 +567,27 @@ class Player {
     this._getServerMetadataErrorCallback = getServerMetadataErrorCallback;
 
     // Call the get.
-    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.GET_SERVER_METADATA }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.GET_SERVER_METADATA }, _furioosServerUrl);
     // The response will be treat in the listener below.
+  }
+
+  setVolume(volume, setVolumeCallback) {
+    if (!this.loaded) {
+      return; // Not loaded.
+    }
+
+    if (this.debugAppMode) {
+      console.log("No setVolume in debug mode")
+      return; // Not loaded.
+    }
+
+    this._setVolume = setVolumeCallback;
+
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_VOLUME, value: volume }, _furioosServerUrl);
   }
 }
 
 module.exports = {
   Player,
-  EVENTS_NAME,
+  SDK_EVENTS_NAME,
 }
