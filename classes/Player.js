@@ -1,6 +1,6 @@
 var SDKDebug = require("./SDKDebug.js");
 
-const _constructorParams = function(shareId, containerId, options) {
+const _constructorParams = function (shareId, containerId, options) {
   // Share Id.
   if (!shareId || typeof shareId != "string") {
     return false;
@@ -14,7 +14,7 @@ const _constructorParams = function(shareId, containerId, options) {
   return true;
 }
 
-const _eventNames = {
+const EVENTS_NAME = {
   LOAD: "load",
   ERROR: "error",
   START: "start",
@@ -57,7 +57,7 @@ const _regions = {
 
 let _furioosServerUrl = "https://portal.furioos.com";
 
-module.exports = class Player {
+class Player {
   static get qualityValues() { return _qualityValues };
   static get regions() { return _regions };
 
@@ -73,7 +73,7 @@ module.exports = class Player {
 
     if (options.overridedURL) {
       _furioosServerUrl = options.overridedURL;
-    } 
+    }
 
     sharedLinkID = _furioosServerUrl + "/embed/" + sharedLinkID;
 
@@ -118,7 +118,7 @@ module.exports = class Player {
             this._onLoadCallback();
           }
         };
-      
+
         this.sdkDebug.onSDKMessage((data) => {
           // Here you can manage the received data.
           if (this._onSDKMessageCallback) {
@@ -137,7 +137,7 @@ module.exports = class Player {
 
     if (!debugAppMode) {
       this.embed = this._createIframe();
-    } 
+    }
   }
 
   ///////////////////////
@@ -156,13 +156,14 @@ module.exports = class Player {
     iframe.setAttribute("src", this.sharedLink);
     iframe.setAttribute("id", "furioos-sdk-iframe");
     iframe.setAttribute("allow", "autoplay; fullscreen");
-    
+
     iframe.style.width = "100%";
     iframe.style.height = "100%";
 
     container.appendChild(iframe);
 
     iframe.onload = this._onLoad.bind(this);
+    // this._bindEvents();
 
     return iframe;
   }
@@ -180,78 +181,78 @@ module.exports = class Player {
   _onLoad() {
     // Bind listener for the messages.
     window.addEventListener("message", (e) => {
-      switch(e.data.type) {
-        case _eventNames.LOAD:
+      switch (e.data.type) {
+        case EVENTS_NAME.LOAD:
           // When the player is loaded: Set the default setted location (if setted).
           if (this.location) {
             if (!this.embed.contentWindow) {
               // Wait the window is reachable.
               setTimeout(() => {
-                this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+                this.embed.contentWindow.postMessage({ type: EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
               }, 100);
             }
             else {
-              this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
+              this.embed.contentWindow.postMessage({ type: EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
             }
           }
-          
+
           this.loaded = true;
 
           if (this._onLoadCallback) {
             this._onLoadCallback();
           }
           return;
-        case _eventNames.ON_SDK_MESSAGE:
+        case EVENTS_NAME.ON_SDK_MESSAGE:
           if (this._onSDKMessageCallback) {
             this._onSDKMessageCallback(e.data.value);
           }
           return;
-        case _eventNames.ON_USER_ACTIVE:
+        case EVENTS_NAME.ON_USER_ACTIVE:
           if (this._onUserActiveCallback) {
             this._onUserActiveCallback();
           }
           return;
-        case _eventNames.ON_USER_INACTIVE:
+        case EVENTS_NAME.ON_USER_INACTIVE:
           if (this._onUserInactiveCallback) {
             this._onUserInactiveCallback();
           }
           return;
-        case _eventNames.ON_APP_INSTALL_PROGRESS:
+        case EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
           if (this._onAppInstallProgress) {
             this._onAppInstallProgress(e.data.value);
           }
           return;
-        case _eventNames.ON_APP_INSTALL_SUCCESS:
+        case EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
           if (this._onAppInstallSuccess) {
             this._onAppInstallSuccess();
           }
           return;
-        case _eventNames.ON_APP_INSTALL_FAIL:
+        case EVENTS_NAME.ON_APP_INSTALL_FAIL:
           if (this._onAppInstallFail) {
             this._onAppInstallFail();
           }
           return;
-        case _eventNames.ON_APP_START:
+        case EVENTS_NAME.ON_APP_START:
           if (this._onAppStart) {
             this._onAppStart();
           }
           return;
-        case _eventNames.ON_STREAM_START:
+        case EVENTS_NAME.ON_STREAM_START:
           if (this._onStreamStart) {
             this._onStreamStart();
           }
           return;
-        case _eventNames.ON_SESSION_STOPPED:
+        case EVENTS_NAME.ON_SESSION_STOPPED:
           if (this._onSessionStoppedCallback) {
             this._onSessionStoppedCallback();
           }
           return;
-        case _eventNames.ON_STATS:
+        case EVENTS_NAME.ON_STATS:
           if (this._onStatsCallback) {
             this._onStatsCallback(JSON.parse(e.data.value));
           }
           return;
-        case _eventNames.GET_SERVER_AVAILABILITY:
+        case EVENTS_NAME.GET_SERVER_AVAILABILITY:
           const response = e.data.value;
 
           if (response.error) {
@@ -267,10 +268,10 @@ module.exports = class Player {
             console.log("No success callback binded !");
             return;
           }
-          
+
           this._getServerAvailabilityCallback(response.stats);
           return;
-        case _eventNames.GET_SERVER_METADATA:
+        case EVENTS_NAME.GET_SERVER_METADATA:
           const res = e.data.value;
 
           if (res.error) {
@@ -286,10 +287,10 @@ module.exports = class Player {
             console.log("No success callback binded !");
             return;
           }
-          
+
           this._getServerMetadataCallback(res.metadata);
           return;
-        case _eventNames.ERROR:
+        case EVENTS_NAME.ERROR:
           this._displayErrorMessage(e.data.value);
           return;
       }
@@ -297,11 +298,58 @@ module.exports = class Player {
   }
 
   ////////////////////////
+  //// BIND EVENTS ////
+  ////////////////////////
+  on(event, callback) {
+    switch (event) {
+      case EVENTS_NAME.LOAD:
+        this._onLoadCallback = callback;
+        return;
+
+      case EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
+        this._onAppInstallProgress = callback;
+        return;
+
+      case EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
+        this._onAppInstallSuccess = callback;
+        return;
+
+      case EVENTS_NAME.ON_APP_INSTALL_FAIL:
+        this._onAppInstallFail = callback;
+        return;
+
+      case EVENTS_NAME.ON_APP_START:
+        this._onAppStart = callback;
+        return;
+
+      case EVENTS_NAME.ON_STREAM_START:
+        this._onStreamStart = callback;
+        return;
+
+      case EVENTS_NAME.ON_SESSION_STOPPED:
+        this._onSessionStoppedCallback = callback;
+        return;
+
+      case EVENTS_NAME.ON_STATS:
+        this._onStatsCallback = callback;
+        return;
+
+      case EVENTS_NAME.ON_USER_INACTIVE:
+        this._onUserInactiveCallback = callback;
+        return;
+
+      case EVENTS_NAME.ON_SDK_MESSAGE:
+        this._onSDKMessageCallback = callback;
+        return;
+    }
+  }
+
+  ////////////////////////
   /////// GETTERS ////////
   ////////////////////////
 
   get quality() {
-    switch(this.quality) {
+    switch (this.quality) {
       case _qualityValues.AUTO:
         return "AUTO";
 
@@ -309,116 +357,111 @@ module.exports = class Player {
         return "LOW";
 
       case _qualityValues.MEDIUM:
-          return "MEDIUM";
+        return "MEDIUM";
 
       case _qualityValues.HIGH:
-          return "HIGH";
+        return "HIGH";
 
       case _qualityValues.ULTRA:
-          return "ULTRA";
+        return "ULTRA";
     }
   }
 
   ////////////////////////
   //// PUBLIC METHODS ////
   ////////////////////////
-  // Binding onload callback.
-  onLoad(onLoadCallback) {
-    this._onLoadCallback = onLoadCallback;
-  }
 
   setDefaultLocation(location) {
     this.location = location;
 
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
       console.log("No setDefaultLocation in debug mode")
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.SET_LOCATION, value: this.location }, _furioosServerUrl);
-  } 
+    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
+  }
 
   start(location) {
     if (!location) {
       location = this.location;
-    }  
+    }
 
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
       console.log("No start in debug mode")
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.START, value: location }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.START, value: location }, _furioosServerUrl);
   }
 
   stop() {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
       console.log("No stop in debug mode")
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.STOP }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.STOP }, _furioosServerUrl);
   }
 
   maximize() {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
       console.log("No maximize in debug mode")
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.MAXIMIZE }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.MAXIMIZE }, _furioosServerUrl);
   }
 
   minimize() {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
       console.log("No minimize in debug mode")
       return; // Not loaded.
     }
-    
-    this.embed.contentWindow.postMessage({ type: _eventNames.MINIMIZE }, _furioosServerUrl);
+
+    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.MINIMIZE }, _furioosServerUrl);
   }
 
   setQuality(value) {
     // Test if the value is correct.
-    if (value != _qualityValues.LOW 
+    if (value != _qualityValues.LOW
       && value != _qualityValues.MEDIUM
       && value != _qualityValues.HIGH
-      && value != _qualityValues.ULTRA) 
-    {
+      && value != _qualityValues.ULTRA) {
       throw "Bad parameter: The quality should be one of the given value in Player.qualityValues";
     }
 
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
       console.log("No setQuality in debug mode")
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ 
-      type: _eventNames.QUALITY,
+    this.embed.contentWindow.postMessage({
+      type: EVENTS_NAME.QUALITY,
       value: value
     }, _furioosServerUrl);
 
@@ -428,73 +471,37 @@ module.exports = class Player {
   restartStream() {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
       console.log("No restartStream in debug mode")
       return; // Not loaded.
     }
-    
-    this.embed.contentWindow.postMessage({ type: _eventNames.RESTART_STREAM }, _furioosServerUrl);
+
+    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.RESTART_STREAM }, _furioosServerUrl);
   }
 
   // SDK
-  onSDKMessage(onSDKMessageCallback) {
-    this._onSDKMessageCallback = onSDKMessageCallback;
-  }
-
   onUserActive(onUserActiveCallback) {
     this._onUserActiveCallback = onUserActiveCallback;
-  }
-
-  onUserInactive(onUserInactiveCallback) {
-    this._onUserInactiveCallback = onUserInactiveCallback;
-  }
-
-  onAppInstallProgress(onAppInstallProgress) {
-    this._onAppInstallProgress = onAppInstallProgress;
-  }
-
-  onAppInstallSuccess(onAppInstallSuccess) {
-    this._onAppInstallSuccess = onAppInstallSuccess;
-  }
-
-  onAppInstallFail(onAppInstallFail) {
-    this._onAppInstallFail = onAppInstallFail;
-  }
-
-  onAppStart(onAppStart) {
-    this._onAppStart = onAppStart;
-  }
-
-  onStreamStart(onStreamStart) {
-    this._onStreamStart = onStreamStart;
-  }
-
-  onSessionStopped(onSessionStoppedCallback) {
-    this._onSessionStoppedCallback = onSessionStoppedCallback;
-  }
-
-  onStats(callback) {
-    this._onStatsCallback = callback;
   }
 
   sendSDKMessage(data) {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (typeof data == "object") {
       data = JSON.stringify(data);
     }
-    
+
     if (this.debugAppMode) {
       this.sdkDebug.sendSDKMessage(data);
       return;
     }
 
-    this.embed.contentWindow.postMessage({ 
-      type: _eventNames.SEND_SDK_MESSAGE,
+    this.embed.contentWindow.postMessage({
+      type: EVENTS_NAME.SEND_SDK_MESSAGE,
       value: data,
     }, _furioosServerUrl);
   }
@@ -506,15 +513,15 @@ module.exports = class Player {
   setThumbnailUrl(thumbnailUrl) {
     if (!this.loaded) {
       return; // Not loaded.
-    } 
+    }
 
     if (this.debugAppMode) {
       console.log("No setThumbnailUrl in debug mode")
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: _eventNames.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
-  } 
+    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
+  }
 
   getServerAvailability(getServerAvailabilityCallback, getServerAvailabilityErrorCallback) {
     if (!this.loaded) {
@@ -530,7 +537,7 @@ module.exports = class Player {
     this._getServerAvailabilityErrorCallback = getServerAvailabilityErrorCallback;
 
     // Call the get.
-    this.embed.contentWindow.postMessage({ type: _eventNames.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
     // The response will be treat in the listener below.
   }
 
@@ -548,7 +555,12 @@ module.exports = class Player {
     this._getServerMetadataErrorCallback = getServerMetadataErrorCallback;
 
     // Call the get.
-    this.embed.contentWindow.postMessage({ type: _eventNames.GET_SERVER_METADATA }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: EVENTS_NAME.GET_SERVER_METADATA }, _furioosServerUrl);
     // The response will be treat in the listener below.
   }
+}
+
+module.exports = {
+  Player,
+  EVENTS_NAME,
 }
