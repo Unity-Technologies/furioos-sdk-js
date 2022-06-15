@@ -39,8 +39,13 @@ const SDK_EVENTS_NAME = {
   ON_APP_START: "onAppStart",
   ON_STREAM_START: "onStreamStart",
   SET_VOLUME: "setVolume",
-  APP_STOP: "appStop",
+  CRASH_APP: "appStop",
 };
+
+const TIMEOUT = {
+  MIN: 10000,
+  MAX: 86400000,
+}
 
 const _qualityValues = {
   AUTO: 0,
@@ -100,6 +105,20 @@ class Player {
 
       if (options.hidePlayButton) {
         sharedLinkID += prefix + "hidePlayButton=true";
+        prefix = "&";
+      }
+
+      if (options.inactiveTimeout) {
+        let inactiveTimeoutClamp = options.inactiveTimeout;
+        if (options.inactiveTimeout < TIMEOUT.MIN) {
+          inactiveTimeoutClamp = TIMEOUT.MIN;
+        }
+
+        if (options.inactiveTimeout > TIMEOUT.MAX) {
+          inactiveTimeoutClamp = TIMEOUT.MAX;
+        }
+
+        sharedLinkID += prefix + "inactiveTimeout=" + inactiveTimeoutClamp / 1000;
         prefix = "&";
       }
 
@@ -296,7 +315,7 @@ class Player {
           this._displayErrorMessage(e.data.value);
           return;
 
-        case SDK_EVENTS_NAME.APP_STOP:
+        case SDK_EVENTS_NAME.CRASH_APP:
           if (this._onAppStop) {
             this._onAppStop(e.data.value);
           }
@@ -354,7 +373,7 @@ class Player {
         this._onSDKMessageCallback = callback;
         return;
 
-      case SDK_EVENTS_NAME.APP_STOP:
+      case SDK_EVENTS_NAME.CRASH_APP:
         this._onAppStop = callback;
         return;
     }
@@ -584,6 +603,65 @@ class Player {
     this._setVolume = setVolumeCallback;
 
     this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_VOLUME, value: volume }, _furioosServerUrl);
+  }
+
+  ////////////////////////
+  //// DEPRECATED ////
+  ////////////////////////
+  // Binding onload callback.
+  onLoad(onLoadCallback) {
+    this._onLoadCallback = onLoadCallback;
+    console.warn("DEPRECATED: OnLoad is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onUserInactive(onUserInactiveCallback) {
+    this._onUserInactiveCallback = onUserInactiveCallback;
+    console.warn("DEPRECATED: onUserInactive is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onAppInstallProgress(onAppInstallProgress) {
+    this._onAppInstallProgress = onAppInstallProgress;
+    console.warn("DEPRECATED: onAppInstallProgress is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onAppInstallSuccess(onAppInstallSuccess) {
+    this._onAppInstallSuccess = onAppInstallSuccess;
+    console.warn("DEPRECATED: onAppInstallSuccess is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onAppInstallFail(onAppInstallFail) {
+    this._onAppInstallFail = onAppInstallFail;
+    console.warn("DEPRECATED: onAppInstallFail is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onAppStart(onAppStart) {
+    this._onAppStart = onAppStart;
+    console.warn("DEPRECATED: onAppStart is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onStreamStart(onStreamStart) {
+    this._onStreamStart = onStreamStart;
+    console.warn("DEPRECATED: onStreamStart is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onSessionStopped(onSessionStoppedCallback) {
+    this._onSessionStoppedCallback = onSessionStoppedCallback;
+    console.warn("DEPRECATED: onSessionStopped is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onStats(callback) {
+    this._onStatsCallback = callback;
+    console.warn("DEPRECATED: onStats is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onSDKMessage(onSDKMessageCallback) {
+    this._onSDKMessageCallback = onSDKMessageCallback;
+    console.warn("DEPRECATED: onSDKMessage is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
+  }
+
+  onUserActive(onUserActiveCallback){
+    this._onUserActiveCallback = onUserActiveCallback;
+    console.warn("DEPRECATED: onUserActive is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
   }
 }
 
