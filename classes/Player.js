@@ -23,6 +23,8 @@ const SDK_EVENTS_NAME = {
   MINIMIZE: "minimize",
   QUALITY: "quality",
   RESTART_STREAM: "restartStream",
+  RESTART_APP: "restartApp",
+  RESUME_SESSION: "resumeSession",
   ON_SDK_MESSAGE: "onSDKMessage",
   SEND_SDK_MESSAGE: "sendSDKMessage",
   SET_LOCATION: "setLocation",
@@ -517,6 +519,32 @@ class Player {
     }
 
     this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESTART_STREAM }, _furioosServerUrl);
+  }
+
+  restartApp() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    }
+
+    if (this.debugAppMode) {
+      console.log("No restartApp in debug mode")
+      return; // Not loaded.
+    }
+
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESTART_APP }, _furioosServerUrl);
+  }
+
+  resumeSession() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    }
+
+    if (this.debugAppMode) {
+      console.log("No resumeSession in debug mode")
+      return; // Not loaded.
+    }
+
+    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESUME_SESSION }, _furioosServerUrl);
   }
 
   // SDK
