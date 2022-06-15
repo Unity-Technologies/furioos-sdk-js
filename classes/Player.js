@@ -47,12 +47,19 @@ const TIMEOUT = {
   MAX: 86400000,
 }
 
-const _qualityValues = {
+const QUALITY_VALUES = {
   AUTO: 0,
   LOW: 1,
   MEDIUM: 2,
   HIGH: 3,
   ULTRA: 4,
+}
+
+const QUALITY_VALUESV2 = {
+  AUTO: 0,
+  LOW: 360,
+  MEDIUM: 720,
+  HIGH: 1080,
 }
 
 const _regions = {
@@ -65,7 +72,8 @@ const _regions = {
 let _furioosServerUrl = "https://portal.furioos.com";
 
 class Player {
-  static get qualityValues() { return _qualityValues };
+  static get qualityValues() { return QUALITY_VALUES };
+  static get qualityValuesV2() { return QUALITY_VALUESV2 };
   static get regions() { return _regions };
 
   constructor(sharedLinkID, containerId, options) {
@@ -380,29 +388,6 @@ class Player {
   }
 
   ////////////////////////
-  /////// GETTERS ////////
-  ////////////////////////
-
-  get quality() {
-    switch (this.quality) {
-      case _qualityValues.AUTO:
-        return "AUTO";
-
-      case _qualityValues.LOW:
-        return "LOW";
-
-      case _qualityValues.MEDIUM:
-        return "MEDIUM";
-
-      case _qualityValues.HIGH:
-        return "HIGH";
-
-      case _qualityValues.ULTRA:
-        return "ULTRA";
-    }
-  }
-
-  ////////////////////////
   //// PUBLIC METHODS ////
   ////////////////////////
 
@@ -479,10 +464,13 @@ class Player {
 
   setQuality(value) {
     // Test if the value is correct.
-    if (value != _qualityValues.LOW
-      && value != _qualityValues.MEDIUM
-      && value != _qualityValues.HIGH
-      && value != _qualityValues.ULTRA) {
+    if (value !== QUALITY_VALUES.LOW
+      && value !== QUALITY_VALUES.MEDIUM
+      && value !== QUALITY_VALUES.HIGH
+      && value !== QUALITY_VALUES.ULTRA
+      && value !== QUALITY_VALUESV2.LOW
+      && value !== QUALITY_VALUESV2.MEDIUM
+      && value !== QUALITY_VALUESV2.HIGH) {
       throw "Bad parameter: The quality should be one of the given value in Player.qualityValues";
     }
 
@@ -495,12 +483,27 @@ class Player {
       return; // Not loaded.
     }
 
+    // DEPRECATED
+    let quality = value;
+    if (quality === QUALITY_VALUES.LOW) {
+      console.warn("DEPRECATED: This version is depreciated and will not be maintained for long. Update your sdk and use the new events. see docs:");
+      quality = QUALITY_VALUESV2.LOW;
+    }
+
+    if (quality === QUALITY_VALUES.MEDIUM) {
+      console.warn("DEPRECATED: This version is depreciated and will not be maintained for long. Update your sdk and use the new events. see docs:");
+      quality = QUALITY_VALUESV2.MEDIUM;
+    }
+
+    if (quality === QUALITY_VALUES.HIGH || quality === QUALITY_VALUES.HIGH) {
+      console.warn("DEPRECATED: This version is depreciated and will not be maintained for long. Update your sdk and use the new events. see docs:");
+      quality = QUALITY_VALUESV2.HIGH;
+    }
+
     this.embed.contentWindow.postMessage({
       type: SDK_EVENTS_NAME.QUALITY,
-      value: value
+      value: quality
     }, _furioosServerUrl);
-
-    this.quality = value;
   }
 
   restartStream() {
@@ -659,7 +662,7 @@ class Player {
     console.warn("DEPRECATED: onSDKMessage is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
   }
 
-  onUserActive(onUserActiveCallback){
+  onUserActive(onUserActiveCallback) {
     this._onUserActiveCallback = onUserActiveCallback;
     console.warn("DEPRECATED: onUserActive is deprecated and will not be maintained for long. Use the new .on() method to subscribe to events");
   }
@@ -668,4 +671,6 @@ class Player {
 module.exports = {
   Player,
   SDK_EVENTS_NAME,
+  QUALITY_VALUESV2,
+  QUALITY_VALUES,
 }
