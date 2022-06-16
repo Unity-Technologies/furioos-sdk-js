@@ -334,7 +334,7 @@ player.on(SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 </details>
 
 
-### DEPRECATED Events
+### :warning: DEPRECATED Events
 :warning: These events is no longer available. Please use the new .on() method.
 <details>
   <summary>
