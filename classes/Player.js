@@ -23,7 +23,7 @@ const SDK_EVENTS_NAME = {
   MINIMIZE: "minimize",
   QUALITY: "quality",
   RESTART_STREAM: "restartStream",
-  RESTART_APP: "restartApp",
+  ON_APP_RESTART: "onAppRestart",
   RESUME_SESSION: "resumeSession",
   ON_RESUME_SESSION: "onResumeSession",
   ON_SDK_MESSAGE: "onSDKMessage",
@@ -340,7 +340,13 @@ class Player {
         case SDK_EVENTS_NAME.ON_RESUME_SESSION:
           if (this._onResumeSession) {
             this.canResumeSession = e.data.value;
-            this._onResumeSession({ canBeResume: e.data.value });
+            this._onResumeSession({ canResumeSession: e.data.value });
+          }
+          return;
+
+        case SDK_EVENTS_NAME.ON_APP_RESTART:
+          if (this._onAppRestart) {
+            this._onAppRestart();
           }
           return;
 
@@ -408,6 +414,10 @@ class Player {
 
       case SDK_EVENTS_NAME.ON_RESUME_SESSION:
         this._onResumeSession = callback;
+        return;
+
+      case SDK_EVENTS_NAME.ON_APP_RESTART:
+        this._onAppRestart = callback;
         return;
 
       // case SDK_EVENTS_NAME.ON_VIDEO_SIZE_CHANGED:
@@ -551,19 +561,6 @@ class Player {
 
     this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESTART_STREAM }, _furioosServerUrl);
     this.isRestartStream = true;
-  }
-
-  restartApp() {
-    if (!this.loaded) {
-      return; // Not loaded.
-    }
-
-    if (this.debugAppMode) {
-      console.log("No restartApp in debug mode");
-      return; // Not loaded.
-    }
-
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESTART_APP }, _furioosServerUrl);
   }
 
   resumeSession() {
