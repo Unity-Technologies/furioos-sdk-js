@@ -8,6 +8,7 @@
 * [API](#api)
   * [Properties](#properties)
   * [Events](#events)
+  * [Deprecated Events](#DEPRECATED-events)
   * [Methods](#methods)
   * [Communicate with your application](#communicate-with-your-application)
 * [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel)
@@ -34,6 +35,8 @@ Instanciate the player for a given application.
 | **`overridedURL`** | Boolean | Override the url of the server you want to communicate with | true | "https://portal.furioos.com" |
 | **`debugAppMode`** | Boolean | Active local debug of your application. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | false |
 | **`wsServerAddress`** | String | Set up the ip address of your websocket server. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | "127.0.0.1" |
+| **`inactiveTimeout`** | Number | Defines the inactivity time in a session before it closes (in ms) Min: 10s / Max: 24h | true | 600000ms |
+
 
 #### Example
 ```javascript
@@ -51,9 +54,288 @@ const player = new Player("123.456", "containerDivId", options);
 
 ### Properties
 #### quality: String
-Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH / ULTRA
+Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
 
-### Events
+## Events
+### .on(SDK_EVENTS_NAME, callback)
+To be able to bind player events, you just need to call the .on function and give it as parameters an SDK events and a callback to get the infos. All SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
+
+<details>
+  <summary>
+    <b>LOAD</b> 
+    <p>
+      Bind a callback that will be called when the player is ready.
+    </p>
+  </summary>
+
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.LOAD, function(data) {
+     // Here you know when the player is ready.
+    player.start();
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_APP_INSTALL_PROGRESS</b> 
+    <p>
+       Bind a callback that will be called during your application installation.
+       You'll receive the progress of the installation.
+    </p>
+  </summary>
+  
+  <b>data: </b>
+  | Property | Type | Description | Value |
+  | --- | --- | --- | --- |
+  | **`status`** | String | The current installation step | "COPYING" or "DECOMPRESSING" |
+  | **`progress`** | Number | The progress value | between 0 and 1 |
+
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS, function(data) {
+    // Implement your own code.
+    console.log(data.status + " the application : " + Math.round(data.progress*100) + "%");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_APP_INSTALL_SUCCESS(function() {})</b> 
+    <p>
+       Bind a callback that will be called when your application installation has succeed.
+    </p>
+  </summary>
+  
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS, function() {
+    // Implement your own code.
+    console.log("My application is fully installed");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_APP_INSTALL_FAIL</b> 
+    <p>
+       Bind a callback that will be called when your application installation has failed.
+    </p>
+  </summary>
+  
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL, function() {
+    // Implement your own code.
+    console.log("Installation has failed");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_APP_START</b> 
+    <p>
+       Bind a callback that will be called when your application starts.
+    </p>
+  </summary>
+  
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_APP_START, function() {
+    // Implement your own code.
+    console.log("Application started");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_STREAM_START</b> 
+    <p>
+       Bind a callback that will be called when the stream starts.
+    </p>
+  </summary>
+  
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_STREAM_START, function() {
+    // Implement your own code.
+    console.log("Stream started");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_USER_ACTIVE</b> 
+    <p>Bind a callback that will be called when the user is **active** on your session (only fired when a session is running).</p>
+  </summary>
+
+<b>Example</b>
+```javascript
+player.on(SDK_EVENTS_NAME.ON_USER_ACTIVE, function() {
+  // Implement your own code.
+  console.log("My user is active");
+})
+```
+</details>
+
+<details>
+  <summary>
+    <b>ON_USER_INACTIVE</b> 
+    <p>Bind a callback that will be called when the user is **inactive** on your session (only fired when a session is running).</p>
+  </summary>
+
+<b>Example</b>
+```javascript
+player.on(SDK_EVENTS_NAME.ON_USER_INACTIVE, function() {
+  // Implement your own code.
+  console.log("My user is inactive");
+})
+```
+</details>
+
+<details>
+  <summary>
+    <b>ON_SESSION_STOPPED</b> 
+    <p>Bind a callback that will be called when the session is stopped (ex: stopped for inactivity).</p>
+  </summary>
+
+<b>Example</b>
+```javascript
+player.on(SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
+  // Implement your own code.
+  console.log("The session has been stopped");
+})
+```
+</details>
+
+<details>
+  <summary>
+    <b>ON_STATS</b> 
+    <p>Bind a callback that will be called frequently during a running session with all stats.</p>
+  </summary>
+  
+  <b>stats:</b>
+  | Property | Type | Description | DefaultValue |
+  | --- | --- | --- | --- |
+  | **`appHeight`** | Number | Height of the application screen on VM | 0 |
+  | **`appWidth`** | Number | Width of the application screen on VM | 0 |
+  | **`dataLatency`** | Number | Round trip network latency | 0 |
+  | **`dataMethod`** | String | events/data transmission method (value: "datachannel" or "ws") | "datachannel" |
+  | **`packetsLost`** | Number | Percent of lost packets (value: 0 to 1) | 0 |
+  | **`serverCpuUsage`** | Number | Server CPU usage | 0 |
+  | **`serverEncodingMs`** | Number | Server encoding time (milliseconds) | 0 |
+  | **`serverFramerate`** | Number | Server framerate | 0 |
+  | **`serverGpuMemTotal`** | Number | Total GPU RAM available on server (byte) | 0 |
+  | **`serverGpuMemUsed`** | Number | Current GPU RAM used on server (byte) | 0 |
+  | **`serverGpuUsage`** | Number | Server GPU usage percent | 0 |
+  | **`serverGrabbingMs`** | Number | Server grabbing time (milliseconds) | 0 |
+  | **`serverRamTotal`** | Number | Total RAM available on serve (byte) | 0 |
+  | **`serverRamUsed`** | Number | Current RAM used on server (byte) | 0 |
+  | **`streamingEngine`** | String | Current streaming engine used (value: "Furioos" or "RenderStreaming") | "Furioos" |
+  | **`userActive`** | Boolean | Define if the user is consider as active by the Furioos player | 0 |
+  | **`videoBitrate`** | Number | Received video bitrate (kbps) | 0 |
+  | **`videoFramerate`** | Number | Received video framerate | 0 |
+  | **`videoHeight`** | Number | Heigh of the received video | 0 |
+  | **`videoWidth`** | Number | Width of the received video | 0 |
+  | **`videoLatency`** | Number | Total video latency (round trip network latency + decoding time) | 0 |
+
+
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_STATS, function(stats) {
+    // Implement your own code.
+    console.log("Stats received: ", stats);
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_SDK_MESSAGE</b> 
+    <p>
+       Bind a callback that will be called during your application sent you data.
+       Data can be a String or an Object.
+    </p>
+  </summary>
+
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {
+    // Implement your own code.
+    console.log("The application sent: " + data);
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_CRASH_APP</b> 
+    <p>
+       Bind a callback that will be called when your application crashed.
+    </p>
+  </summary>
+
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_CRASH_APP, function() {
+    // Implement your own code.
+    console.log("The application crashed");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_RESUME_SESSION</b> 
+    <p>
+      Bind a callback that will be called when player is initialized.
+      Lets you know if you can restart a session in progress.
+    </p>
+  </summary>
+
+  <b>data: </b>
+  | Property | Type | Description | Value |
+  | --- | --- | --- | --- |
+  | **`canResumeSession`** | Boolean | Define if you can resume a session or not | |
+
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_RESUME_SESSION, function(data) {
+    // Implement your own code.
+    if(data.canResumeSession) {
+      player.resumeSession();
+    }
+    console.log("Can resume sesssion: " + data);
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_APP_RESTART</b> 
+    <p>
+       Bind a callback that will be called when your application restarted.
+    </p>
+  </summary>
+
+  <b>Example</b>
+  ```javascript
+  player.on(SDK_EVENTS_NAME.ON_APP_RESTART, function() {
+    // Implement your own code.
+    console.log("The application restarted");
+  })
+  ```
+</details>
+
+
+### DEPRECATED Events
+
 <details>
   <summary>
     <b>onLoad(function() {})</b> 
@@ -247,8 +529,8 @@ player.onSessionStopped(function() {
   ```
 </details>
 
-### Methods
-#### setUserActive()
+## Methods
+### setUserActive()
 This function help you to keep the session open if your user does not interact with the interface.  
 Calling this function will fire onUserActive.  
 :warning: If you always call it without checking if the user is really here the session will never ended untill the user close his window.
@@ -313,7 +595,7 @@ Calling this function will fire onUserActive.
   
   <b>Example:</b>
   ```javascript
-    player.getServerAvailability(function(metadata) {
+    player.getServerMetadata(function(metadata) {
       console.log("Public VM IP: ", metadata.publicIP);
       console.log("VM unique name: ", metadata.name);
     }, function(error) {
@@ -340,13 +622,13 @@ Calling this function will fire onUserActive.
   ```
 </details>
 
-#### stop()
+### stop()
 Stop the session.
 
-#### maximize()
+### maximize()
 Enable Full screen mode.
 
-#### minimize()
+### minimize()
 Disable Full screen mode.
 
 <details>
@@ -359,7 +641,7 @@ Disable Full screen mode.
   
   | Property | Type | Description | DefaultValue | Optional |
   | --- | --- | --- | --- | --- |
-  | **`quality`** | QualityValue | Use one of the static value Player.qualityValues.AUTO / Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA | Furioos App Quality | false |
+  | **`quality`** | QualityValue | Use one of the static value Player.qualityValues.AUTO / Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH | Furioos App Quality | false |
   
   <b>Example:</b>
   ```javascript
@@ -367,10 +649,31 @@ Disable Full screen mode.
   ```
 </details>
 
-#### restartStream()
+### restartStream()
 Restart the streaming.
 
-### Communicate with your application
+### resumeSession()
+Resume active session. You can only call this method after check the response value of ON_RESUME_SESSION event
+
+<details>
+  <summary>
+    <b>setVolume(volume)</b> 
+    <p>
+      Set the volume of the stream.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue | Optional |
+  | --- | --- | --- | --- | --- |
+  | **`volume`** | Number | Volume intensity between 0 - 1 | 1 | false |
+  
+  <b>Example:</b>
+  ```javascript
+    player.setVolume(0.5);
+  ```
+</details>
+
+## Communicate with your application
 Go deeper with your UI by creating your own data interpretation.  
 Those methods let you send/receive JSON data between your application and the HTML page where you have implemented the JS SDK.
 

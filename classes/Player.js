@@ -42,7 +42,7 @@ const SDK_EVENTS_NAME = {
   ON_APP_START: "onAppStart",
   ON_STREAM_START: "onStreamStart",
   SET_VOLUME: "setVolume",
-  CRASH_APP: "appStop",
+  ON_CRASH_APP: "appStop",
   // ON_VIDEO_SIZE_CHANGED: "videoSizeChanged",
 };
 
@@ -331,7 +331,7 @@ class Player {
           this._displayErrorMessage(e.data.value);
           return;
 
-        case SDK_EVENTS_NAME.CRASH_APP:
+        case SDK_EVENTS_NAME.ON_CRASH_APP:
           if (this._onAppStop) {
             this._onAppStop(e.data.value);
           }
@@ -408,7 +408,7 @@ class Player {
         this._onSDKMessageCallback = callback;
         return;
 
-      case SDK_EVENTS_NAME.CRASH_APP:
+      case SDK_EVENTS_NAME.ON_CRASH_APP:
         this._onAppStop = callback;
         return;
 
