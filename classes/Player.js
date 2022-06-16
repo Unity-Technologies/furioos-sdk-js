@@ -25,6 +25,7 @@ const SDK_EVENTS_NAME = {
   RESTART_STREAM: "restartStream",
   RESTART_APP: "restartApp",
   RESUME_SESSION: "resumeSession",
+  ON_RESUME_SESSION: "onResumeSession",
   ON_SDK_MESSAGE: "onSDKMessage",
   SEND_SDK_MESSAGE: "sendSDKMessage",
   SET_LOCATION: "setLocation",
@@ -42,6 +43,7 @@ const SDK_EVENTS_NAME = {
   ON_STREAM_START: "onStreamStart",
   SET_VOLUME: "setVolume",
   CRASH_APP: "appStop",
+  // ON_VIDEO_SIZE_CHANGED: "videoSizeChanged",
 };
 
 const TIMEOUT = {
@@ -82,6 +84,9 @@ class Player {
     if (!_constructorParams(sharedLinkID, containerId, options)) {
       throw "Bad parameters";
     }
+
+    this.isRestartStream = false;
+    this.canResumeSession = false;
 
     if (sharedLinkID.indexOf("?") > 0) {
       // Remove URL parameters, should use the options for parameters.
@@ -270,6 +275,7 @@ class Player {
           return;
         case SDK_EVENTS_NAME.ON_STREAM_START:
           if (this._onStreamStart) {
+            this.isRestartStream = false;
             this._onStreamStart();
           }
           return;
@@ -330,6 +336,19 @@ class Player {
             this._onAppStop(e.data.value);
           }
           return;
+
+        case SDK_EVENTS_NAME.ON_RESUME_SESSION:
+          if (this._onResumeSession) {
+            this.canResumeSession = e.data.value;
+            this._onResumeSession({ canBeResume: e.data.value });
+          }
+          return;
+
+        // case SDK_EVENTS_NAME.ON_VIDEO_SIZE_CHANGED:
+        //   if (this._onVideoSizeChanged) {
+        //     this._onVideoSizeChanged(e.data.value);
+        //   }
+        //   return;
       }
     });
   }
@@ -386,6 +405,14 @@ class Player {
       case SDK_EVENTS_NAME.CRASH_APP:
         this._onAppStop = callback;
         return;
+
+      case SDK_EVENTS_NAME.ON_RESUME_SESSION:
+        this._onResumeSession = callback;
+        return;
+
+      // case SDK_EVENTS_NAME.ON_VIDEO_SIZE_CHANGED:
+      //   this._onVideoSizeChanged = callback;
+      //   return;
     }
   }
 
@@ -514,11 +541,16 @@ class Player {
     }
 
     if (this.debugAppMode) {
-      console.log("No restartStream in debug mode")
+      console.log("No restartStream in debug mode");
       return; // Not loaded.
+    }
+    if (this.isRestartStream) {
+      console.warn("Stream is already restarting");
+      return;
     }
 
     this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESTART_STREAM }, _furioosServerUrl);
+    this.isRestartStream = true;
   }
 
   restartApp() {
@@ -527,7 +559,7 @@ class Player {
     }
 
     if (this.debugAppMode) {
-      console.log("No restartApp in debug mode")
+      console.log("No restartApp in debug mode");
       return; // Not loaded.
     }
 
@@ -542,6 +574,11 @@ class Player {
     if (this.debugAppMode) {
       console.log("No resumeSession in debug mode")
       return; // Not loaded.
+    }
+
+    if (!this.canResumeSession) {
+      console.warn("No active session")
+      return;
     }
 
     this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESUME_SESSION }, _furioosServerUrl);
