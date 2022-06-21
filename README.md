@@ -681,7 +681,7 @@ Those methods let you send/receive JSON data between your application and the HT
 
 #### Requirements
 - The Furioos SDK implemented in your application.
-  - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
+  - Furioos SDK for Unity : https://github.cds.internal.unity3d.com/unity/furioos-unity-packages
   - Furioos SDK for Unreal : https://github.com/Unity-Technologies/furioos-sdk-unreal-engine
 
 <details>
