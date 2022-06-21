@@ -533,7 +533,7 @@ player.onSessionStopped(function() {
 ### setUserActive()
 This function help you to keep the session open if your user does not interact with the interface.  
 Calling this function will fire onUserActive.  
-:warning: If you always call it without checking if the user is really here the session will never ended untill the user close his window.
+:warning: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never ended untill the user close his window.
 
 <details>
   <summary>
