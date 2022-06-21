@@ -35,7 +35,7 @@ Instanciate the player for a given application.
 | **`overridedURL`** | Boolean | Override the url of the server you want to communicate with | true | "https://portal.furioos.com" |
 | **`debugAppMode`** | Boolean | Active local debug of your application. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | false |
 | **`wsServerAddress`** | String | Set up the ip address of your websocket server. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | "127.0.0.1" |
-| **`inactiveTimeout`** | Number | Defines the inactivity time in a session before it closes (in ms) Min: 10s / Max: 24h | true | 600000ms |
+| **`inactiveTimeout`** | Number | Defines the inactivity time in a session before it closes (in ms) Min: 10s / Max: 24h | true | 600000 (ms) |
 
 
 #### Example
@@ -57,8 +57,8 @@ const player = new Player("123.456", "containerDivId", options);
 Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
 
 ## Events
-### .on(SDK_EVENTS_NAME, callback)
-To be able to bind player events, you just need to call the .on function and give it as parameters an SDK events and a callback to get the infos. All SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
+### .on(FS_SDK_EVENTS_NAME, callback)
+To be able to bind player events, you just need to call the .on function and give it as parameters an SDK events and a callback to get the infos. All FS_SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
 
 <details>
   <summary>
@@ -70,7 +70,7 @@ To be able to bind player events, you just need to call the .on function and giv
 
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.LOAD, function(data) {
+  player.on(FS_SDK_EVENTS_NAME.LOAD, function(data) {
      // Here you know when the player is ready.
     player.start();
   })
@@ -94,7 +94,7 @@ To be able to bind player events, you just need to call the .on function and giv
 
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS, function(data) {
+  player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS, function(data) {
     // Implement your own code.
     console.log(data.status + " the application : " + Math.round(data.progress*100) + "%");
   })
@@ -103,7 +103,7 @@ To be able to bind player events, you just need to call the .on function and giv
 
 <details>
   <summary>
-    <b>ON_APP_INSTALL_SUCCESS(function() {})</b> 
+    <b>ON_APP_INSTALL_SUCCESS</b> 
     <p>
        Bind a callback that will be called when your application installation has succeed.
     </p>
@@ -111,7 +111,7 @@ To be able to bind player events, you just need to call the .on function and giv
   
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS, function() {
+  player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS, function() {
     // Implement your own code.
     console.log("My application is fully installed");
   })
@@ -128,7 +128,7 @@ To be able to bind player events, you just need to call the .on function and giv
   
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL, function() {
+  player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL, function() {
     // Implement your own code.
     console.log("Installation has failed");
   })
@@ -145,7 +145,7 @@ To be able to bind player events, you just need to call the .on function and giv
   
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_APP_START, function() {
+  player.on(FS_SDK_EVENTS_NAME.ON_APP_START, function() {
     // Implement your own code.
     console.log("Application started");
   })
@@ -162,7 +162,7 @@ To be able to bind player events, you just need to call the .on function and giv
   
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_STREAM_START, function() {
+  player.on(FS_SDK_EVENTS_NAME.ON_STREAM_START, function() {
     // Implement your own code.
     console.log("Stream started");
   })
@@ -177,7 +177,7 @@ To be able to bind player events, you just need to call the .on function and giv
 
 <b>Example</b>
 ```javascript
-player.on(SDK_EVENTS_NAME.ON_USER_ACTIVE, function() {
+player.on(FS_SDK_EVENTS_NAME.ON_USER_ACTIVE, function() {
   // Implement your own code.
   console.log("My user is active");
 })
@@ -192,7 +192,7 @@ player.on(SDK_EVENTS_NAME.ON_USER_ACTIVE, function() {
 
 <b>Example</b>
 ```javascript
-player.on(SDK_EVENTS_NAME.ON_USER_INACTIVE, function() {
+player.on(FS_SDK_EVENTS_NAME.ON_USER_INACTIVE, function() {
   // Implement your own code.
   console.log("My user is inactive");
 })
@@ -207,7 +207,7 @@ player.on(SDK_EVENTS_NAME.ON_USER_INACTIVE, function() {
 
 <b>Example</b>
 ```javascript
-player.on(SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
+player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
   // Implement your own code.
   console.log("The session has been stopped");
 })
@@ -248,7 +248,7 @@ player.on(SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_STATS, function(stats) {
+  player.on(FS_SDK_EVENTS_NAME.ON_STATS, function(stats) {
     // Implement your own code.
     console.log("Stats received: ", stats);
   })
@@ -266,7 +266,7 @@ player.on(SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {
+  player.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {
     // Implement your own code.
     console.log("The application sent: " + data);
   })
@@ -283,7 +283,7 @@ player.on(SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_CRASH_APP, function() {
+  player.on(FS_SDK_EVENTS_NAME.ON_CRASH_APP, function() {
     // Implement your own code.
     console.log("The application crashed");
   })
@@ -306,7 +306,7 @@ player.on(SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_RESUME_SESSION, function(data) {
+  player.on(FS_SDK_EVENTS_NAME.ON_RESUME_SESSION, function(data) {
     // Implement your own code.
     if(data.canResumeSession) {
       player.resumeSession();
@@ -326,7 +326,7 @@ player.on(SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 
   <b>Example</b>
   ```javascript
-  player.on(SDK_EVENTS_NAME.ON_APP_RESTART, function() {
+  player.on(FS_SDK_EVENTS_NAME.ON_APP_RESTART, function() {
     // Implement your own code.
     console.log("The application restarted");
   })
@@ -335,7 +335,7 @@ player.on(SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 
 
 ### :warning: DEPRECATED Events
-:warning: These events is no longer available. Please use the new .on() method.
+:warning: These events are no longer available. Please use the new .on() method.
 <details>
   <summary>
     <b>onLoad(function() {})</b> 
@@ -636,16 +636,18 @@ Disable Full screen mode.
     <b>setQuality(quality)</b> 
     <p>
       Set the quality of the stream.
+      Use the new quality values by importing FS_QUALITY_VALUES
+      :warning: You can access deprecated quality values by importing QUALITY_VALUES. However these value are no longer available.
     </p>
   </summary>
   
   | Property | Type | Description | DefaultValue | Optional |
   | --- | --- | --- | --- | --- |
-  | **`quality`** | QualityValue | Use one of the static value Player.qualityValues.AUTO / Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH | Furioos App Quality | false |
+  | **`quality`** | QualityValue | Use one of the static value FS_QUALITY_VALUES.AUTO / FS_QUALITY_VALUES.LOW / FS_QUALITY_VALUES.MEDIUM / FS_QUALITY_VALUES.HIGH | Furioos App Quality | false |
   
   <b>Example:</b>
   ```javascript
-    player.setQuality(Player.qualityValues.ULTRA);
+    player.setQuality(FS_QUALITY_VALUES.HIGH);
   ```
 </details>
 

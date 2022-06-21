@@ -14,7 +14,7 @@ const _constructorParams = function (shareId, containerId, options) {
   return true;
 }
 
-const SDK_EVENTS_NAME = {
+const FS_SDK_EVENTS_NAME = {
   LOAD: "load",
   ERROR: "error",
   START: "start",
@@ -59,7 +59,7 @@ const QUALITY_VALUES = {
   ULTRA: 4,
 }
 
-const QUALITY_VALUESV2 = {
+const FS_QUALITY_VALUES = {
   AUTO: 0,
   LOW: 360,
   MEDIUM: 720,
@@ -77,7 +77,7 @@ let _furioosServerUrl = "https://portal.furioos.com";
 
 class Player {
   static get qualityValues() { return QUALITY_VALUES };
-  static get qualityValuesV2() { return QUALITY_VALUESV2 };
+  static get fsQualityValues() { return FS_QUALITY_VALUES };
   static get regions() { return _regions };
 
   constructor(sharedLinkID, containerId, options) {
@@ -96,6 +96,8 @@ class Player {
     if (options.overridedURL) {
       _furioosServerUrl = options.overridedURL;
     }
+
+    this._quality = FS_QUALITY_VALUES.AUTO;
 
     sharedLinkID = _furioosServerUrl + "/embed/" + sharedLinkID;
 
@@ -218,17 +220,17 @@ class Player {
     // Bind listener for the messages.
     window.addEventListener("message", (e) => {
       switch (e.data.type) {
-        case SDK_EVENTS_NAME.LOAD:
+        case FS_SDK_EVENTS_NAME.LOAD:
           // When the player is loaded: Set the default setted location (if setted).
           if (this.location) {
             if (!this.embed.contentWindow) {
               // Wait the window is reachable.
               setTimeout(() => {
-                this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
+                this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
               }, 100);
             }
             else {
-              this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
+              this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
             }
           }
 
@@ -238,58 +240,58 @@ class Player {
             this._onLoadCallback();
           }
           return;
-        case SDK_EVENTS_NAME.ON_SDK_MESSAGE:
+        case FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE:
           if (this._onSDKMessageCallback) {
             this._onSDKMessageCallback(e.data.value);
           }
           return;
-        case SDK_EVENTS_NAME.ON_USER_ACTIVE:
+        case FS_SDK_EVENTS_NAME.ON_USER_ACTIVE:
           if (this._onUserActiveCallback) {
             this._onUserActiveCallback();
           }
           return;
-        case SDK_EVENTS_NAME.ON_USER_INACTIVE:
+        case FS_SDK_EVENTS_NAME.ON_USER_INACTIVE:
           if (this._onUserInactiveCallback) {
             this._onUserInactiveCallback();
           }
           return;
-        case SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
+        case FS_SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
           if (this._onAppInstallProgress) {
             this._onAppInstallProgress(e.data.value);
           }
           return;
-        case SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
+        case FS_SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
           if (this._onAppInstallSuccess) {
             this._onAppInstallSuccess();
           }
           return;
-        case SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL:
+        case FS_SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL:
           if (this._onAppInstallFail) {
             this._onAppInstallFail();
           }
           return;
-        case SDK_EVENTS_NAME.ON_APP_START:
+        case FS_SDK_EVENTS_NAME.ON_APP_START:
           if (this._onAppStart) {
             this._onAppStart();
           }
           return;
-        case SDK_EVENTS_NAME.ON_STREAM_START:
+        case FS_SDK_EVENTS_NAME.ON_STREAM_START:
           if (this._onStreamStart) {
             this.isRestartStream = false;
             this._onStreamStart();
           }
           return;
-        case SDK_EVENTS_NAME.ON_SESSION_STOPPED:
+        case FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED:
           if (this._onSessionStoppedCallback) {
             this._onSessionStoppedCallback();
           }
           return;
-        case SDK_EVENTS_NAME.ON_STATS:
+        case FS_SDK_EVENTS_NAME.ON_STATS:
           if (this._onStatsCallback) {
             this._onStatsCallback(JSON.parse(e.data.value));
           }
           return;
-        case SDK_EVENTS_NAME.GET_SERVER_AVAILABILITY:
+        case FS_SDK_EVENTS_NAME.GET_SERVER_AVAILABILITY:
           const response = e.data.value;
 
           if (response.error) {
@@ -308,7 +310,7 @@ class Player {
 
           this._getServerAvailabilityCallback(response.stats);
           return;
-        case SDK_EVENTS_NAME.GET_SERVER_METADATA:
+        case FS_SDK_EVENTS_NAME.GET_SERVER_METADATA:
           const res = e.data.value;
 
           if (res.error) {
@@ -327,30 +329,30 @@ class Player {
 
           this._getServerMetadataCallback(res.metadata);
           return;
-        case SDK_EVENTS_NAME.ERROR:
+        case FS_SDK_EVENTS_NAME.ERROR:
           this._displayErrorMessage(e.data.value);
           return;
 
-        case SDK_EVENTS_NAME.ON_CRASH_APP:
+        case FS_SDK_EVENTS_NAME.ON_CRASH_APP:
           if (this._onAppStop) {
             this._onAppStop(e.data.value);
           }
           return;
 
-        case SDK_EVENTS_NAME.ON_RESUME_SESSION:
+        case FS_SDK_EVENTS_NAME.ON_RESUME_SESSION:
           if (this._onResumeSession) {
             this.canResumeSession = e.data.value;
             this._onResumeSession({ canResumeSession: e.data.value });
           }
           return;
 
-        case SDK_EVENTS_NAME.ON_APP_RESTART:
+        case FS_SDK_EVENTS_NAME.ON_APP_RESTART:
           if (this._onAppRestart) {
             this._onAppRestart();
           }
           return;
 
-        // case SDK_EVENTS_NAME.ON_VIDEO_SIZE_CHANGED:
+        // case FS_SDK_EVENTS_NAME.ON_VIDEO_SIZE_CHANGED:
         //   if (this._onVideoSizeChanged) {
         //     this._onVideoSizeChanged(e.data.value);
         //   }
@@ -364,63 +366,63 @@ class Player {
   ////////////////////////
   on(event, callback) {
     switch (event) {
-      case SDK_EVENTS_NAME.LOAD:
+      case FS_SDK_EVENTS_NAME.LOAD:
         this._onLoadCallback = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
+      case FS_SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS:
         this._onAppInstallProgress = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
+      case FS_SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS:
         this._onAppInstallSuccess = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL:
+      case FS_SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL:
         this._onAppInstallFail = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_APP_START:
+      case FS_SDK_EVENTS_NAME.ON_APP_START:
         this._onAppStart = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_STREAM_START:
+      case FS_SDK_EVENTS_NAME.ON_STREAM_START:
         this._onStreamStart = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_SESSION_STOPPED:
+      case FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED:
         this._onSessionStoppedCallback = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_STATS:
+      case FS_SDK_EVENTS_NAME.ON_STATS:
         this._onStatsCallback = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_USER_INACTIVE:
+      case FS_SDK_EVENTS_NAME.ON_USER_INACTIVE:
         this._onUserInactiveCallback = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_USER_ACTIVE:
+      case FS_SDK_EVENTS_NAME.ON_USER_ACTIVE:
         this._onUserActiveCallback = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_SDK_MESSAGE:
+      case FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE:
         this._onSDKMessageCallback = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_CRASH_APP:
+      case FS_SDK_EVENTS_NAME.ON_CRASH_APP:
         this._onAppStop = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_RESUME_SESSION:
+      case FS_SDK_EVENTS_NAME.ON_RESUME_SESSION:
         this._onResumeSession = callback;
         return;
 
-      case SDK_EVENTS_NAME.ON_APP_RESTART:
+      case FS_SDK_EVENTS_NAME.ON_APP_RESTART:
         this._onAppRestart = callback;
         return;
 
-      // case SDK_EVENTS_NAME.ON_VIDEO_SIZE_CHANGED:
+      // case FS_SDK_EVENTS_NAME.ON_VIDEO_SIZE_CHANGED:
       //   this._onVideoSizeChanged = callback;
       //   return;
     }
@@ -442,7 +444,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.SET_LOCATION, value: this.location }, _furioosServerUrl);
   }
 
   start(location) {
@@ -459,7 +461,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.START, value: location }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.START, value: location }, _furioosServerUrl);
   }
 
   stop() {
@@ -472,7 +474,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.STOP }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.STOP }, _furioosServerUrl);
   }
 
   maximize() {
@@ -485,7 +487,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.MAXIMIZE }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.MAXIMIZE }, _furioosServerUrl);
   }
 
   minimize() {
@@ -498,7 +500,33 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.MINIMIZE }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.MINIMIZE }, _furioosServerUrl);
+  }
+
+  ////////////////////////
+  /////// GETTERS ////////
+  ////////////////////////
+  get quality() {
+    switch (this._quality) {
+      case QUALITY_VALUES.AUTO:
+      case FS_QUALITY_VALUES.AUTO:
+        return "AUTO";
+
+      case QUALITY_VALUES.LOW:
+      case FS_QUALITY_VALUES.LOW:
+        return "LOW";
+
+      case QUALITY_VALUES.MEDIUM:
+      case FS_QUALITY_VALUES.MEDIUM:
+        return "MEDIUM";
+
+      case QUALITY_VALUES.HIGH:
+      case FS_QUALITY_VALUES.HIGH:
+        return "HIGH";
+
+      case QUALITY_VALUES.ULTRA:
+        return "HIGH";
+    }
   }
 
   setQuality(value) {
@@ -507,9 +535,9 @@ class Player {
       && value !== QUALITY_VALUES.MEDIUM
       && value !== QUALITY_VALUES.HIGH
       && value !== QUALITY_VALUES.ULTRA
-      && value !== QUALITY_VALUESV2.LOW
-      && value !== QUALITY_VALUESV2.MEDIUM
-      && value !== QUALITY_VALUESV2.HIGH) {
+      && value !== FS_QUALITY_VALUES.LOW
+      && value !== FS_QUALITY_VALUES.MEDIUM
+      && value !== FS_QUALITY_VALUES.HIGH) {
       throw "Bad parameter: The quality should be one of the given value in Player.qualityValues";
     }
 
@@ -526,21 +554,23 @@ class Player {
     let quality = value;
     if (quality === QUALITY_VALUES.LOW) {
       console.warn("DEPRECATED: This version is depreciated and will not be maintained for long. Update your sdk and use the new events. see docs:");
-      quality = QUALITY_VALUESV2.LOW;
+      quality = FS_QUALITY_VALUES.LOW;
     }
 
     if (quality === QUALITY_VALUES.MEDIUM) {
       console.warn("DEPRECATED: This version is depreciated and will not be maintained for long. Update your sdk and use the new events. see docs:");
-      quality = QUALITY_VALUESV2.MEDIUM;
+      quality = FS_QUALITY_VALUES.MEDIUM;
     }
 
     if (quality === QUALITY_VALUES.HIGH || quality === QUALITY_VALUES.HIGH) {
       console.warn("DEPRECATED: This version is depreciated and will not be maintained for long. Update your sdk and use the new events. see docs:");
-      quality = QUALITY_VALUESV2.HIGH;
+      quality = FS_QUALITY_VALUES.HIGH;
     }
 
+    this._quality = quality;
+
     this.embed.contentWindow.postMessage({
-      type: SDK_EVENTS_NAME.QUALITY,
+      type: FS_SDK_EVENTS_NAME.QUALITY,
       value: quality
     }, _furioosServerUrl);
   }
@@ -559,7 +589,7 @@ class Player {
       return;
     }
 
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESTART_STREAM }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.RESTART_STREAM }, _furioosServerUrl);
     this.isRestartStream = true;
   }
 
@@ -578,7 +608,7 @@ class Player {
       return;
     }
 
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.RESUME_SESSION }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.RESUME_SESSION }, _furioosServerUrl);
   }
 
   // SDK
@@ -597,7 +627,7 @@ class Player {
     }
 
     this.embed.contentWindow.postMessage({
-      type: SDK_EVENTS_NAME.SEND_SDK_MESSAGE,
+      type: FS_SDK_EVENTS_NAME.SEND_SDK_MESSAGE,
       value: data,
     }, _furioosServerUrl);
   }
@@ -616,7 +646,7 @@ class Player {
       return; // Not loaded.
     }
 
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.SET_THUMBNAIL_URL, value: thumbnailUrl }, _furioosServerUrl);
   }
 
   getServerAvailability(getServerAvailabilityCallback, getServerAvailabilityErrorCallback) {
@@ -633,7 +663,7 @@ class Player {
     this._getServerAvailabilityErrorCallback = getServerAvailabilityErrorCallback;
 
     // Call the get.
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.GET_SERVER_AVAILABILITY }, _furioosServerUrl);
     // The response will be treat in the listener below.
   }
 
@@ -651,7 +681,7 @@ class Player {
     this._getServerMetadataErrorCallback = getServerMetadataErrorCallback;
 
     // Call the get.
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.GET_SERVER_METADATA }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.GET_SERVER_METADATA }, _furioosServerUrl);
     // The response will be treat in the listener below.
   }
 
@@ -667,7 +697,7 @@ class Player {
 
     this._setVolume = setVolumeCallback;
 
-    this.embed.contentWindow.postMessage({ type: SDK_EVENTS_NAME.SET_VOLUME, value: volume }, _furioosServerUrl);
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.SET_VOLUME, value: volume }, _furioosServerUrl);
   }
 
   ////////////////////////
@@ -732,7 +762,7 @@ class Player {
 
 module.exports = {
   Player,
-  SDK_EVENTS_NAME,
-  QUALITY_VALUESV2,
+  FS_SDK_EVENTS_NAME,
+  FS_QUALITY_VALUES,
   QUALITY_VALUES,
 }
