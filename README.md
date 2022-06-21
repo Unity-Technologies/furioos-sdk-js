@@ -635,8 +635,8 @@ Disable Full screen mode.
   <summary>
     <b>setQuality(quality)</b> 
     <p>
-      Set the quality of the stream.
-      Use the new quality values by importing FS_QUALITY_VALUES
+      Set the quality of the stream.<br/>
+      Use the new quality values by importing FS_QUALITY_VALUES<br/>
       :warning: You can access deprecated quality values by importing QUALITY_VALUES. However these value are no longer available.
     </p>
   </summary>
