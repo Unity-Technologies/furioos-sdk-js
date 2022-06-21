@@ -311,7 +311,7 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
     if(data.canResumeSession) {
       player.resumeSession();
     }
-    console.log("Can resume sesssion: " + data);
+    console.log("Can resume sesssion: " + data.canResumeSession);
   })
   ```
 </details>
