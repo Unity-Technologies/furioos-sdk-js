@@ -28,7 +28,6 @@ const FS_SDK_EVENTS_NAME = {
   MINIMIZE: "minimize",
   QUALITY: "quality",
   RESTART_STREAM: "restartStream",
-  ON_APP_RESTART: "onAppRestart",
   RESUME_SESSION: "resumeSession",
   ON_RESUME_SESSION: "onResumeSession",
   ON_SDK_MESSAGE: "onSDKMessage",
@@ -353,12 +352,6 @@ class Player {
           }
           return;
 
-        case FS_SDK_EVENTS_NAME.ON_APP_RESTART:
-          if (this._onAppRestart) {
-            this._onAppRestart();
-          }
-          return;
-
         // case FS_SDK_EVENTS_NAME.ON_VIDEO_SIZE_CHANGED:
         //   if (this._onVideoSizeChanged) {
         //     this._onVideoSizeChanged(e.data.value);
@@ -423,10 +416,6 @@ class Player {
 
       case FS_SDK_EVENTS_NAME.ON_RESUME_SESSION:
         this._onResumeSession = callback;
-        return;
-
-      case FS_SDK_EVENTS_NAME.ON_APP_RESTART:
-        this._onAppRestart = callback;
         return;
 
       // case FS_SDK_EVENTS_NAME.ON_VIDEO_SIZE_CHANGED:
