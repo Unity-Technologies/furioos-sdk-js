@@ -249,3 +249,208 @@ player.onSessionStopped(function() {
   })
   ```
 </details>
+
+
+## Methods
+### setUserActive()
+This function help you to keep the session open if your user does not interact with the interface.  
+Calling this function will fire onUserActive.  
+:warning: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never ended untill the user close his window.
+
+<details>
+  <summary>
+    <b>setThumbnailUrl(url)</b> 
+    <p>Change the thumbnail of your app.</p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue |
+  | --- | --- | --- | --- |
+  | **`url`** | String | A public url of the thumbnail you want to set | null |
+</details>
+
+<details>
+  <summary>
+    <b>getServerAvailability(function(data) {}, function(error) {})</b> 
+    <p>Call this function to get an estimated time to get a session on Furioos.</p>
+  </summary>
+  
+  <b>data:</b>
+  | Property | Type | Description | DefaultValue |
+  | --- | --- | --- | --- |
+  | **`assignTime`** | Number | Estimated time (minutes) to be assigned to a server | 0 |
+  | **`launchTime`** | Number | Estimated time (minutes) for your app to be ready (copied, extracted and launched) | 0 |
+  | **`availableMachines`** | Number | Number of ready VM waiting for a session | 0 |
+  | <b>*</b>**`maximumMachines`** | Number | Maximum machines setted on your campaign | 0 |
+  | <b>*</b>**`usedMachines`** | Number | Number of current used machines in your pool | 0 |
+  | <b>*</b>**`creatingMachines`** | Number | Number of creating machines (creating machine in the cloud) | 0 |
+  | <b>*</b>**`installingMachines`** | Number | Number of installing machine (installing your application on it) | 0 |
+  
+  <b>*</b> *Those values are only available for an application running on a pre-allocated campaign.*
+  
+  <b>Example:</b>
+  ```javascript
+    player.getServerAvailability(function(data) {
+      console.log("Time to assign a server: ", data.assignTime);
+      console.log("Time to copy, extract and launch your application: ", data.launchTime);
+      console.log("Number of machines ready for a session: ", data.availableMachines);
+      console.log("Total time to get session ready: ", data.assignTime + data.launchTime);
+    }, function(error) {
+      // Treat the error.
+    });
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>getServerMetadata(function(metadata) {}, function(error) {})</b> 
+    <p>
+      Call this function to get unique VM informations.
+      This function return metadata only when a session is running.
+    </p>
+  </summary>
+  
+  <b>metadata:</b>
+  | Property | Type | Description | DefaultValue |
+  | --- | --- | --- | --- |
+  | **`publicIP`** | String | The VM public IP. | "" |
+  | **`name`** | String | A unique name to identify a VM. | "" |
+  
+  <b>Example:</b>
+  ```javascript
+    player.getServerMetadata(function(metadata) {
+      console.log("Public VM IP: ", metadata.publicIP);
+      console.log("VM unique name: ", metadata.name);
+    }, function(error) {
+      // Treat the error.
+    });
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>start(location)</b> 
+    <p>
+      Start a new session.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue | Optional |
+  | --- | --- | --- | --- | --- |
+  | **`location`** | String | The VM public IP. | "" | true |
+  
+  <b>Example:</b>
+  ```javascript
+    player.start(Player.regions.EUW);
+  ```
+</details>
+
+### stop()
+Stop the session.
+
+### maximize()
+Enable Full screen mode.
+
+### minimize()
+Disable Full screen mode.
+
+<details>
+  <summary>
+    <b>setQuality(quality)</b> 
+    <p>
+      Set the quality of the stream.<br/>
+      You can access deprecated quality values by importing QUALITY_VALUES. However these value are no longer available.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue | Optional |
+  | --- | --- | --- | --- | --- |
+  | **`quality`** | QualityValue | Use one of the static value QUALITY_VALUES.AUTO / QUALITY_VALUES.LOW / QUALITY_VALUES.MEDIUM / QUALITY_VALUES.HIGH / QUALITY_VALUES.ULTRA  | Furioos App Quality | false |
+  
+  <b>Example:</b>
+  ```javascript
+    player.setQuality(FS_QUALITY_VALUES.HIGH);
+  ```
+</details>
+
+### restartStream()
+Restart the streaming.
+
+## Communicate with your application
+Go deeper with your UI by creating your own data interpretation.  
+Those methods let you send/receive JSON data between your application and the HTML page where you have implemented the JS SDK.
+
+#### Requirements
+- The Furioos SDK implemented in your application.
+  - Furioos SDK for Unity : https://github.cds.internal.unity3d.com/unity/furioos-unity-packages
+  - Furioos SDK for Unreal : https://github.com/Unity-Technologies/furioos-sdk-unreal-engine
+
+<details>
+  <summary>
+    <b>onSDKMessage(function(data) {})</b> 
+    <p>
+      Bind a callback to receive messages from your application.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue | Optional |
+  | --- | --- | --- | --- | --- |
+  | **`data`** | Object | The JSON that you send from your application. | null | false |
+  
+  <b>Example:</b>
+  ```javascript
+    player.onSDKMessage(function(data) {
+      console.log("Message received from my application: ", data);
+    });
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>sendSDKMessage(data)</b> 
+    <p>
+      Send data to your own application by using the Furioos SDK.
+    </p>
+  </summary>
+  
+  | Property | Type | Description | DefaultValue | Optional |
+  | --- | --- | --- | --- | --- |
+  | **`data`** | Object | The data you want to send to your app formated in JSON. | null | false |
+  
+  <b>Example:</b>
+  ```javascript
+    player.sendSDKMessage({ "test": "test" }); 
+  ```
+</details>
+
+## Debug localy the SDK communication tunnel
+:warning: This feature cannot work without **running the following example**: `furioos-sdk-js-example`
+
+With this project, you'll be able to communicate localy with your application through port 8081.
+
+:warning: There will be no stream.
+<p>
+ This feature open a direct tunnel between your js and your application running localy.<br/>
+ Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
+</p>
+
+#### How does it work ?
+You just need to enable the **debugAppMode**.
+
+```javascript
+import { Player } from 'furioos-sdk';
+
+const options = {
+  whiteLabel: true,
+  hideToolbar: false,
+  hideTitle: true,
+  hidePlayButton: false,
+  debugAppMode: true, // This enable the local debug mode.
+};
+
+const player = new Player("123.456", "containerDivId", options);
+```
+## :warning: Common Errors
+- *Failed to execute 'postMessage' on 'DOMWindow': The target origin (http://....) provided does not match the recipient window's origin ('http://...')*
+
+  This error means that you do not have the correct website URL setted on your SDK link on Furioos.  
+  If the url your are testing the player implementation is `http://localhost:8080`, you must have this url as website url of your SDK link on Furioos (by creating or editing one).
