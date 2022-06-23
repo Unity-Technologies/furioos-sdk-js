@@ -1,4 +1,5 @@
 var SDKDebug = require("./SDKDebug.js");
+const { version } = require('../package.json');
 
 const _constructorParams = function (shareId, containerId, options) {
   // Share Id.
@@ -12,6 +13,10 @@ const _constructorParams = function (shareId, containerId, options) {
   }
 
   return true;
+}
+
+const _fsSdkEventsName = {
+  SET_VERSION: "SET_VERSION",
 }
 
 const FS_SDK_EVENTS_NAME = {
@@ -74,6 +79,7 @@ const _regions = {
 }
 
 let _furioosServerUrl = "https://portal.furioos.com";
+const FS_SDK_VERSION = version;
 
 class Player {
   static get qualityValues() { return QUALITY_VALUES };
@@ -235,6 +241,7 @@ class Player {
           }
 
           this.loaded = true;
+          this.embed.contentWindow.postMessage({ type: _fsSdkEventsName.SET_VERSION, value: FS_SDK_VERSION }, _furioosServerUrl);
 
           if (this._onLoadCallback) {
             this._onLoadCallback();
@@ -553,17 +560,17 @@ class Player {
     // DEPRECATED
     let quality = value;
     if (quality === QUALITY_VALUES.LOW) {
-      console.warn("DEPRECATED: This version is depreciated and will not be maintained for long. Update your sdk and use the new events. see docs:");
+      console.warn("DEPRECATED: This quality constants is depreciated and will not be maintained for long. Update your sdk and use the new quality values: FS_QUALITY_VALUES");
       quality = FS_QUALITY_VALUES.LOW;
     }
 
     if (quality === QUALITY_VALUES.MEDIUM) {
-      console.warn("DEPRECATED: This version is depreciated and will not be maintained for long. Update your sdk and use the new events. see docs:");
+      console.warn("DEPRECATED: This quality constants is depreciated and will not be maintained for long. Update your sdk and use the new quality values: FS_QUALITY_VALUES");
       quality = FS_QUALITY_VALUES.MEDIUM;
     }
 
-    if (quality === QUALITY_VALUES.HIGH || quality === QUALITY_VALUES.HIGH) {
-      console.warn("DEPRECATED: This version is depreciated and will not be maintained for long. Update your sdk and use the new events. see docs:");
+    if (quality === QUALITY_VALUES.HIGH || quality === QUALITY_VALUES.ULTRA) {
+      console.warn("DEPRECATED: This quality constants is depreciated and will not be maintained for long. Update your sdk and use the new quality values: FS_QUALITY_VALUES");
       quality = FS_QUALITY_VALUES.HIGH;
     }
 
