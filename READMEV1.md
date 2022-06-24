@@ -48,11 +48,46 @@ const options = {
 };
 
 const player = new Player("123.456", "containerDivId", options);
+
+// Bind player loaded
+player.onLoad(() => {
+  console.info("Do something on load");
+});
+
+// Bind application install progress
+player.onAppInstallProgress(function(value) {
+  console.log("SDK client FIRED: App install progress", value);
+});
+
+// Bind application install success
+player.onAppInstallSuccess(function() {
+  console.log("SDK client FIRED: App install success");
+});
+
+// Bind application start
+player.onAppStart(function() {
+  console.log("SDK client FIRED: App start");
+});
+
+// Bind stream start
+player.onStreamStart(function() {
+  console.log("SDK client FIRED: Stream start");
+});
+
+// Bind SDK messages
+player.onSDKMessage(function(data) {
+  console.log("SDK Message Received:", data);
+});
+
+// Bind session stoppeds
+player.onSessionStopped(function() {
+  console.log("SDK client FIRED: Session Stopped");
+});
 ```
 
 ### Properties
 #### quality: String
-Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
+Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH / ULTRA
 
 
 ## Methods
