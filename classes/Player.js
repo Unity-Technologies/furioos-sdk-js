@@ -102,7 +102,7 @@ class Player {
       _furioosServerUrl = options.overridedURL;
     }
 
-    this._quality = FS_QUALITY_VALUES.AUTO;
+    this._quality = FS_QUALITY_VALUES.HIGH;
 
     sharedLinkID = _furioosServerUrl + "/embed/" + sharedLinkID;
 
@@ -531,6 +531,8 @@ class Player {
       && value !== QUALITY_VALUES.MEDIUM
       && value !== QUALITY_VALUES.HIGH
       && value !== QUALITY_VALUES.ULTRA
+      && value !== QUALITY_VALUES.AUTO
+      && value !== FS_QUALITY_VALUES.AUTO
       && value !== FS_QUALITY_VALUES.LOW
       && value !== FS_QUALITY_VALUES.MEDIUM
       && value !== FS_QUALITY_VALUES.HIGH) {
