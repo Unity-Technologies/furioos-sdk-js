@@ -45,8 +45,8 @@ For example if you want to create a way to change the color of a Material using 
 - Check the color value
 - Changes the Material color
 
-You can find a full Unity demo project here: <br/>
-You can find a full Unreal Engine demo project here: 
+You can find a full <b>Unity demo project</b> here: <br/>
+You can find a full <b>Unreal Engine demo project</b> here: 
 
 ## API
 #### constructor(sdkShareLinkID, containerDivId, options)
