@@ -26,7 +26,6 @@ yarn add furioos-sdk
 ```
 
 ## Why using it ? 
----
 
 The Furioos SDK allows you to integrate the Furioos player on your own website. <br/>
 The SDK allows you to:
@@ -274,7 +273,6 @@ Resume active session. You can only call this method after check the response va
 </details>
 
 ## Events
----
 ### .on(FS_SDK_EVENTS_NAME, callback)
 To be able to bind player events, you just need to call the .on function and give it as parameters an SDK events and a callback to get the infos. All FS_SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
 
