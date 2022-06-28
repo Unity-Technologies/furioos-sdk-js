@@ -64,7 +64,7 @@ Instanciate the player for a given application.
 | **`hideTitle`** | Boolean | Hide the title bar to create your own | true | false |
 | **`hidePlayButton`** | Boolean | Hide the play button | true | false |
 | **`debugAppMode`** | Boolean | Active local debug of your application. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | false |
-| **`inactiveTimeout`** | Number | Defines the inactivity time in a session before it closes (in ms) Min: 10s / Max: 24h | true | 600000 (ms) |
+| **`inactiveTimeout`** | Number | Defines the inactivity time in a session before it closes (in ms) Min: 10s / Max: 24h | true | 60000 (ms) |
 
 
 ### Basic Example
