@@ -17,8 +17,13 @@
 * [Furioos SDK V1](/READMEV1.md)
 
 ## Installation
-```npm install --save furioos-sdk```
-
+```bash
+npm install --save furioos-sdk
+```
+or
+```bash
+yarn add furioos-sdk
+```
 
 ## Why using it ? 
 ---
