@@ -1,4 +1,4 @@
-# Furioos SDK
+# Furioos SDK JS
 :warning: if you are using the first version of the SDK, please refer to this documentation: [Furioos SDK V1](/READMEV1.md)<br/>
 ## Requirements
 - A Furioos Account on www.furioos.com.
