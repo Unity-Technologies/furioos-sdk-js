@@ -26,7 +26,7 @@ yarn add furioos-sdk
 ```
 
 ## Why using it ? 
-With the Furioos SDK Unity / Unreal Engine, you can embed your application in your website and make them communicate with each other in a bidirectional way through the SDK JS.
+With the Furioos SDK Unity / Unreal Engine, you can embed your application in your website and make them communicate with each other in a bidirectional way through the SDK JS. <br />
 The Furioos SDK allows you to:
 - Customize your own UI (loading progress, start/stop button, etc...)
 - Communicate with your Unity / Unreal Engine app
