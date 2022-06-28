@@ -22,10 +22,12 @@
 ---
 
 ## Why using it ? 
-The furioos SDK allows you to integrate the Furioos player on your own website. <br/>
-THE SDK allows you to:
+The Furioos SDK allows you to integrate the Furioos player on your own website. <br/>
+The SDK allows you to:
 - Customize your own UI (loading progress, start/stop button, etc...)
 - Communicate with your Unity / Unreal Engine app
+
+<img src=".docs/assets/sdk-ui-example.png" width="600">
 
 ---
 
