@@ -30,6 +30,7 @@ With the Furioos SDK Unity / Unreal Engine, you can embed your application in yo
 The Furioos SDK allows you to:
 - Customize your own UI (loading progress, start/stop button, etc...)
 - Communicate with your Unity / Unreal Engine app
+- Access stream Events
 
 <img src=".docs/assets/sdk-ui-example.png" width="600">
 
