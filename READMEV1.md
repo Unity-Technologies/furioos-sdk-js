@@ -1,5 +1,5 @@
 # Furioos SDK V1
-:warning: This version is deprecated and no longer available, please update it as soon as you can
+:warning: This version is deprecated and no longer available, please update it as soon as possible.
 
 ## Requirements
 - A Furioos Account on www.furioos.com.
@@ -51,7 +51,7 @@ const player = new Player("123.456", "containerDivId", options);
 
 // Bind player loaded
 player.onLoad(() => {
-  console.info("Do something on load");
+  console.log("SDK client FIRED: Player loaded");
 });
 
 // Bind application install progress

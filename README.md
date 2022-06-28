@@ -6,15 +6,33 @@
 
 ## Table of contents
 * [Installation](#installation)
+* [Why using it ?](#why-using-it-?)
+* [How it works](#how-it-works-?)
 * [API](#api)
   * [Properties](#properties)
   * [Methods](#methods)
   * [Events](#events)
   * [Communicate with your application](#communicate-with-your-application)
 * [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel)
+* [Furioos SDK V1](/READMEV1.md)
 
 ## Installation
 ```npm install --save furioos-sdk```
+
+---
+
+## Why using it ? 
+The furioos SDK allows you to integrate the Furioos player on your own website. <br/>
+THE SDK allows you to:
+- Customize your own UI (loading progress, start/stop button, etc...)
+- Communicate with your Unity / Unreal Engine app
+
+---
+
+## How it works ?
+```npm install --save furioos-sdk```
+
+---
 
 ## API
 #### constructor(sdkShareLinkID, containerDivId, options)
@@ -36,7 +54,7 @@ Instanciate the player for a given application.
 | **`inactiveTimeout`** | Number | Defines the inactivity time in a session before it closes (in ms) Min: 10s / Max: 24h | true | 600000 (ms) |
 
 
-### Example
+### Basic Example
 
 ```javascript
 import { Player, FS_SDK_EVENTS_NAME } from 'furioos-sdk';
@@ -53,7 +71,7 @@ const player = new Player("123.456", "containerDivId", options);
 
 // Bind player loaded
 player.on(FS_SDK_EVENTS_NAME.LOAD, function() {
-  player.start();
+  console.log("SDK client FIRED: Player loaded");
 });
 
 // Bind application install progress
@@ -76,6 +94,13 @@ player.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {
   console.log("SDK Message Received:", data);
 });
 
+// Bind an event that lets you know if you can resume session
+player.on(FS_SDK_EVENTS_NAME.ON_RESUME_SESSION, function({ canResumeSession }) {
+  if(canResumeSession) {
+    player.resumeSession();
+  }
+});
+
 // Bind session stoppeds
 player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
   console.log("SDK client FIRED: Session Stopped");
@@ -83,10 +108,13 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 
 ```
 
+---
+
 ## Properties
 #### quality: String
 Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
 
+---
 ## Methods
 ### setUserActive()
 This function help you to keep the session open if your user does not interact with the interface.  
@@ -233,6 +261,8 @@ Resume active session. You can only call this method after check the response va
   ```
 </details>
 
+---
+
 ## Events
 ### .on(FS_SDK_EVENTS_NAME, callback)
 To be able to bind player events, you just need to call the .on function and give it as parameters an SDK events and a callback to get the infos. All FS_SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
@@ -249,7 +279,7 @@ To be able to bind player events, you just need to call the .on function and giv
   ```javascript
   player.on(FS_SDK_EVENTS_NAME.LOAD, function(data) {
      // Here you know when the player is ready.
-    player.start();
+      console.log("SDK client FIRED: Player loaded");
   })
   ```
 </details>
@@ -493,7 +523,7 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
   ```
 </details>
 
-
+---
 
 ## Communicate with your application
 Go deeper with your UI by creating your own data interpretation.  
@@ -506,7 +536,7 @@ Those methods let you send/receive JSON data between your application and the HT
 
 <details>
   <summary>
-    <b>onSDKMessage(function(data) {})</b> 
+    <b>.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {})</b> 
     <p>
       Bind a callback to receive messages from your application.
     </p>
@@ -518,7 +548,7 @@ Those methods let you send/receive JSON data between your application and the HT
   
   <b>Example:</b>
   ```javascript
-    player.onSDKMessage(function(data) {
+    player.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {
       console.log("Message received from my application: ", data);
     });
   ```
@@ -541,6 +571,8 @@ Those methods let you send/receive JSON data between your application and the HT
     player.sendSDKMessage({ "test": "test" }); 
   ```
 </details>
+
+---
 
 ## Debug localy the SDK communication tunnel
 :warning: This feature cannot work without **running the following example**: `furioos-sdk-js-example`
