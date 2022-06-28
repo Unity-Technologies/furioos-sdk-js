@@ -34,7 +34,7 @@ The Furioos SDK allows you to:
 <img src=".docs/assets/sdk-ui-example.png" width="600">
 
 ## How it works ?
-For example if you want to create a way to change the color of a GameObject using a color picker on your website <br/>
+For example if you want to create a way to change the color of a Material using a color picker on your website <br/>
 <br/>
 <img src=".docs/assets/SDK Example 1.jpg">
 
@@ -42,7 +42,7 @@ For example if you want to create a way to change the color of a GameObject usin
 - The Unity/Unreal Engine application receives the message
 - Parse the message in your script and identify the action "Change color"
 - Check the color value
-- Changes the GameObject material color
+- Changes the Material color
 
 You can find a full Unity demo project here: <br/>
 You can find a full Unreal Engine demo project here: 
