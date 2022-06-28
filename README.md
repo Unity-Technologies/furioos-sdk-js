@@ -36,7 +36,6 @@ The SDK allows you to:
 <img src=".docs/assets/sdk-ui-example.png" width="600">
 
 ## How it works ?
----
 For example if you want to create a way to change the color of a GameObject using a color picker on your website <br/>
 <br/>
 <img src=".docs/assets/SDK Example 1.jpg">
@@ -47,11 +46,10 @@ For example if you want to create a way to change the color of a GameObject usin
 - Check the color value
 - Changes the GameObject material color
 
-You can find a Unity demo project here: <br/>
-You can find a Unreal Engine demo project here: 
+You can find a full Unity demo project here: <br/>
+You can find a full Unreal Engine demo project here: 
 
 ## API
----
 #### constructor(sdkShareLinkID, containerDivId, options)
 Instanciate the player for a given application.
 | Property | Type | Description | optional | DefaultValue |
@@ -126,12 +124,10 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 ```
 
 ## Properties
----
 #### quality: String
 Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
 
 ## Methods
----
 ### setUserActive()
 This function help you to keep the session open if your user does not interact with the interface.  
 Calling this function will fire onUserActive.  
@@ -539,7 +535,6 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 </details>
 
 ## Communicate with your application
----
 Go deeper with your UI by creating your own data interpretation.  
 Those methods let you send/receive JSON data between your application and the HTML page where you have implemented the JS SDK.
 
@@ -587,7 +582,6 @@ Those methods let you send/receive JSON data between your application and the HT
 </details>
 
 ## Debug localy the SDK communication tunnel
----
 :warning: This feature cannot work without **running the following example**: `furioos-sdk-js-example`
 
 With this project, you'll be able to communicate localy with your application through port 8081.
