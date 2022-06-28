@@ -7,7 +7,7 @@
 ## Table of contents
 * [Installation](#installation)
 * [Why using it ?](#why-using-it-?)
-* [How it works](#how-it-works-?)
+* [How it works ?](#how-it-works-?)
 * [API](#api)
   * [Properties](#properties)
   * [Methods](#methods)
@@ -26,9 +26,8 @@ yarn add furioos-sdk
 ```
 
 ## Why using it ? 
-
-The Furioos SDK allows you to integrate the Furioos player on your own website. <br/>
-The SDK allows you to:
+With the Furioos SDK Unity / Unreal Engine, you can embed your application in your website and make them communicate with each other in a bidirectional way through the SDK JS.
+The Furioos SDK allows you to:
 - Customize your own UI (loading progress, start/stop button, etc...)
 - Communicate with your Unity / Unreal Engine app
 
