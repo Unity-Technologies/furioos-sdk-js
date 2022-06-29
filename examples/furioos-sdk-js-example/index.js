@@ -119,3 +119,11 @@ player.on(FS_SDK_EVENTS_NAME.ON_USER_INACTIVE, function () {
 player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function () {
   console.log("SDK client FIRED: Session Stopped");
 });
+
+player.on(FS_SDK_EVENTS_NAME.ON_CRASH_APP, (data) => {
+  console.warn("SDK client FIRED: crash app", data);
+});
+
+player.on(FS_SDK_EVENTS_NAME.ON_RESUME_SESSION, (data) => {
+  console.warn("SDK client FIRED: session can be resumed", data);
+});

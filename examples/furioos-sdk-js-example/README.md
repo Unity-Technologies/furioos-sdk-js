@@ -11,9 +11,9 @@ You just need to **download** the full project zipped.
 **Go under** `examples/furioos-sdk-js-example` (this subfolder should be extracted from the whole project to make your test).
 :warning: Keeping and running the example folder form the furioos-sdk-js folder could trigger errors.
 
-**Run it** by executing the run.sh script `sh run.sh`
-
-:warning: On Windows, bash is not native. You could use git bash or other similar stuff.
+**Run it** 
+Execute npm install
+then npm start
 
 Here you get two things running :
 1. A nodeJS server running on port 8080: To test a full JS integration of Furioos' SDK
