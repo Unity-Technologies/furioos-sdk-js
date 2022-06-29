@@ -635,6 +635,7 @@ const options = {
 const player = new Player("123.456", "containerDivId", options);
 ```
 When you launch your site in debug mode, the stream is not displayed, the following message will be displayed in your player.
+
 <img src=".docs/assets/debug-mode.png" width="400">
 
 #### Unity Side
