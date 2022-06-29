@@ -5,9 +5,11 @@
 - Then choose the application you want to use with the SDK and create a SDK link.
 
 ## Table of contents
+* [About Furioos SDK](#about-furioos-sdk)
+  * [Why cutomize my furioos player](#why-cutomize-your-furioos-player)
+  * [Communicate between my website and my application](#communicate-between-my-website-and-my-application) 
+  * [Example of application](#example-of-application)
 * [Installation](#installation)
-* [Why using it ?](#why-using-it-?)
-* [How it works ?](#how-it-works-?)
 * [API](#api)
   * [Properties](#properties)
   * [Methods](#methods)
@@ -15,6 +17,53 @@
   * [Communicate with your application](#communicate-with-your-application)
 * [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel)
 * [Furioos SDK V1](/READMEV1.md)
+
+## About Furioos SDK
+The Furioos SDK is composed of 2 parts:
+- one is Website side
+- and the other one on the application side
+
+Website side you have to use the Furioos SDK JS.
+It allow you to :
+- embed the Furioos player into your web site and customize it
+- communicate with your Unity or Unreal application 
+
+### Why cutomize your Furioos player
+Here are some possible use cases for player customization: (it's not an exhaustive list)
+- remove all Furioos branding
+- hide the button play   
+- hide the player toolbar and build a new one from your website
+- create your own installation progress bar
+- trigger your own features once the stream has been started
+- ...
+
+> ***Note**: For this kind of thing you just need to have the Furioos SDK JS in your Website.*
+
+
+### Communicate between my website and my application
+However, if you need to communicate beetween your website and your Unity or Unreal application, you will need to add the Furioos SDK (Unity or Unreal) into your application.
+This allows you to send and receive messages bidirectionally.
+
+<img src=".docs/assets/SDKs_Communication.jpg">
+
+> ***Important**: Before to send or receive messages the session must be launched. You can check with ON_APP_START event*
+
+Here are some examples:
+- You want to change the color of an object from the your website
+  - Send a message with the final color from the website
+  - From application you get the color in the message and assign the material with the new color
+- You want get the position of the player to display on your website
+  - Send a message with player coord from the application
+  - From your website you get the coord and show on your website
+
+To implement a bidirectionnal communication you can find the documentation:
+- For Unity [here](https://github.com/Unity-Technologies/furioos-sdk-unity)
+- For Unreal [here](https://github.com/Unity-Technologies/furioos-sdk-unreal-engine)
+
+### Example of application
+Here is an example of an application that customizes the Furioos player and uses the message system for a complete integration with the website 
+
+<img src=".docs/assets/sdk-ui-example.png">
 
 ## Installation
 ```bash
@@ -24,29 +73,6 @@ or
 ```bash
 yarn add furioos-sdk
 ```
-
-## Why using it ? 
-With the Furioos SDK Unity / Unreal Engine, you can embed your application in your website and make them communicate with each other in a bidirectional way through the SDK JS. <br />
-The Furioos SDK allows you to:
-- Customize your own UI (loading progress, start/stop button, etc...)
-- Communicate with your Unity / Unreal Engine app
-- Access stream Events
-
-<img src=".docs/assets/sdk-ui-example.png" width="600">
-
-## How it works ?
-For example if you want to create a way to change the color of a Material using a color picker on your website <br/>
-<br/>
-<img src=".docs/assets/SDK Example 1.jpg">
-
-- When changing color, send a message from the web client by using Furioos JS SDK with the selected color code
-- The Unity/Unreal Engine application receives the message
-- Parse the message in your script and identify the action "Change color"
-- Check the color value
-- Changes the Material color
-
-You can find a full <b>Unity demo project</b> here: <br/>
-You can find a full <b>Unreal Engine demo project</b> here: 
 
 ## API
 #### constructor(sdkShareLinkID, containerDivId, options)
