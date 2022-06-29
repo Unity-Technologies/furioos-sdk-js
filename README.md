@@ -244,10 +244,10 @@ Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
 #### **stop()**
 Stop the session.
 
-#### maximize()
+#### **maximize()**
 Enable Full screen mode.
 
-##### minimize()
+##### **minimize()**
 Disable Full screen mode.
 
 <details>
@@ -270,10 +270,10 @@ Disable Full screen mode.
   ```
 </details>
 
-### restartStream()
+#### **restartStream()**
 Restart the streaming.
 
-### resumeSession()
+#### **resumeSession()**
 Resume active session. You can only call this method after check the response value of ON_RESUME_SESSION event
 
 <details>
@@ -301,7 +301,7 @@ Calling this function will fire onUserActive.
 :warning: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never ended untill the user close his window.
 
 ## Events
-### .on(FS_SDK_EVENTS_NAME, callback)
+#### **.on(FS_SDK_EVENTS_NAME, callback)**
 To be able to bind player events, you just need to call the .on function and give it as parameters an SDK events and a callback to get the infos. All FS_SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
 
 <details>
