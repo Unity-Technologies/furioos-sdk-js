@@ -1,5 +1,5 @@
 # Furioos SDK JS
-:warning: if you are using the first version of the SDK, please refer to this documentation: [Furioos SDK V1](/READMEV1.md)<br/>
+> :warning: if you are using the first version of the SDK, please refer to this documentation: [Furioos SDK V1](/READMEV1.md)<br/>
 ## Requirements
 - A Furioos Account on www.furioos.com.
 - Then choose the application you want to use with the SDK and create a SDK link.
@@ -298,7 +298,7 @@ Resume active session. You can only call this method after check the response va
 #### **setUserActive()**
 This function help you to keep the session open if your user does not interact with the interface.  
 Calling this function will fire onUserActive.  
-:warning: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never ended untill the user close his window.
+> :warning: ***important**: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never ended untill the user close his window.*
 
 ## Events
 #### **.on(FS_SDK_EVENTS_NAME, callback)**
@@ -608,18 +608,18 @@ Those methods let you send/receive JSON data between your application and the HT
 </details>
 
 ## Debug localy the SDK communication tunnel
-:warning: This feature cannot work without **running the following example**: `furioos-sdk-js-example`
+The Furioos SDK Unity provides a local debug mode, to facilitate the debugging of sending and receiving messages.
 
-With this project, you'll be able to communicate localy with your application through port 8081.
+> ***Note**: There will be no stream.*
 
-:warning: There will be no stream.
-<p>
- This feature open a direct tunnel between your js and your application running localy.<br/>
- Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
-</p>
+> This feature open a direct tunnel between your js and your application running localy.\
+Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
 
-#### How does it work ?
-You just need to enable the **debugAppMode**.
+
+### How does it work ?
+#### Webclient Side
+
+To enable debugging mode you have to set the **debugAppMode** property to true.
 
 ```javascript
 import { Player } from 'furioos-sdk';
@@ -634,6 +634,12 @@ const options = {
 
 const player = new Player("123.456", "containerDivId", options);
 ```
+#### Unity Side
+Nothing to configure. When you start your application(With last version of the Furioos SDK Unity) with the play button in the Unity Editor, the local debug mode is automatically enabled.
+
+#### Unreal Engine Side
+For the moment, it is not possilbe activate the debug mode. The new version of the Furioos SDK Unreal is coming soon.
+
 ## :warning: Common Errors
 - *Failed to execute 'postMessage' on 'DOMWindow': The target origin (http://....) provided does not match the recipient window's origin ('http://...')*
 
