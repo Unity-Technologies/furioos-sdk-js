@@ -1,13 +1,15 @@
 # Furioos SDK JS
-:warning: if you are using the first version of the SDK, please refer to this documentation: [Furioos SDK V1](/READMEV1.md)<br/>
+> :warning: if you are using the first version of the SDK, please refer to this documentation: [Furioos SDK V1](/READMEV1.md)<br/>
 ## Requirements
 - A Furioos Account on www.furioos.com.
 - Then choose the application you want to use with the SDK and create a SDK link.
 
 ## Table of contents
+* [About Furioos SDK](#about-furioos-sdk)
+  * [Why cutomize my furioos player](#why-cutomize-your-furioos-player)
+  * [Communicate between my website and my application](#communicate-between-my-website-and-my-application) 
+  * [Example of application](#example-of-application)
 * [Installation](#installation)
-* [Why using it ?](#why-using-it-?)
-* [How it works ?](#how-it-works-?)
 * [API](#api)
   * [Properties](#properties)
   * [Methods](#methods)
@@ -15,6 +17,53 @@
   * [Communicate with your application](#communicate-with-your-application)
 * [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel)
 * [Furioos SDK V1](/READMEV1.md)
+
+## About Furioos SDK
+The Furioos SDK is composed of 2 parts:
+- one is Website side
+- and the other one on the application side
+
+Website side you have to use the Furioos SDK JS.
+It allow you to :
+- embed the Furioos player into your web site and customize it
+- communicate with your Unity or Unreal application 
+
+### Why cutomize your Furioos player
+Here are some possible use cases for player customization: (it's not an exhaustive list)
+- remove all Furioos branding
+- hide the button play   
+- hide the player toolbar and build a new one from your website
+- create your own installation progress bar
+- trigger your own features once the stream has been started
+- ...
+
+> ***Note**: For this kind of thing you just need to have the Furioos SDK JS in your Website.*
+
+
+### Communicate between my website and my application
+However, if you need to communicate beetween your website and your Unity or Unreal application, you will need to add the Furioos SDK (Unity or Unreal) into your application.
+This allows you to send and receive messages bidirectionally.
+
+<img src=".docs/assets/SDKs_Communication.jpg">
+
+> ***Important**: Before to send or receive messages the session must be launched. You can check with ON_APP_START event*
+
+Here are some examples:
+- You want to change the color of an object from the your website
+  - Send a message with the final color from the website
+  - From application you get the color in the message and assign the material with the new color
+- You want get the position of the player to display on your website
+  - Send a message with player coord from the application
+  - From your website you get the coord and show on your website
+
+To implement a bidirectionnal communication you can find the documentation:
+- For Unity [here](https://github.com/Unity-Technologies/furioos-sdk-unity)
+- For Unreal [here](https://github.com/Unity-Technologies/furioos-sdk-unreal-engine)
+
+### Example of application
+Here is an example of an application that customizes the Furioos player and uses the message system for a complete integration with the website 
+
+<img src=".docs/assets/sdk-ui-example.png">
 
 ## Installation
 ```bash
@@ -24,29 +73,6 @@ or
 ```bash
 yarn add furioos-sdk
 ```
-
-## Why using it ? 
-With the Furioos SDK Unity / Unreal Engine, you can embed your application in your website and make them communicate with each other in a bidirectional way through the SDK JS. <br />
-The Furioos SDK allows you to:
-- Customize your own UI (loading progress, start/stop button, etc...)
-- Communicate with your Unity / Unreal Engine app
-- Access stream Events
-
-<img src=".docs/assets/sdk-ui-example.png" width="600">
-
-## How it works ?
-For example if you want to create a way to change the color of a Material using a color picker on your website <br/>
-<br/>
-<img src=".docs/assets/SDK Example 1.jpg">
-
-- When changing color, send a message from the web client by using Furioos JS SDK with the selected color code
-- The Unity/Unreal Engine application receives the message
-- Parse the message in your script and identify the action "Change color"
-- Check the color value
-- Changes the Material color
-
-You can find a full <b>Unity demo project</b> here: <br/>
-You can find a full <b>Unreal Engine demo project</b> here: 
 
 ## API
 #### constructor(sdkShareLinkID, containerDivId, options)
@@ -158,6 +184,7 @@ Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
   <b>*</b> *Those values are only available for an application running on a pre-allocated campaign.*
   
   <b>Example:</b>
+
   ```javascript
     player.getServerAvailability(function(data) {
       console.log("Time to assign a server: ", data.assignTime);
@@ -214,13 +241,13 @@ Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
   ```
 </details>
 
-### stop()
+#### **stop()**
 Stop the session.
 
-### maximize()
+#### **maximize()**
 Enable Full screen mode.
 
-### minimize()
+##### **minimize()**
 Disable Full screen mode.
 
 <details>
@@ -243,10 +270,10 @@ Disable Full screen mode.
   ```
 </details>
 
-### restartStream()
+#### **restartStream()**
 Restart the streaming.
 
-### resumeSession()
+#### **resumeSession()**
 Resume active session. You can only call this method after check the response value of ON_RESUME_SESSION event
 
 <details>
@@ -268,13 +295,13 @@ Resume active session. You can only call this method after check the response va
 </details>
 
 
-### setUserActive()
+#### **setUserActive()**
 This function help you to keep the session open if your user does not interact with the interface.  
 Calling this function will fire onUserActive.  
-:warning: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never ended untill the user close his window.
+> :warning: ***important**: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never ended untill the user close his window.*
 
 ## Events
-### .on(FS_SDK_EVENTS_NAME, callback)
+#### **.on(FS_SDK_EVENTS_NAME, callback)**
 To be able to bind player events, you just need to call the .on function and give it as parameters an SDK events and a callback to get the infos. All FS_SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
 
 <details>
@@ -581,18 +608,18 @@ Those methods let you send/receive JSON data between your application and the HT
 </details>
 
 ## Debug localy the SDK communication tunnel
-:warning: This feature cannot work without **running the following example**: `furioos-sdk-js-example`
+The Furioos SDK Unity provides a local debug mode, to facilitate the debugging of sending and receiving messages.
 
-With this project, you'll be able to communicate localy with your application through port 8081.
+> ***Note**: There will be no stream.*
 
-:warning: There will be no stream.
-<p>
- This feature open a direct tunnel between your js and your application running localy.<br/>
- Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
-</p>
+> This feature open a direct tunnel between your website and your application running localy.\
+Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
 
-#### How does it work ?
-You just need to enable the **debugAppMode**.
+
+### How does it work ?
+#### Webclient Side
+
+To enable debugging mode you have to set the **debugAppMode** property to true.
 
 ```javascript
 import { Player } from 'furioos-sdk';
@@ -607,7 +634,20 @@ const options = {
 
 const player = new Player("123.456", "containerDivId", options);
 ```
+When you launch your site in debug mode, the stream is not displayed, the following message will be displayed in your player.
+
+<img src=".docs/assets/debug-mode.png" width="400">
+
+#### Unity Side
+
+Nothing to configure. When you start your application(With last version of the Furioos SDK Unity) with the play button in the Unity Editor, the local debug mode is automatically enabled.
+
+#### Unreal Engine Side
+
+For the moment, it is not possilbe activate the debug mode. The new version of the Furioos SDK Unreal is coming soon.
+
 ## :warning: Common Errors
+
 - *Failed to execute 'postMessage' on 'DOMWindow': The target origin (http://....) provided does not match the recipient window's origin ('http://...')*
 
   This error means that you do not have the correct website URL setted on your SDK link on Furioos.  
