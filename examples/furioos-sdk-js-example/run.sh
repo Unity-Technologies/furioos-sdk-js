@@ -11,7 +11,7 @@ fi
 echo "$(tput bold)NPM:$(tput setaf 2) OK $(tput sgr0)"
 
 # Update furioos package.
-npm i --save furioos-sdk
+npm i --save https://github.com/Unity-Technologies/furioos-sdk-js.git#feature/rework
 
 # Install Express for server side.
 npm i --save express

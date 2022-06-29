@@ -70,7 +70,7 @@ const FS_QUALITY_VALUES = {
   HIGH: 1080,
 }
 
-const _regions = {
+const FS_REGIONS = {
   EUW: [52.1326, 5.2913],
   USW: [47.751076, -120.740135],
   USE: [37.926868, -78.024902],
@@ -83,7 +83,7 @@ const FS_SDK_VERSION = version;
 class Player {
   static get qualityValues() { return QUALITY_VALUES };
   static get fsQualityValues() { return FS_QUALITY_VALUES };
-  static get regions() { return _regions };
+  static get regions() { return FS_REGIONS };
 
   constructor(sharedLinkID, containerId, options) {
     if (!_constructorParams(sharedLinkID, containerId, options)) {
@@ -762,5 +762,6 @@ module.exports = {
   Player,
   FS_SDK_EVENTS_NAME,
   FS_QUALITY_VALUES,
+  FS_REGIONS,
   QUALITY_VALUES,
 }

@@ -1,0 +1,17 @@
+{
+  "name": "furioos-sdk-js-example",
+  "version": "1.0.0",
+  "description": "This project is a simple nodeJS server that render a single HTML page. It is a first step to try Furioos SDK with your links on Furioos. It also a way to debug localy your application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "furioos-sdk": "git+https://github.com/Unity-Technologies/furioos-sdk-js.git#feature/rework",
+    "ws": "^8.8.0"
+  }
+}

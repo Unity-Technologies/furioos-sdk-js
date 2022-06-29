@@ -1,15 +1,16 @@
 
-const SDK = require("furioos-sdk");
-const Player = SDK.Player;
+const { Player, FS_SDK_EVENTS_NAME } = require("furioos-sdk");
+
+const SHARED_LINK = 'wEX5hbEi2w4Z5xyCs';
 
 // CONF
-const player = new Player('123.456', 'furioos_container', {
+const player = new Player(SHARED_LINK, 'furioos_container', {
   whiteLabel: true,
   hideTitle: true,
   hideToolbar: false,
   hidePlayButton: false,
   debugAppMode: false,
-  // overridedURL: 'http://localhost:8080'
+  overridedURL: 'http://localhost:3000'
 });
 
 document.getElementById('button_setUserActive').addEventListener("click", () => {
@@ -64,55 +65,57 @@ document.getElementById('button_getServerMetadata').addEventListener("click", ()
   });
 });
 
-player.onLoad(() => {
+
+// EVENTS
+player.on(FS_SDK_EVENTS_NAME.LOAD, () => {
   console.info("Do something on load");
 });
 
-player.onStats((stats) => {
+player.on(FS_SDK_EVENTS_NAME.ON_STATS, (stats) => {
   //console.log("SDK client FIRED: Stats received", stats);
 });
 
 // Bind SDK messages
-player.onSDKMessage(function(data) {
+player.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function (data) {
   console.log("SDK Message Received:", data);
 });
 
 // Bind application install progress
-player.onAppInstallProgress(function(value) {
+player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS, function (value) {
   console.log("SDK client FIRED: App install progress", value);
 });
 
 // Bind application install success
-player.onAppInstallSuccess(function() {
+player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS, function () {
   console.log("SDK client FIRED: App install success");
 });
 
 // Bind application install fail
-player.onAppInstallFail(function() {
+player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL, function () {
   console.log("SDK client FIRED: App install fail");
 });
 
 // Bind application start
-player.onAppStart(function() {
+player.on(FS_SDK_EVENTS_NAME.ON_APP_START, function () {
   console.log("SDK client FIRED: App start");
 });
 
 // Bind stream start
-player.onStreamStart(function() {
+player.on(FS_SDK_EVENTS_NAME.ON_STREAM_START, function () {
   console.log("SDK client FIRED: Stream start");
 });
 
 // Bind user active
-player.onUserActive(function() {
+player.on(FS_SDK_EVENTS_NAME.ON_USER_ACTIVE, function () {
   console.log("SDK client FIRED: User Active");
 });
 
 // Bind user inactive
-player.onUserInactive(function() {
+player.on(FS_SDK_EVENTS_NAME.ON_USER_INACTIVE, function () {
   console.log("SDK client FIRED: User Inactive");
 });
 
 // Bind session stoppeds
-player.onSessionStopped(function() {
+player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function () {
   console.log("SDK client FIRED: Session Stopped");
 });
