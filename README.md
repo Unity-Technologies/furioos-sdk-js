@@ -184,6 +184,7 @@ Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
   <b>*</b> *Those values are only available for an application running on a pre-allocated campaign.*
   
   <b>Example:</b>
+
   ```javascript
     player.getServerAvailability(function(data) {
       console.log("Time to assign a server: ", data.assignTime);
@@ -240,13 +241,13 @@ Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
   ```
 </details>
 
-### stop()
+#### **stop()**
 Stop the session.
 
-### maximize()
+#### maximize()
 Enable Full screen mode.
 
-### minimize()
+##### minimize()
 Disable Full screen mode.
 
 <details>
@@ -294,7 +295,7 @@ Resume active session. You can only call this method after check the response va
 </details>
 
 
-### setUserActive()
+#### **setUserActive()**
 This function help you to keep the session open if your user does not interact with the interface.  
 Calling this function will fire onUserActive.  
 :warning: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never ended untill the user close his window.
