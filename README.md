@@ -612,7 +612,7 @@ The Furioos SDK Unity provides a local debug mode, to facilitate the debugging o
 
 > ***Note**: There will be no stream.*
 
-> This feature open a direct tunnel between your js and your application running localy.\
+> This feature open a direct tunnel between your website and your application running localy.\
 Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
 
 
@@ -634,13 +634,19 @@ const options = {
 
 const player = new Player("123.456", "containerDivId", options);
 ```
+When you launch your site in debug mode, the stream is not displayed, the following message will be displayed in your player.
+<img src=".docs/assets/debug-mode.png" width="400">
+
 #### Unity Side
+
 Nothing to configure. When you start your application(With last version of the Furioos SDK Unity) with the play button in the Unity Editor, the local debug mode is automatically enabled.
 
 #### Unreal Engine Side
+
 For the moment, it is not possilbe activate the debug mode. The new version of the Furioos SDK Unreal is coming soon.
 
 ## :warning: Common Errors
+
 - *Failed to execute 'postMessage' on 'DOMWindow': The target origin (http://....) provided does not match the recipient window's origin ('http://...')*
 
   This error means that you do not have the correct website URL setted on your SDK link on Furioos.  
