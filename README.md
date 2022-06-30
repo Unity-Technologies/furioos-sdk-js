@@ -20,12 +20,12 @@
 
 ## About Furioos SDK
 The Furioos SDK is composed of 2 parts:
-- one is Website side
+- one is website side
 - and the other one on the application side
 
 Website side you have to use the Furioos SDK JS.
 It allow you to :
-- embed the Furioos player into your web site and customize it
+- embed the Furioos player into your website and customize it
 - communicate with your Unity or Unreal application 
 
 ### Why cutomize your Furioos player
@@ -37,7 +37,7 @@ Here are some possible use cases for player customization: (it's not an exhausti
 - trigger your own features once the stream has been started
 - ...
 
-> ***Note**: For this kind of thing you just need to have the Furioos SDK JS in your Website.*
+> ***Note**: For this kind of thing you just need to have the Furioos SDK JS in your website.*
 
 
 ### Communicate between my website and my application
@@ -49,16 +49,16 @@ This allows you to send and receive messages bidirectionally.
 > ***Important**: Before to send or receive messages the session must be launched. You can check with ON_APP_START event*
 
 Here are some examples:
-- You want to change the color of an object from the your website
-  - Send a message with the final color from the website
-  - From application you get the color in the message and assign the material with the new color
+- If you want to change the color of an object from the your website, you can:
+  - Send a message with the final color from your website
+  - From application, get the color in the message and assign the material with the new color
 - You want get the position of the player to display on your website
   - Send a message with player coord from the application
   - From your website you get the coord and show on your website
 
-To implement a bidirectionnal communication you can find the documentation:
-- For Unity [here](https://github.com/Unity-Technologies/furioos-sdk-unity)
-- For Unreal [here](https://github.com/Unity-Technologies/furioos-sdk-unreal-engine)
+To implement a bidirectionnal communication you can find details:
+- About Unity [here](https://github.com/Unity-Technologies/furioos-sdk-unity)
+- About Unreal [here](https://github.com/Unity-Technologies/furioos-sdk-unreal-engine)
 
 ### Example of application
 Here is an example of an application that customizes the Furioos player and uses the message system for a complete integration with the website 
