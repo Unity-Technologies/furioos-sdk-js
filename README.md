@@ -57,8 +57,8 @@ Here are some examples:
   - From your website you get the coord and show on your website
 
 To implement a bidirectionnal communication you can find details:
-- About Unity [here](https://github.com/Unity-Technologies/furioos-sdk-unity)
-- About Unreal [here](https://github.com/Unity-Technologies/furioos-sdk-unreal-engine)
+- About [Furioos SDK for Unity](https://github.com/Unity-Technologies/furioos-sdk-unity)
+- About [Furioos SDK for Unreal](https://github.com/Unity-Technologies/furioos-sdk-unreal-engine)
 
 ### Example of application
 Here is an example of an application that customizes the Furioos player and uses the message system for a complete integration with the website 
