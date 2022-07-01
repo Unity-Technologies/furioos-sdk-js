@@ -1,7 +1,7 @@
 
 const { Player, FS_SDK_EVENTS_NAME } = require("furioos-sdk");
 
-const SHARED_LINK = 'wEX5hbEi2w4Z5xyCs'; // Set your shared link here
+const SHARED_LINK = '123456'; // Set your shared link here
 
 // CONF
 const player = new Player(SHARED_LINK, 'furioos_container', {
@@ -10,7 +10,6 @@ const player = new Player(SHARED_LINK, 'furioos_container', {
   hideToolbar: false,
   hidePlayButton: false,
   debugAppMode: false,
-  overridedURL: 'http://localhost:3000'
 });
 
 document.getElementById('button_setUserActive').addEventListener("click", () => {
