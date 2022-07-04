@@ -15,6 +15,7 @@
   * [Methods](#methods)
   * [Events](#events)
   * [Communicate with your application](#communicate-with-your-application)
+* [Exemple of implementation](/examples/furioos-sdk-js-example/README.md)
 * [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel)
 * [Furioos SDK V1](/READMEV1.md)
 
@@ -559,6 +560,10 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
   })
   ```
 </details>
+
+## Exmple of implementation
+
+Go [here](/examples/furioos-sdk-js-example/README.md) to view an example of implentation
 
 ## Communicate with your application
 Go deeper with your UI by creating your own data interpretation.  
