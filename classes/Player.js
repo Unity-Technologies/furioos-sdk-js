@@ -202,6 +202,7 @@ class Player {
 
     iframe.style.width = "100%";
     iframe.style.height = "100%";
+    iframe.style.border = "none";
 
     container.appendChild(iframe);
 
