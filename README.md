@@ -21,48 +21,50 @@
 
 ## About Furioos SDK
 The Furioos SDK is composed of 2 parts:
-- one is website side
-- and the other one on the application side
+- one is on the website side
+- and the other one is on the application side
 
-Website side you have to use the Furioos SDK JS.
-It allow you to :
+On the website side you have to use the Furioos SDK JS.
+It allows you to :
 - embed the Furioos player into your website and customize it
 - communicate with your Unity or Unreal application 
 
 ### Why cutomize your Furioos player
-Here are some possible use cases for player customization: (it's not an exhaustive list)
+Here are some possible use cases for player customization (it's not an exhaustive list):
 - remove all Furioos branding
-- hide the button play   
+- hide the play button   
 - hide the player toolbar and build a new one from your website
 - create your own installation progress bar
 - trigger your own features once the stream has been started
 - ...
 
-> ***Note**: For this kind of thing you just need to have the Furioos SDK JS in your website.*
+> ***Note**: For these examples you just need to have the Furioos SDK JS in your website.*
 
 
-### Communicate between my website and my application
-However, if you need to communicate beetween your website and your Unity or Unreal application, you will need to add the Furioos SDK (Unity or Unreal) into your application.
-This allows you to send and receive messages bidirectionally.
+### Communication inbetween my website and my application
+However, if you need to communication inbetween your website and your Unity or Unreal application, you will need to add the Furioos SDK (Unity or Unreal) into your application.
+This allows you to send and receive bidirectional messages.
 
 <img src=".docs/assets/SDKs_Communication.jpg">
 
-> ***Important**: Before to send or receive messages the session must be launched. You can check with ON_APP_START event*
+> ***Important**: Before sending or receiving messages, the session must be launched. You can check it with ON_APP_START event*
 
 Here are some examples:
-- If you want to change the color of an object from the your website, you can:
+- If you want to change the color of an object from your website, you can:
   - Send a message with the final color from your website
-  - From application, get the color in the message and assign the material with the new color
-- You want get the position of the player to display on your website
+  - From your application, get the color in the message and assign the material with the new color
+- If you want to get the position of the player to display it on your website
   - Send a message with player coord from the application
-  - From your website you get the coord and show on your website
+  - From your website, get the coordinates and show it on your website
 
-To implement a bidirectionnal communication you can find details:
+To implement a bidirectionnal communication you can find details below:
 - About [Furioos SDK for Unity](https://github.com/Unity-Technologies/furioos-sdk-unity)
 - About [Furioos SDK for Unreal](https://github.com/Unity-Technologies/furioos-sdk-unreal-engine)
 
 ### Example of application
-Here is an example of an application that customizes the Furioos player and uses the message system for a complete integration with the website 
+Here is an example of an application that customizes the Furioos player and uses the message system for a complete integration with the website.\
+On the left, the menu is on the website side (html).\
+On the right, the house dispay is on the application side (Furious player). 
 
 <img src=".docs/assets/sdk-ui-example.png">
 
@@ -203,7 +205,7 @@ Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
     <b>getServerMetadata(function(metadata) {}, function(error) {})</b> 
     <p>
       Call this function to get unique VM informations.
-      This function return metadata only when a session is running.
+      This function returns metadata only if a session is running.
     </p>
   </summary>
   
@@ -297,9 +299,9 @@ Resume active session. You can only call this method after check the response va
 
 
 #### **setUserActive()**
-This function help you to keep the session open if your user does not interact with the interface.  
+This function helps you to keep the session opened if your user does not interact with the interface.  
 Calling this function will fire onUserActive.  
-> :warning: ***important**: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never ended untill the user close his window.*
+> :warning: ***important**: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never end untill the user close their window.*
 
 ## Events
 #### **.on(FS_SDK_EVENTS_NAME, callback)**
@@ -504,7 +506,7 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
   <summary>
     <b>ON_SDK_MESSAGE</b> 
     <p>
-       Bind a callback that will be called during your application sent you data.
+       Bind a callback that will be called while your application is sending you data.
        Data can be a String or an Object.
     </p>
   </summary>
@@ -522,7 +524,7 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
   <summary>
     <b>ON_CRASH_APP</b> 
     <p>
-       Bind a callback that will be called when your application crashed.
+       Bind a callback that will be called when your application crashes.
     </p>
   </summary>
 
@@ -539,8 +541,8 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
   <summary>
     <b>ON_RESUME_SESSION</b> 
     <p>
-      Bind a callback that will be called when player is initialized.
-      Lets you know if you can restart a session in progress.
+      Bind a callback that will be called when the player is initialized.
+      It Lets you know if you can restart a session in progress.
     </p>
   </summary>
 
@@ -561,13 +563,13 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
   ```
 </details>
 
-## Exmple of implementation
+## Example of implementation
 
-Go [here](/examples/furioos-sdk-js-example/README.md) to view an example of implentation
+Go [here](/examples/furioos-sdk-js-example/README.md) to view an example of implementation
 
 ## Communicate with your application
 Go deeper with your UI by creating your own data interpretation.  
-Those methods let you send/receive JSON data between your application and the HTML page where you have implemented the JS SDK.
+Those methods let you send/receive JSON data inbetween your application and the HTML page where you have implemented the JS SDK.
 
 #### Requirements
 - The Furioos SDK implemented in your application.
@@ -617,7 +619,7 @@ The Furioos SDK Unity provides a local debug mode, to facilitate the debugging o
 
 > ***Note**: There will be no stream.*
 
-> This feature open a direct tunnel between your website and your application running localy.\
+> This feature opens a direct tunnel inbetween your website and your application running locally.\
 Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
 
 
@@ -639,9 +641,10 @@ const options = {
 
 const player = new Player("123.456", "containerDivId", options);
 ```
-When you launch your site in debug mode, the stream is not displayed, the following message will be displayed in your player.
+When you launch your site in debug mode, the stream is not displayed, the following message will appear on your player.
 
 <img src=".docs/assets/debug-mode.png" width="400">
+
 
 #### Unity Side
 
@@ -649,11 +652,11 @@ Nothing to configure. When you start your application(With last version of the F
 
 #### Unreal Engine Side
 
-For the moment, it is not possilbe activate the debug mode. The new version of the Furioos SDK Unreal is coming soon.
+For the moment, it is not possible activate the debug mode. The new version of the Furioos SDK for Unreal is coming soon.
 
 ## :warning: Common Errors
 
 - *Failed to execute 'postMessage' on 'DOMWindow': The target origin (http://....) provided does not match the recipient window's origin ('http://...')*
 
-  This error means that you do not have the correct website URL setted on your SDK link on Furioos.  
+  This error means that you do not have the correct website URL set on your SDK link, on Furioos side.  
   If the url your are testing the player implementation is `http://localhost:8080`, you must have this url as website url of your SDK link on Furioos (by creating or editing one).
