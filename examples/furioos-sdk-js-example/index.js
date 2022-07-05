@@ -1,5 +1,5 @@
 
-const { Player, FS_SDK_EVENTS_NAME } = require("furioos-sdk");
+const { Player, FS_SDK_EVENTS_NAME, FS_QUALITY_VALUES } = require("furioos-sdk");
 
 const SHARED_LINK = '123456'; // Set your shared link here
 
@@ -50,6 +50,16 @@ document.getElementById('button_start').addEventListener("click", () => {
   player.start()
 });
 
+document.getElementById('button_stop').addEventListener("click", () => {
+  console.log("Call stop");
+  player.stop()
+});
+
+document.getElementById('button_restartStream').addEventListener("click", () => {
+  console.log("Call restart stream");
+  player.restartStream()
+});
+
 document.getElementById('button_setThumb').addEventListener("click", () => {
   console.log("Call setThumb");
   player.setThumbnailUrl("https://images.unsplash.com/photo-1599499462686-3ed0badee8c3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3302&q=80");
@@ -64,6 +74,24 @@ document.getElementById('button_getServerMetadata').addEventListener("click", ()
   });
 });
 
+document.getElementById('button_quality_auto').addEventListener("click", () => {
+  player.setQuality(FS_QUALITY_VALUES.AUTO);
+});
+document.getElementById('button_quality_low').addEventListener("click", () => {
+  player.setQuality(FS_QUALITY_VALUES.LOW);
+});
+document.getElementById('button_quality_medium').addEventListener("click", () => {
+  player.setQuality(FS_QUALITY_VALUES.MEDIUM);
+});
+document.getElementById('button_quality_high').addEventListener("click", () => {
+  player.setQuality(FS_QUALITY_VALUES.HIGH);
+});
+
+var slider = document.getElementById('volume_range');
+slider.oninput = function() {
+  console.log('volume', this.value/100);
+  player.setVolume(this.value/100);
+}
 
 // EVENTS
 player.on(FS_SDK_EVENTS_NAME.LOAD, () => {
