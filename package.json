@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack ./index.js --output-filename=furioos.bundle.js --mode=production"
+    "build": "webpack ./index.webpack.js --output-filename=furioos.bundle.js --mode=production"
   },
   "repository": {
     "type": "git",

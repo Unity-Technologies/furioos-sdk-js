@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.1",
-    "furioos-sdk": "git+https://github.com/Unity-Technologies/furioos-sdk-js.git#feature/rework",
+    "furioos-sdk": "git+https://github.com/Unity-Technologies/furioos-sdk-js.git#feature/bundle-sdk",
     "ws": "^8.8.0"
   },
   "devDependencies": {
