@@ -316,7 +316,7 @@ Calling this function will fire onUserActive.
 
 ## Events
 #### **.on(FS_SDK_EVENTS_NAME, callback)**
-To be able to bind player events, you just need to call the .on function and give it as parameters an SDK events and a callback to get the infos. All FS_SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
+To be able to bind player events, you just need to call the .on function and give it an SDK events parameter and a callback to get the infos. All FS_SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
 
 <details>
   <summary>
@@ -580,7 +580,7 @@ Those methods let you send/receive JSON data inbetween your application and the 
 
 #### Requirements
 - The Furioos SDK implemented in your application.
-  - Furioos SDK for Unity : https://github.cds.internal.unity3d.com/unity/furioos-unity-packages
+  - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity/tree/V2
   - Furioos SDK for Unreal : https://github.com/Unity-Technologies/furioos-sdk-unreal-engine
 
 <details>
@@ -670,4 +670,5 @@ For the moment, it is not possible activate the debug mode. The new version of t
 - *Failed to execute 'postMessage' on 'DOMWindow': The target origin (http://....) provided does not match the recipient window's origin ('http://...')*
 
   This error means that you do not have the correct website URL set on your SDK link, on Furioos side.  
-  If the url your are testing the player implementation is `http://localhost:8080`, you must have this url as website url of your SDK link on Furioos (by creating or editing one).
+Your player’s implementation url must match the website URL entered when creating your SDK link on the Furioos side. 
+If you’re working locally, remind that you might need to change the URL on the SDK Link, example: http://localhost:8080. 
