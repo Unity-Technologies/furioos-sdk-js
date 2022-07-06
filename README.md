@@ -83,7 +83,7 @@ You can find a full example [HERE](/examples/furioos-sdk-js-npm-example/README.m
 
 ### Via CDN
 ```bash
-  <script src="https://cdn.jsdelivr.net/gh/Unity-Technologies/furioos-sdk-js@feature/bundle-sdk/dist/furioos.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Unity-Technologies/furioos-sdk-js@feature/bundle-sdk/dist/furioos.bundle.js"></script>
 ```
 
 You can find a full example [HERE](/examples/furioos-sdk-js-cdn-example/README.md)
@@ -580,7 +580,7 @@ Those methods let you send/receive JSON data inbetween your application and the 
 
 #### Requirements
 - The Furioos SDK implemented in your application.
-  - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity/tree/V2
+  - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
   - Furioos SDK for Unreal : https://github.com/Unity-Technologies/furioos-sdk-unreal-engine
 
 <details>
