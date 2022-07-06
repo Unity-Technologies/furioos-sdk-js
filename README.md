@@ -10,12 +10,13 @@
   * [Communicate between my website and my application](#communicate-between-my-website-and-my-application) 
   * [Example of application](#example-of-application)
 * [Installation](#installation)
+  * [Via NPM](#Via-NPM)
+  * [Via CDN](#Via-CDN)
 * [API](#api)
   * [Properties](#properties)
   * [Methods](#methods)
   * [Events](#events)
   * [Communicate with your application](#communicate-with-your-application)
-* [Exemple of implementation](/examples/furioos-sdk-js-example/README.md)
 * [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel)
 * [Furioos SDK V1](/READMEV1.md)
 
@@ -69,6 +70,7 @@ On the right, the house dispay is on the application side (Furious player).
 <img src=".docs/assets/sdk-ui-example.png">
 
 ## Installation
+### Via NPM
 ```bash
 npm install --save furioos-sdk
 ```
@@ -76,6 +78,15 @@ or
 ```bash
 yarn add furioos-sdk
 ```
+
+You can find a full example [HERE](/examples/furioos-sdk-js-npm-example/README.md)
+
+### Via CDN
+```bash
+  <script src="https://cdn.jsdelivr.net/gh/Unity-Technologies/furioos-sdk-js@feature/bundle-sdk/dist/furioos.bundle.js"></script>
+```
+
+You can find a full example [HERE](/examples/furioos-sdk-js-cdn-example/README.md)
 
 ## API
 #### constructor(sdkShareLinkID, containerDivId, options)
@@ -563,10 +574,6 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
   ```
 </details>
 
-## Example of implementation
-
-Go [here](/examples/furioos-sdk-js-example/README.md) to view an example of implementation
-
 ## Communicate with your application
 Go deeper with your UI by creating your own data interpretation.  
 Those methods let you send/receive JSON data inbetween your application and the HTML page where you have implemented the JS SDK.
@@ -613,6 +620,10 @@ Those methods let you send/receive JSON data inbetween your application and the 
     player.sendSDKMessage({ "test": "test" }); 
   ```
 </details>
+
+## Examples of implementation
+
+
 
 ## Debug localy the SDK communication tunnel
 The Furioos SDK Unity provides a local debug mode, to facilitate the debugging of sending and receiving messages.
