@@ -79,14 +79,14 @@ or
 yarn add furioos-sdk
 ```
 
-You can find a full example [HERE](/examples/furioos-sdk-js-npm-example/README.md)
+You can find a full example [HERE](/examples/furioos-sdk-js-npm-example)
 
 ### Via CDN
 ```bash
 <script src="https://cdn.jsdelivr.net/gh/Unity-Technologies/furioos-sdk-js@feature/bundle-sdk/dist/furioos.bundle.js"></script>
 ```
 
-You can find a full example [HERE](/examples/furioos-sdk-js-cdn-example/README.md)
+You can find a full example [HERE](/examples/furioos-sdk-js-cdn-example)
 
 ## API
 #### constructor(sdkShareLinkID, containerDivId, options)
