@@ -19,6 +19,8 @@
     <div class="main-container">
       <div id="furioos_container"></div>
       <button id="button_start">Start session</button>
+      <button id="button_stop">Stop session</button>
+      <button id="button_restartStream">Restart stream</button>
       <button id="button_sendSDKMessage">Send SDK message</button>
       <button id="button_maximize">Maximize</button>
       <button id="button_minimize">Minimize</button>
@@ -26,6 +28,13 @@
       <button id="button_getServerAvailability">Get server availability</button>
       <button id="button_getServerMetadata">Get server metadata</button>
       <button id="button_setThumb">Set Thumbnail</button>
+      <button id="button_quality_auto">Quality Auto</button>
+      <button id="button_quality_low">Quality Low</button>
+      <button id="button_quality_medium">Quality Medium</button>
+      <button id="button_quality_high">Quality High</button>
+      <div class="slidecontainer">
+        <input type="range" min="0" max="100" value="100" class="slider" id="volume_range">
+      </div>
     </div>
 
     <script src="index.js"></script>
