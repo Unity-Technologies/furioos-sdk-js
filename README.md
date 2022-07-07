@@ -163,6 +163,7 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 ```
 
 ## Properties
+>***important** These properties are only getters*
 #### quality: String
 Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
 
