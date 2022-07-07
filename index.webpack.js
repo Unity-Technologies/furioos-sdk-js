@@ -7,3 +7,11 @@ module.exports = {
   FS_REGIONS,
   QUALITY_VALUES,
 }
+
+window.furioos = {
+  Player,
+  FS_SDK_EVENTS_NAME,
+  FS_QUALITY_VALUES,
+  FS_REGIONS,
+  QUALITY_VALUES,
+}

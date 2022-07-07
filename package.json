@@ -1,10 +1,11 @@
 {
   "name": "furioos-sdk",
-  "version": "1.2.5",
+  "version": "2.0.0",
   "description": "Furioos SDK: create your own furioos UI communicating with your application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack ./index.webpack.js --output-filename=furioos.bundle.js --mode=production"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/Unity-Technologies/furioos-sdk-js/issues"
   },
-  "homepage": "https://github.com/Unity-Technologies/furioos-sdk-js#readme"
+  "homepage": "https://github.com/Unity-Technologies/furioos-sdk-js#readme",
+  "devDependencies": {
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
+  }
 }

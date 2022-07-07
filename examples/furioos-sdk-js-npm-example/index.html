@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    .main-container {
+      max-width: 1200px;
+      padding: 20px;
+      margin: 0 auto;
+    }
+    
+    #furioos_container {
+      width: 75%;
+      height: 500px;
+    }
+  </style>
+  <body>
+    <div class="main-container">
+      <div id="furioos_container"></div>
+      <button id="button_start">Start session</button>
+      <button id="button_stop">Stop session</button>
+      <button id="button_restartStream">Restart stream</button>
+      <button id="button_sendSDKMessage">Send SDK message</button>
+      <button id="button_maximize">Maximize</button>
+      <button id="button_minimize">Minimize</button>
+      <button id="button_setUserActive">Set user active</button>
+      <button id="button_getServerAvailability">Get server availability</button>
+      <button id="button_getServerMetadata">Get server metadata</button>
+      <button id="button_setThumb">Set Thumbnail</button>
+      <button id="button_quality_auto">Quality Auto</button>
+      <button id="button_quality_low">Quality Low</button>
+      <button id="button_quality_medium">Quality Medium</button>
+      <button id="button_quality_high">Quality High</button>
+      <div class="slidecontainer">
+        <input type="range" min="0" max="100" value="100" class="slider" id="volume_range">
+      </div>
+    </div>
+  </body>
+  <footer>
+    <script src="indexBrowserified.js"></script>
+  </footer>
+</html>

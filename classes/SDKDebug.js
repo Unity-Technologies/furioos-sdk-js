@@ -7,9 +7,9 @@ module.exports = class SDKDebug {
     // Init WS connection.
     this.ws = new WebSocket("ws://" + localServerAddress);
     this.ws.binaryType = 'arraybuffer';
-    this.ws.onerror = (event) => {this._wsOnError(event)};
-    this.ws.onclose = (event) => {this._wsOnClose(event);}
-    this.ws.onmessage = (event) => {this._wsOnMessage(event);}
+    this.ws.onerror = (event) => { this._wsOnError(event) };
+    this.ws.onclose = (event) => { this._wsOnClose(event); }
+    this.ws.onmessage = (event) => { this._wsOnMessage(event); }
     this.ws.onopen = () => {
       console.log("WS connected to: ", localServerAddress);
       if (this.onReady) {
@@ -32,7 +32,8 @@ module.exports = class SDKDebug {
   _wsOnMessage(event) {
     const msg = JSON.parse(event.data);
     if (msg.type == "furioos" && msg.task == "sdk") {
-      this._onSDKMessageCallback(JSON.parse(msg.data));
+      const dataFromApp = typeof msg.data === 'string' ? msg.data : JSON.parse(msg.data);
+      this._onSDKMessageCallback(dataFromApp);
     }
   }
 
@@ -54,7 +55,7 @@ module.exports = class SDKDebug {
     if (!this.ws || this.ws.readyState != WebSocket.OPEN) {
       console.log("Cannot send message, ws connection not open");
       return; // Not loaded.
-    } 
+    }
 
     const parsedData = {
       type: "furioos",
@@ -62,6 +63,6 @@ module.exports = class SDKDebug {
       data: data
     }
 
-    this.ws.send(JSON.stringify(parsedData),this._wsOnSendError);
+    this.ws.send(JSON.stringify(parsedData), this._wsOnSendError);
   }
 }

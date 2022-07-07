@@ -1,92 +1,22 @@
-# Furioos SDK JS
-> :warning: if you are using the first version of the SDK, please refer to this documentation: [Furioos SDK V1](/READMEV1.md)<br/>
+# Furioos SDK V1
+:warning: This version is deprecated and no longer available, please update it as soon as possible.
+
 ## Requirements
 - A Furioos Account on www.furioos.com.
 - Then choose the application you want to use with the SDK and create a SDK link.
 
+
 ## Table of contents
-* [About Furioos SDK](#about-furioos-sdk)
-  * [Why cutomize my furioos player](#why-cutomize-your-furioos-player)
-  * [Communicate between my website and my application](#communicate-between-my-website-and-my-application) 
-  * [Example of application](#example-of-application)
 * [Installation](#installation)
-  * [Via NPM](#Via-NPM)
-  * [Via CDN](#Via-CDN)
 * [API](#api)
   * [Properties](#properties)
   * [Methods](#methods)
   * [Events](#events)
   * [Communicate with your application](#communicate-with-your-application)
 * [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel)
-* [Furioos SDK V1](/READMEV1.md)
-
-## About Furioos SDK
-The Furioos SDK is composed of 2 parts:
-- one is on the website side
-- and the other one is on the application side
-
-On the website side you have to use the Furioos SDK JS.
-It allows you to :
-- embed the Furioos player into your website and customize it
-- communicate with your Unity or Unreal application 
-
-### Why cutomize your Furioos player
-Here are some possible use cases for player customization (it's not an exhaustive list):
-- remove all Furioos branding
-- hide the play button   
-- hide the player toolbar and build a new one from your website
-- create your own installation progress bar
-- trigger your own features once the stream has been started
-- ...
-
-> ***Note**: For these examples you just need to have the Furioos SDK JS in your website.*
-
-
-### Communication inbetween my website and my application
-However, if you need to communication inbetween your website and your Unity or Unreal application, you will need to add the Furioos SDK (Unity or Unreal) into your application.
-This allows you to send and receive bidirectional messages.
-
-<img src=".docs/assets/SDKs_Communication.jpg">
-
-> ***Important**: Before sending or receiving messages, the session must be launched. You can check it with ON_APP_START event*
-
-Here are some examples:
-- If you want to change the color of an object from your website, you can:
-  - Send a message with the final color from your website
-  - From your application, get the color in the message and assign the material with the new color
-- If you want to get the position of the player to display it on your website
-  - Send a message with player coord from the application
-  - From your website, get the coordinates and show it on your website
-
-To implement a bidirectionnal communication you can find details below:
-- About [Furioos SDK for Unity](https://github.com/Unity-Technologies/furioos-sdk-unity)
-- About [Furioos SDK for Unreal](https://github.com/Unity-Technologies/furioos-sdk-unreal-engine)
-
-### Example of application
-Here is an example of an application that customizes the Furioos player and uses the message system for a complete integration with the website.\
-On the left, the menu is on the website side (html).\
-On the right, the house dispay is on the application side (Furious player). 
-
-<img src=".docs/assets/sdk-ui-example.png">
 
 ## Installation
-### Via NPM
-```bash
-npm install --save furioos-sdk
-```
-or
-```bash
-yarn add furioos-sdk
-```
-
-You can find a full example [HERE](/examples/furioos-sdk-js-npm-example)
-
-### Via CDN
-```bash
-<script src="https://cdn.jsdelivr.net/gh/Unity-Technologies/furioos-sdk-js@feature/bundle-sdk/dist/furioos.bundle.js"></script>
-```
-
-You can find a full example [HERE](/examples/furioos-sdk-js-cdn-example)
+```npm install --save furioos-sdk```
 
 ## API
 #### constructor(sdkShareLinkID, containerDivId, options)
@@ -105,72 +35,67 @@ Instanciate the player for a given application.
 | **`hideTitle`** | Boolean | Hide the title bar to create your own | true | false |
 | **`hidePlayButton`** | Boolean | Hide the play button | true | false |
 | **`debugAppMode`** | Boolean | Active local debug of your application. See [Debug localy the SDK communication tunnel](#debug-localy-the-sdk-communication-tunnel) for more detail | true | false |
-| **`inactiveTimeout`** | Number | Defines the inactivity time in a session before it closes (in ms) Min: 10s / Max: 24h | true | 60000 (ms) |
 
-
-### Basic Example
-
+#### Example
 ```javascript
-import { Player, FS_SDK_EVENTS_NAME } from 'furioos-sdk';
+import { Player } from 'furioos-sdk';
 
 const options = {
   whiteLabel: true,
   hideToolbar: false,
   hideTitle: true,
   hidePlayButton: false,
-  inactiveTimeout: 60000,
 };
 
-const player = new Player("YOUR_SDK_LINK_ID" ,"containerDivId", options);
+const player = new Player("123.456", "containerDivId", options);
 
 // Bind player loaded
-player.on(FS_SDK_EVENTS_NAME.LOAD, function() {
+player.onLoad(() => {
   console.log("SDK client FIRED: Player loaded");
 });
 
 // Bind application install progress
-player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS, function(data) {
-  console.log("SDK client FIRED: App install progress", data);
+player.onAppInstallProgress(function(value) {
+  console.log("SDK client FIRED: App install progress", value);
+});
+
+// Bind application install success
+player.onAppInstallSuccess(function() {
+  console.log("SDK client FIRED: App install success");
 });
 
 // Bind application start
-player.on(FS_SDK_EVENTS_NAME.ON_APP_START, function() {
+player.onAppStart(function() {
   console.log("SDK client FIRED: App start");
 });
 
 // Bind stream start
-player.on(FS_SDK_EVENTS_NAME.ON_STREAM_START, function() {
+player.onStreamStart(function() {
   console.log("SDK client FIRED: Stream start");
 });
 
 // Bind SDK messages
-player.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {
+player.onSDKMessage(function(data) {
   console.log("SDK Message Received:", data);
 });
 
-// Bind an event that lets you know if you can resume session
-player.on(FS_SDK_EVENTS_NAME.ON_RESUME_SESSION, function({ canResumeSession }) {
-  if(canResumeSession) {
-    player.resumeSession();
-  }
-});
-
 // Bind session stoppeds
-player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
+player.onSessionStopped(function() {
   console.log("SDK client FIRED: Session Stopped");
 });
-
 ```
 
-## Properties
->***important** These properties are only getters*
+### Properties
 #### quality: String
-Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
+Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH / ULTRA
 
-#### volume: Number
-Get the current setted volume. Value between 0 - 1
 
 ## Methods
+### setUserActive()
+This function help you to keep the session open if your user does not interact with the interface.  
+Calling this function will fire onUserActive.  
+:warning: If you always call it without checking if the user is really here the session will never ended untill the user close his window.
+
 <details>
   <summary>
     <b>setThumbnailUrl(url)</b> 
@@ -202,7 +127,6 @@ Get the current setted volume. Value between 0 - 1
   <b>*</b> *Those values are only available for an application running on a pre-allocated campaign.*
   
   <b>Example:</b>
-
   ```javascript
     player.getServerAvailability(function(data) {
       console.log("Time to assign a server: ", data.assignTime);
@@ -220,7 +144,7 @@ Get the current setted volume. Value between 0 - 1
     <b>getServerMetadata(function(metadata) {}, function(error) {})</b> 
     <p>
       Call this function to get unique VM informations.
-      This function returns metadata only if a session is running.
+      This function return metadata only when a session is running.
     </p>
   </summary>
   
@@ -259,13 +183,13 @@ Get the current setted volume. Value between 0 - 1
   ```
 </details>
 
-#### **stop()**
+### stop()
 Stop the session.
 
-#### **maximize()**
+### maximize()
 Enable Full screen mode.
 
-##### **minimize()**
+### minimize()
 Disable Full screen mode.
 
 <details>
@@ -273,75 +197,42 @@ Disable Full screen mode.
     <b>setQuality(quality)</b> 
     <p>
       Set the quality of the stream.<br/>
-      Use the new quality values by importing FS_QUALITY_VALUES<br/>
-      :warning: You can access deprecated quality values by importing QUALITY_VALUES. However these value are no longer available.
     </p>
   </summary>
   
   | Property | Type | Description | DefaultValue | Optional |
   | --- | --- | --- | --- | --- |
-  | **`quality`** | QualityValue | Use one of the static value FS_QUALITY_VALUES.AUTO / FS_QUALITY_VALUES.LOW / FS_QUALITY_VALUES.MEDIUM / FS_QUALITY_VALUES.HIGH | Furioos App Quality | false |
+  | **`quality`** | QualityValue | Use one of the static value Player.qualityValues.AUTO / Player.qualityValues.LOW / Player.qualityValues.MEDIUM / Player.qualityValues.HIGH / Player.qualityValues.ULTRA  | Furioos App Quality | false |
   
   <b>Example:</b>
   ```javascript
-    player.setQuality(FS_QUALITY_VALUES.HIGH);
+    player.setQuality(Player.qualityValues.ULTRA);
   ```
 </details>
 
-#### **restartStream()**
+### restartStream()
 Restart the streaming.
 
-#### **resumeSession()**
-Resume active session. You can only call this method after check the response value of ON_RESUME_SESSION event
-
+### Events
+:warning: These events are no longer available. Please use the new .on() method.
 <details>
   <summary>
-    <b>setVolume(volume)</b> 
-    <p>
-      Set the volume of the stream.
-    </p>
-  </summary>
-  
-  | Property | Type | Description | DefaultValue | Optional |
-  | --- | --- | --- | --- | --- |
-  | **`volume`** | Number | Volume intensity between 0 - 1 | 1 | false |
-  
-  <b>Example:</b>
-  ```javascript
-    player.setVolume(0.5);
-  ```
-</details>
-
-
-#### **setUserActive()**
-This function helps you to keep the session opened if your user does not interact with the interface.  
-Calling this function will fire onUserActive.  
-> :warning: ***important**: We recommended to use inactiveTimeout in Player constructor instead of calling this function. If you always call it without checking if the user is really here the session will never end untill the user close their window.*
-
-## Events
-#### **.on(FS_SDK_EVENTS_NAME, callback)**
-To be able to bind player events, you just need to call the .on function and give it an SDK events parameter and a callback to get the infos. All FS_SDK_EVENTS_NAME constants are accessible from the furioos-sdk package.
-
-<details>
-  <summary>
-    <b>LOAD</b> 
-    <p>
-      Bind a callback that will be called when the player is ready.
-    </p>
+    <b>onLoad(function() {})</b> 
+    <p>Bind a callback that will be called when the player is ready.</p>
   </summary>
 
-  <b>Example</b>
-  ```javascript
-  player.on(FS_SDK_EVENTS_NAME.LOAD, function(data) {
-     // Here you know when the player is ready.
-      console.log("SDK client FIRED: Player loaded");
-  })
-  ```
+<b>Example</b>
+```javascript
+player.onLoad(function() {
+  // Here you know when the player is ready.
+  player.start();
+})
+```
 </details>
 
 <details>
   <summary>
-    <b>ON_APP_INSTALL_PROGRESS</b> 
+    <b>onAppInstallProgress(function(data) {})</b> 
     <p>
        Bind a callback that will be called during your application installation.
        You'll receive the progress of the installation.
@@ -351,12 +242,12 @@ To be able to bind player events, you just need to call the .on function and giv
   <b>data: </b>
   | Property | Type | Description | Value |
   | --- | --- | --- | --- |
-  | **`status`** | String | The current installation step | "COPY" or "UNARCHIVE" |
+  | **`status`** | String | The current installation step | "COPYING" or "DECOMPRESSING" |
   | **`progress`** | Number | The progress value | between 0 and 1 |
 
   <b>Example</b>
   ```javascript
-  player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_PROGRESS, function(data) {
+  player.onAppInstallProgress(function(data) {
     // Implement your own code.
     console.log(data.status + " the application : " + Math.round(data.progress*100) + "%");
   })
@@ -365,7 +256,7 @@ To be able to bind player events, you just need to call the .on function and giv
 
 <details>
   <summary>
-    <b>ON_APP_INSTALL_SUCCESS</b> 
+    <b>onAppInstallSuccess(function() {})</b> 
     <p>
        Bind a callback that will be called when your application installation has succeed.
     </p>
@@ -373,7 +264,7 @@ To be able to bind player events, you just need to call the .on function and giv
   
   <b>Example</b>
   ```javascript
-  player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_SUCCESS, function() {
+  player.onAppInstallSuccess(function() {
     // Implement your own code.
     console.log("My application is fully installed");
   })
@@ -382,7 +273,7 @@ To be able to bind player events, you just need to call the .on function and giv
 
 <details>
   <summary>
-    <b>ON_APP_INSTALL_FAIL</b> 
+    <b>onAppInstallFail(function() {})</b> 
     <p>
        Bind a callback that will be called when your application installation has failed.
     </p>
@@ -390,7 +281,7 @@ To be able to bind player events, you just need to call the .on function and giv
   
   <b>Example</b>
   ```javascript
-  player.on(FS_SDK_EVENTS_NAME.ON_APP_INSTALL_FAIL, function() {
+  player.onAppInstallFail(function() {
     // Implement your own code.
     console.log("Installation has failed");
   })
@@ -399,7 +290,7 @@ To be able to bind player events, you just need to call the .on function and giv
 
 <details>
   <summary>
-    <b>ON_APP_START</b> 
+    <b>onAppStart(function() {})</b> 
     <p>
        Bind a callback that will be called when your application starts.
     </p>
@@ -407,7 +298,7 @@ To be able to bind player events, you just need to call the .on function and giv
   
   <b>Example</b>
   ```javascript
-  player.on(FS_SDK_EVENTS_NAME.ON_APP_START, function() {
+  player.onAppStart(function() {
     // Implement your own code.
     console.log("Application started");
   })
@@ -416,7 +307,7 @@ To be able to bind player events, you just need to call the .on function and giv
 
 <details>
   <summary>
-    <b>ON_STREAM_START</b> 
+    <b>onStreamStart(function() {})</b> 
     <p>
        Bind a callback that will be called when the stream starts.
     </p>
@@ -424,7 +315,7 @@ To be able to bind player events, you just need to call the .on function and giv
   
   <b>Example</b>
   ```javascript
-  player.on(FS_SDK_EVENTS_NAME.ON_STREAM_START, function() {
+  player.onStreamStart(function() {
     // Implement your own code.
     console.log("Stream started");
   })
@@ -433,13 +324,13 @@ To be able to bind player events, you just need to call the .on function and giv
 
 <details>
   <summary>
-    <b>ON_USER_ACTIVE</b> 
+    <b>onUserActive(function() {})</b> 
     <p>Bind a callback that will be called when the user is **active** on your session (only fired when a session is running).</p>
   </summary>
 
 <b>Example</b>
 ```javascript
-player.on(FS_SDK_EVENTS_NAME.ON_USER_ACTIVE, function() {
+player.onUserActive(function() {
   // Implement your own code.
   console.log("My user is active");
 })
@@ -448,13 +339,13 @@ player.on(FS_SDK_EVENTS_NAME.ON_USER_ACTIVE, function() {
 
 <details>
   <summary>
-    <b>ON_USER_INACTIVE</b> 
+    <b>onUserInactive(function() {})</b> 
     <p>Bind a callback that will be called when the user is **inactive** on your session (only fired when a session is running).</p>
   </summary>
 
 <b>Example</b>
 ```javascript
-player.on(FS_SDK_EVENTS_NAME.ON_USER_INACTIVE, function() {
+player.onUserInactive(function() {
   // Implement your own code.
   console.log("My user is inactive");
 })
@@ -463,13 +354,13 @@ player.on(FS_SDK_EVENTS_NAME.ON_USER_INACTIVE, function() {
 
 <details>
   <summary>
-    <b>ON_SESSION_STOPPED</b> 
+    <b>onSessionStopped(function() {})</b> 
     <p>Bind a callback that will be called when the session is stopped (ex: stopped for inactivity).</p>
   </summary>
 
 <b>Example</b>
 ```javascript
-player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
+player.onSessionStopped(function() {
   // Implement your own code.
   console.log("The session has been stopped");
 })
@@ -478,7 +369,7 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 
 <details>
   <summary>
-    <b>ON_STATS</b> 
+    <b>onStats(function(stats) {})</b> 
     <p>Bind a callback that will be called frequently during a running session with all stats.</p>
   </summary>
   
@@ -510,86 +401,25 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 
   <b>Example</b>
   ```javascript
-  player.on(FS_SDK_EVENTS_NAME.ON_STATS, function(stats) {
+  player.onStats(function(stats) {
     // Implement your own code.
     console.log("Stats received: ", stats);
   })
   ```
 </details>
 
-<details>
-  <summary>
-    <b>ON_SDK_MESSAGE</b> 
-    <p>
-       Bind a callback that will be called while your application is sending you data.
-       Data can be a String or an Object.
-    </p>
-  </summary>
-
-  <b>Example</b>
-  ```javascript
-  player.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {
-    // Implement your own code.
-    console.log("The application sent: " + data);
-  })
-  ```
-</details>
-
-<details>
-  <summary>
-    <b>ON_CRASH_APP</b> 
-    <p>
-       Bind a callback that will be called when your application crashes.
-    </p>
-  </summary>
-
-  <b>Example</b>
-  ```javascript
-  player.on(FS_SDK_EVENTS_NAME.ON_CRASH_APP, function() {
-    // Implement your own code.
-    console.log("The application crashed");
-  })
-  ```
-</details>
-
-<details>
-  <summary>
-    <b>ON_RESUME_SESSION</b> 
-    <p>
-      Bind a callback that will be called when the player is initialized.
-      It Lets you know if you can restart a session in progress.
-    </p>
-  </summary>
-
-  <b>data: </b>
-  | Property | Type | Description | Value |
-  | --- | --- | --- | --- |
-  | **`canResumeSession`** | Boolean | Define if you can resume a session or not | |
-
-  <b>Example</b>
-  ```javascript
-  player.on(FS_SDK_EVENTS_NAME.ON_RESUME_SESSION, function(data) {
-    // Implement your own code.
-    if(data.canResumeSession) {
-      player.resumeSession();
-    }
-    console.log("Can resume sesssion: " + data.canResumeSession);
-  })
-  ```
-</details>
-
 ## Communicate with your application
 Go deeper with your UI by creating your own data interpretation.  
-Those methods let you send/receive JSON data inbetween your application and the HTML page where you have implemented the JS SDK.
+Those methods let you send/receive JSON data between your application and the HTML page where you have implemented the JS SDK.
 
 #### Requirements
 - The Furioos SDK implemented in your application.
-  - Furioos SDK for Unity : https://github.com/Unity-Technologies/furioos-sdk-unity
+  - Furioos SDK for Unity : https://github.cds.internal.unity3d.com/unity/furioos-unity-packages
   - Furioos SDK for Unreal : https://github.com/Unity-Technologies/furioos-sdk-unreal-engine
 
 <details>
   <summary>
-    <b>.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {})</b> 
+    <b>onSDKMessage(function(data) {})</b> 
     <p>
       Bind a callback to receive messages from your application.
     </p>
@@ -601,7 +431,7 @@ Those methods let you send/receive JSON data inbetween your application and the 
   
   <b>Example:</b>
   ```javascript
-    player.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {
+    player.onSDKMessage(function(data) {
       console.log("Message received from my application: ", data);
     });
   ```
@@ -625,23 +455,19 @@ Those methods let you send/receive JSON data inbetween your application and the 
   ```
 </details>
 
-## Examples of implementation
-
-
-
 ## Debug localy the SDK communication tunnel
-The Furioos SDK Unity provides a local debug mode, to facilitate the debugging of sending and receiving messages.
+:warning: This feature cannot work without **running the following example**: `furioos-sdk-js-example`
 
-> ***Note**: There will be no stream.*
+With this project, you'll be able to communicate localy with your application through port 8081.
 
-> This feature opens a direct tunnel inbetween your website and your application running locally.\
-Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
+:warning: There will be no stream.
+<p>
+ This feature open a direct tunnel between your js and your application running localy.<br/>
+ Only <b>sendSDKMessage</b> and <b>onSDKMessage</b> can be used here to test the communication.
+</p>
 
-
-### How does it work ?
-#### Webclient Side
-
-To enable debugging mode you have to set the **debugAppMode** property to true.
+#### How does it work ?
+You just need to enable the **debugAppMode**.
 
 ```javascript
 import { Player } from 'furioos-sdk';
@@ -654,25 +480,10 @@ const options = {
   debugAppMode: true, // This enable the local debug mode.
 };
 
-const player = new Player("YOUR_SDK_LINK_ID", "containerDivId", options);
+const player = new Player("123.456", "containerDivId", options);
 ```
-When you launch your site in debug mode, the stream is not displayed, the following message will appear on your player.
-
-<img src=".docs/assets/debug-mode.png" width="400">
-
-
-#### Unity Side
-
-Nothing to configure. When you start your application(With last version of the Furioos SDK Unity) with the play button in the Unity Editor, the local debug mode is automatically enabled.
-
-#### Unreal Engine Side
-
-For the moment, it is not possible activate the debug mode. The new version of the Furioos SDK for Unreal is coming soon.
-
 ## :warning: Common Errors
-
 - *Failed to execute 'postMessage' on 'DOMWindow': The target origin (http://....) provided does not match the recipient window's origin ('http://...')*
 
-  This error means that you do not have the correct website URL set on your SDK link, on Furioos side.  
-Your player’s implementation url must match the website URL entered when creating your SDK link on the Furioos side. 
-If you’re working locally, remind that you might need to change the URL on the SDK Link, example: http://localhost:8080. 
+  This error means that you do not have the correct website URL setted on your SDK link on Furioos.  
+  If the url your are testing the player implementation is `http://localhost:8080`, you must have this url as website url of your SDK link on Furioos (by creating or editing one).
