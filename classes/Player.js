@@ -103,6 +103,7 @@ class Player {
     }
 
     this._quality = FS_QUALITY_VALUES.HIGH;
+    this._volume = 1;
 
     sharedLinkID = _furioosServerUrl + "/embed/" + sharedLinkID;
 
@@ -526,6 +527,10 @@ class Player {
     }
   }
 
+  get volume() {
+    return this._volume;
+  }
+
   setQuality(value) {
     // Test if the value is correct.
     if (value !== QUALITY_VALUES.LOW
@@ -695,6 +700,7 @@ class Player {
     }
 
     this._setVolume = setVolumeCallback;
+    this._volume = volume;
 
     this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.SET_VOLUME, value: volume }, _furioosServerUrl);
   }

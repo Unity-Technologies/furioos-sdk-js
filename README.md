@@ -166,6 +166,9 @@ player.on(FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED, function() {
 #### quality: String
 Get the current setted quality. Possible values : AUTO / LOW / MEDIUM / HIGH
 
+#### volume: Number
+Get the current setted volume. Value between 0 - 1
+
 ## Methods
 <details>
   <summary>
