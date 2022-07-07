@@ -121,7 +121,7 @@ const options = {
   inactiveTimeout: 60000,
 };
 
-const player = new Player("123.456", "containerDivId", options);
+const player = new Player("YOUR_SDK_LINK_ID" ,"containerDivId", options);
 
 // Bind player loaded
 player.on(FS_SDK_EVENTS_NAME.LOAD, function() {
@@ -654,7 +654,7 @@ const options = {
   debugAppMode: true, // This enable the local debug mode.
 };
 
-const player = new Player("123.456", "containerDivId", options);
+const player = new Player("YOUR_SDK_LINK_ID", "containerDivId", options);
 ```
 When you launch your site in debug mode, the stream is not displayed, the following message will appear on your player.
 

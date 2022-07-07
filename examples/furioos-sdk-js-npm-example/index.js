@@ -1,7 +1,7 @@
 
 const { Player, FS_SDK_EVENTS_NAME, FS_QUALITY_VALUES } = require("furioos-sdk");
 
-const SHARED_LINK = '123456'; // Set your shared link here
+const SHARED_LINK = 'YOUR_SDK_LINK_ID'; // Set your shared link here
 
 // CONF
 const player = new Player(SHARED_LINK, 'furioos_container', {
