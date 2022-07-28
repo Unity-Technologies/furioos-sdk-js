@@ -47,6 +47,7 @@ const FS_SDK_EVENTS_NAME = {
   ON_STREAM_START: "onStreamStart",
   SET_VOLUME: "setVolume",
   ON_CRASH_APP: "appStop",
+  TOGGLE_VOLUME_MUTED: "toggleVolumeMuted",
   // ON_VIDEO_SIZE_CHANGED: "videoSizeChanged",
 };
 
@@ -703,6 +704,21 @@ class Player {
     this._volume = volume;
 
     this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.SET_VOLUME, value: volume }, _furioosServerUrl);
+  }
+
+  toggleMuted() {
+    if (!this.loaded) {
+      return; // Not loaded.
+    }
+
+    if (this.debugAppMode) {
+      console.log("No toggleMuted in debug mode")
+      return; // Not loaded.
+    }
+
+    this._volume = 0;
+
+    this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.TOGGLE_VOLUME_MUTED }, _furioosServerUrl);
   }
 
   ////////////////////////
