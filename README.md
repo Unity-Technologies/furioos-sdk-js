@@ -312,6 +312,9 @@ Resume active session. You can only call this method after check the response va
   ```
 </details>
 
+#### **toggleMuted()**
+Mute the stream. You can call this method before the application is launched with the ON_APP_INSTALL_SUCCESS event.
+
 
 #### **setUserActive()**
 This function helps you to keep the session opened if your user does not interact with the interface.  
