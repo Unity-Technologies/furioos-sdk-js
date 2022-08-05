@@ -599,10 +599,6 @@ class Player {
   }
 
   resumeSession() {
-    if (!this.loaded) {
-      return; // Not loaded.
-    }
-
     if (this.debugAppMode) {
       console.log("No resumeSession in debug mode")
       return; // Not loaded.
