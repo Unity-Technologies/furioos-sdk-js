@@ -610,6 +610,8 @@ class Player {
     }
 
     this.embed.contentWindow.postMessage({ type: FS_SDK_EVENTS_NAME.RESUME_SESSION }, _furioosServerUrl);
+
+    this.canResumeSession = false;
   }
 
   // SDK
