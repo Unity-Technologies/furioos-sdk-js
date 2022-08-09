@@ -83,7 +83,7 @@ You can find a full example [HERE](/examples/furioos-sdk-js-npm-example)
 
 ### Via CDN
 ```bash
-<script src="https://cdn.jsdelivr.net/gh/Unity-Technologies/furioos-sdk-js@master/dist/furioos.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Unity-Technologies/furioos-sdk-js@3db8ef6c6f0a57ea061473e16e8cd63bd26a2826/dist/furioos.bundle.js"></script>
 ```
 
 You can find a full example [HERE](/examples/furioos-sdk-js-cdn-example)
