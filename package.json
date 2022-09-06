@@ -1,6 +1,6 @@
 {
   "name": "furioos-sdk",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Furioos SDK: create your own furioos UI communicating with your application",
   "main": "index.js",
   "scripts": {
