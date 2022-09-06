@@ -143,6 +143,11 @@ player.on(FS_SDK_EVENTS_NAME.ON_STREAM_START, function() {
   console.log("SDK client FIRED: Stream start");
 });
 
+// Bind stream start
+player.on(FS_SDK_EVENTS_NAME.ON_SDK_START, function() {
+  console.log("SDK client FIRED: SDK start");
+});
+
 // Bind SDK messages
 player.on(FS_SDK_EVENTS_NAME.ON_SDK_MESSAGE, function(data) {
   console.log("SDK Message Received:", data);
@@ -430,6 +435,23 @@ To be able to bind player events, you just need to call the .on function and giv
   player.on(FS_SDK_EVENTS_NAME.ON_STREAM_START, function() {
     // Implement your own code.
     console.log("Stream started");
+  })
+  ```
+</details>
+
+<details>
+  <summary>
+    <b>ON_SDK_START</b> 
+    <p>
+       Bind a callback that will be called when the SDK start.
+    </p>
+  </summary>
+  
+  <b>Example</b>
+  ```javascript
+  player.on(FS_SDK_EVENTS_NAME.ON_SDK_START, function() {
+    // Implement your own code.
+    console.log("SDK started");
   })
   ```
 </details>
