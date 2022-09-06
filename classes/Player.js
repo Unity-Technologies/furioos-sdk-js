@@ -644,6 +644,7 @@ class Player {
 
     if (!this.canSendSDKMessage) {
       console.warn("The sdk has not been started yet. Please wait for the ON_SDK_START event before sending a message");
+      return;
     }
 
     this.embed.contentWindow.postMessage({
