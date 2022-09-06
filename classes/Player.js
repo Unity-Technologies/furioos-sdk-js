@@ -48,6 +48,7 @@ const FS_SDK_EVENTS_NAME = {
   SET_VOLUME: "setVolume",
   ON_CRASH_APP: "appStop",
   TOGGLE_VOLUME_MUTED: "toggleVolumeMuted",
+  ON_SDK_START: "onSDKStart"
   // ON_VIDEO_SIZE_CHANGED: "videoSizeChanged",
 };
 
@@ -93,6 +94,7 @@ class Player {
 
     this.isRestartStream = false;
     this.canResumeSession = false;
+    this.canSendSDKMessage = false;
 
     if (sharedLinkID.indexOf("?") > 0) {
       // Remove URL parameters, should use the options for parameters.
@@ -284,6 +286,12 @@ class Player {
             this._onAppStart();
           }
           return;
+        case FS_SDK_EVENTS_NAME.ON_SDK_START:
+          this.canSendSDKMessage = true;
+          if (this._onSDKStart) {
+            this._onSDKStart();
+          }
+          return;
         case FS_SDK_EVENTS_NAME.ON_STREAM_START:
           if (this._onStreamStart) {
             this.isRestartStream = false;
@@ -291,6 +299,7 @@ class Player {
           }
           return;
         case FS_SDK_EVENTS_NAME.ON_SESSION_STOPPED:
+          this.canSendSDKMessage = false;
           if (this._onSessionStoppedCallback) {
             this._onSessionStoppedCallback();
           }
@@ -387,6 +396,10 @@ class Player {
 
       case FS_SDK_EVENTS_NAME.ON_APP_START:
         this._onAppStart = callback;
+        return;
+
+      case FS_SDK_EVENTS_NAME.ON_SDK_START:
+        this._onSDKStart = callback;
         return;
 
       case FS_SDK_EVENTS_NAME.ON_STREAM_START:
@@ -627,6 +640,10 @@ class Player {
     if (this.debugAppMode) {
       this.sdkDebug.sendSDKMessage(data);
       return;
+    }
+
+    if (!this.canSendSDKMessage) {
+      console.warn("The sdk has not been started yet. Please wait for the ON_SDK_START event before sending a message");
     }
 
     this.embed.contentWindow.postMessage({
